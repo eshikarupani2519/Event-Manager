@@ -53,7 +53,7 @@ exports.addEvent=async (req,res)=>{
     
  
     console.log("event inserted ")
-    return res.status(201).json("wowwww");
+    return res.status(201).json("wowwww,areyyy eshika kya daali h tu ye wowww, wow kya hota h");
 
     }
     catch(err){
@@ -122,3 +122,41 @@ exports.deleteEvent = async (req, res) => {
     res.status(500).json({ message: 'Error deleting event' });
   }
 };
+
+exports.joinWebinar = (req,res)=>{
+
+    const meetingId = req.params.meetingId
+
+    const query = `
+    SELECT * FROM events
+    WHERE meeting_id = ?
+    `
+
+    db.query(query,[meetingId],(err,result)=>{
+
+        if(err) throw err
+
+        if(result.length === 0){
+
+            return res.status(404).json({
+                message:"Invalid meeting link"
+            })
+
+        }
+
+        if(result[0].webinar_status !== "live"){
+
+            return res.json({
+                message:"Webinar has not started yet"
+            })
+
+        }
+
+        res.json({
+            meetingId,
+            event:result[0]
+        })
+
+    })
+
+}

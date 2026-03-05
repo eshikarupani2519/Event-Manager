@@ -30,4 +30,6 @@ router.post("/attendees",authenticate,authorize("admin"),attendeeController.regi
 
 router.get("/attendees/:id",authenticate,authorize("admin"),attendeeController.getAttendeeByEventId);
 
+router.get("/webinar/:meetingId",eventController.joinWebinar);
+
 module.exports = router;
