@@ -1,0 +1,124 @@
+
+.event-info {
+  margin: 2rem auto;
+  width: 60%;
+  max-width: 500px;
+  padding: 2rem;
+  background: linear-gradient(135deg, #9ecdfc 0%, #ffffff 100%);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Poppins', sans-serif;
+  color: #1e3a8a;
+}
+
+/* Title */
+.event-info h2 {
+  color: #1e3a8a;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+/* Info lines */
+.info-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.info-line:last-child {
+  border-bottom: none;
+}
+
+.info-line strong {
+  font-weight: 500;
+  color: #1e3a8a;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.info-line span {
+  font-size: 0.9rem;
+  color: #1e3a8a;
+}
+
+/* Buttons group */
+.button-grp {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  gap: 20px;
+}
+
+/* Buttons */
+.btn {
+  width: 48%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+/* Primary button */
+.btn-primary {
+  background-color: #1e90ff;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #1c86ee;
+}
+
+/* Danger button */
+.btn-danger {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #a71d2a;
+}
+
+/* Loading placeholder */
+p {
+  color: #1e3a8a;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* High z-index to cover everything */
+  color: white;
+  font-size: 1.2rem;
+}
+
+.spinner {
+  border: 5px solid rgba(255, 255, 255, 0.3); /* Light grey border */
+  border-top: 5px solid #4F80E1; 
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite; /* Faster spin */
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

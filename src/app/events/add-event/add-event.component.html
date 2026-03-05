@@ -1,0 +1,40 @@
+<div class="container">
+    <h2 class=" text-center my-2">{{formTitle}}</h2>
+    <form class="add-event-form" [formGroup]="addEventForm" (ngSubmit)="onSubmit()">
+        <div class="label-input">
+            <label for="name">Name</label>
+            <input type="text" name="name" required formControlName="event_name">
+        </div>
+        <p *ngIf="isFormControlError('name')" class="errors">name required</p>
+
+        <div class="label-input">
+            <label for="description">Description</label>
+            <input type="description" name="description" required formControlName="event_description">
+        </div>
+        <p *ngIf="isFormControlError('description')" class="errors">description required</p>
+        <div class="label-input">
+            <label for="date">Date</label>
+            <input type="date" name="date" required formControlName="event_date">
+        </div>
+        <p *ngIf="isFormControlError('date')" class="errors">date required</p>
+
+
+        <div class="label-input">
+            <label for="type">Type</label>
+            <select name="type" formControlName="event_type">
+                <option value="Conference">Conference</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Meetup">Meetup</option>
+            </select>
+        </div>
+        <p *ngIf="isFormControlError('type')" class="errors">type required</p>
+
+        <div class="label-input">
+            <label for="timing">Timing</label>
+            <input type="time" name="timing" required formControlName="timing">
+        </div>
+        <p *ngIf="isFormControlError('timing')" class="errors">Timing required</p>
+
+        <button type="submit" [disabled]="addEventForm.invalid">{{formTitle}}</button>
+    </form>
+</div>

@@ -1,0 +1,101 @@
+/* Container */
+.container {
+  margin: 2rem auto;
+  padding: 2rem;
+ 
+  background: linear-gradient(135deg, #9ecdfcff 0%, #ffffff 100%);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Form labels & text */
+label {
+  font-weight: 500;
+  color: #1e3a8a;
+  font-size: 0.9rem;
+}
+
+/* Inputs */
+input {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #1e90ff;
+  box-shadow: 0 0 4px rgba(30, 144, 255, 0.4);
+}
+
+/* Password input + eye icon */
+.password-input {
+  width: 90%;
+}
+
+.eye-icon {
+  color: #1e40af;
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn {
+  background-color: #1e90ff;
+  color: #ffffff;
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #1c86ee;
+}
+
+/* Divider text */
+.btn-muted {
+  background: none;
+  font-size: 0.8rem;
+  cursor: default;
+}
+
+/* Google button */
+.d-flex button {
+  background-color: #ffffff;
+  color: #1e40af;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.d-flex button:hover {
+  background-color: #f1f5f9;
+}
+
+/* Links */
+a {
+  color: #1e40af;
+  text-decoration: none;
+  /* font-size: 0.85rem; */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Error messages */
+.text-danger {
+  color: #dc2626;
+  
+  margin-top: 0.2rem;
+  font-weight: 500;
+}

@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+<div class="container col-lg-4 col-md-6 col-sm-7">
+    
+    <h4 class="text-center">Register for an event</h4>
+    <form [formGroup]="registerFormGroup" class="font-poppins" (ngSubmit)="submitData()">
+        <div class="login-form">
+            <div class="my-3">
+                <label for="name" class="my-1">Name</label>
+                <div>
+                    <input type="text" placeholder="Enter name" formControlName="name" />
+                </div>
+            </div>
+            <p *ngIf="isEmailRequired('name')" class="text-danger">name required</p>
+            <div class="my-3">
+                <label for="email" class="my-1">Email Address</label>
+                <div>
+                    <input type="text" placeholder="Enter email" formControlName="email" />
+                </div>
+            </div>
+
+            <p *ngIf="isEmailValid('email')" class="text-danger">email should be valid</p>
+            <p *ngIf="isEmailRequired('email')" class="text-danger">email required</p>
+
+            <div class="my-3">
+                <div class="d-flex flex-column justify-content-between">
+                    <label for="phone" class="my-1">Phone no.</label>
+                     <div class="d-flex">
+                    <input  type="number" id="phone"  placeholder="phone" formControlName="phone" />
+                </div>
+                </div>
+
+                <p *ngIf="isEmailRequired('phone')" class="text-danger">Phone no. required</p>
+
+                <div class="d-flex flex-column
+                    justify-content-between">
+                    <label for="event" class="my-1">Event name</label>
+                    <select name="event" id="event" formControlName="event">
+                        <option *ngFor="let event of events" value={{event.event_name}}>
+                            {{event.event_name}}
+                        </option>
+                    </select>
+                </div>
+                <p *ngIf="isEmailRequired('event')" class="text-danger">Event name required</p>
+            </div>
+            
+        </div>
+       
+        <button class="btn my-3">Register</button>
+        
+
+    </form>
+</div>

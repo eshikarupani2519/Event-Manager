@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<h2 class="text-center">Dashboard</h2>
+<div class="text-end mx-5">
+    <h5>Total Events: {{totalEvents}}</h5>
+</div>
+<div class="body">
+
+
+
+    <div class="d-flex main-body flex-column">
+
+        <div class="chart-container" style="height: 250px; width: 250px; margin: 0 auto; position: relative;">
+            <canvas id="mainBoardIpoChart"></canvas>
+        </div>
+        <div class="d-flex justify-content-around mt-4">
+            <div class="text-center">
+                <div class="legend-circle bg-primary me-2 d-inline-block"></div>
+                <span class="fw-bold">Conferences</span>
+                <br>
+                <span class="text-muted">{{ conferences }}</span>
+            </div>
+            <div class="text-center">
+                <div class="legend-circle bg-info me-2 d-inline-block"></div>
+                <span class="fw-bold">Workshops</span>
+                <br>
+                <span class="text-muted">{{ workShops }}</span>
+            </div>
+            <div class="text-center">
+                <div class="legend-circle bg-success me-2 d-inline-block"></div>
+                <span class="fw-bold">Meetups</span>
+                <br>
+                <span class="text-muted">{{ meetUps }}</span>
+            </div>
+        </div>
+
+    </div>
+</div>

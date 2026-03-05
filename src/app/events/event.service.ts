@@ -1,0 +1,32 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+@Injectable({
+  providedIn: 'root'
+})
+export class EventService {
+  baseUrl = environment.apiUrl
+  constructor(private http: HttpClient) { }
+  getEventById(id: number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.baseUrl}/event/${id}`, { headers });
+  }
+
+  updateEvent(id: number, formData: any, headers: any) {
+    return this.http.put(`${this.baseUrl}/event/${id}`, formData, headers);
+  }
+
+  addEvent(event: any, headers: any) {
+    return this.http.post(`${this.baseUrl}/events`, event, headers);
+  }
+
+  getAllEvents(headers: any) {
+    return this.http.get(`${this.baseUrl}/events`, headers)
+  }
+  deleteEvent(id: number, headers: any) {
+    return this.http.delete(`${this.baseUrl}/event/${id}`, headers)
+  }
+}

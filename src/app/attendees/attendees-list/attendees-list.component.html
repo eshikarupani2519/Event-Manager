@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <h2>Select Event to View Attendees</h2>
+
+  <!-- Dropdown -->
+  <label for="eventSelect">Event:</label>
+  <select id="eventSelect" [(ngModel)]="selectedEventId" (change)="onEventChange()">
+    <option [ngValue]="null"> Select an Event </option>
+    <option *ngFor="let event of events" [ngValue]="event.event_id">
+      {{ event.event_name }} 
+    </option>
+  </select>
+
+  <!-- Attendees List -->
+  <div class="attendees-section" *ngIf="selectedEventId">
+
+    
+    <ul class="attendees-list" *ngIf="attendees">
+      <h3>Attendees:</h3>
+      <li *ngFor="let attendee of attendees">
+        {{ attendee.att_name }}
+      </li>
+    </ul>
+    <ng-template [ngIf]="attendeesLength==0">
+      <p>No attendees for this event.</p>
+    </ng-template>
+  </div>
+</div>
+<div *ngIf="isLoading" class="loader-overlay">
+        <div class="spinner"></div>
+        <p>Processing request...</p>
+    </div>

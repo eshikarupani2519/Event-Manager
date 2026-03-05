@@ -1,0 +1,68 @@
+.body {
+    margin-top: 70px;
+    
+    position: absolute;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   height: 100%;
+    width: 100%;
+    padding: 0.8rem;
+}
+.main-body {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+.legend-circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Adjust colors to match your theme */
+.legend-circle.bg-primary {
+    background-color: #87faa0ff!important;
+}
+
+/* Purple for Upcoming */
+.legend-circle.bg-info {
+    background-color: #8593ED !important;
+}
+
+/* Blue for New Listed */
+.legend-circle.bg-success {
+    background-color: #c55acfff !important;
+}
+
+/* Green for Ongoing */
+
+.bg-primary {
+    background-color: #87faa0ff!important;
+}
+
+.bg-info {
+    background-color: #8593ED !important;
+}
+
+.bg-success {
+    background-color: #c55acfff  !important;
+}
+
+@media (max-width:940px) {
+    .main-body {
+        flex-direction: column;
+    }
+  
+}
+@media (max-width:524px) {
+    .main-body {
+        margin-left: 1rem;
+    }
+
+  
+}

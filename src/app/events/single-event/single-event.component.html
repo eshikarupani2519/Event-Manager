@@ -1,0 +1,33 @@
+<div class="event-info">
+  <h2>{{ event_name }}</h2>
+  <div class="info-line">
+    <strong>Description:</strong>
+    <span>{{ event_description }}</span>
+  </div>
+
+  <div class="info-line">
+    <strong>Date:</strong>
+    <span>{{event_date}} </span>
+  </div>
+
+  <div class="info-line">
+    <strong>Total Attendees:</strong>
+    <span>{{totalAttendees}} </span>
+  </div>
+
+  <div class="info-line">
+    <strong>Type:</strong>
+    <span>{{ event_type }}</span>
+  </div>
+
+  <div class="info-line">
+    <strong>Timing:</strong>
+    <span>{{ timing }}</span>
+  </div>
+
+     
+</div>
+<div *ngIf="isLoading" class="loader-overlay">
+  <div class="spinner"></div>
+  <p>Processing request...</p>
+</div>
