@@ -7,6 +7,7 @@ import { SingleEventComponent } from './events/single-event/single-event.compone
 import { RegisterAttendeeComponent } from './attendees/register-attendee/register-attendee.component';
 import { AttendeesListComponent } from './attendees/attendees-list/attendees-list.component';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
+import { SuggestionsComponent } from './events/suggestions/suggestions.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path:'register-attendee',component:RegisterAttendeeComponent},
   {path:'attendees-list',component:AttendeesListComponent},
   {path:'dashboard',component:DashboardComponent},
+  {path:'event-suggestions',component:SuggestionsComponent},
 ];
 
 @NgModule({

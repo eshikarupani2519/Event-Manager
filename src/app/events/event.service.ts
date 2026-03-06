@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EventService {
+  mlUrl=environment.mlUrl
   baseUrl = environment.apiUrl
   constructor(private http: HttpClient) { }
   getEventById(id: number) {
@@ -28,5 +29,11 @@ export class EventService {
   }
   deleteEvent(id: number, headers: any) {
     return this.http.delete(`${this.baseUrl}/event/${id}`, headers)
+  }
+   getEventSuggestions(headers:any,payload:any){
+    return this.http.post(`${this.mlUrl}/event-suggestion`,payload,
+    {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }

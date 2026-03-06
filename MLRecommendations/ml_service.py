@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 # --------------------------------------------------
 # 1️⃣ EVENT SUGGESTION (CURRENT interests COLLABORATIVE FILTERING)
 # --------------------------------------------------
@@ -33,19 +33,19 @@ def event_suggestion():
             avg_rating = sum(h.get("rating", 0) for h in hosts) / len(hosts)
         else:
             avg_rating = 0
-
-        results.append({
-            "id": event.get("event_id"),
-            "name": event.get("event_name"),
-            "type": event.get("event_type"),
-            "date": event.get("event_date"),
-            "timing": event.get("timing"),
-            "mode": event.get("event_mode"),
-            "location": event.get("location"),
-            "avg_host_rating": round(avg_rating, 2),
-            "interestMatchPercentage": round(match_pct, 2),
-            "missingCategories": missing_categories
-        })
+        if match_pct>30:
+            results.append({
+                "id": event.get("event_id"),
+                "name": event.get("event_name"),
+                "type": event.get("event_type"),
+                "date": event.get("event_date"),
+                "timing": event.get("timing"),
+                "mode": event.get("event_mode"),
+                "location": event.get("location"),
+                "avg_host_rating": round(avg_rating, 2),
+                "interestMatchPercentage": round(match_pct, 2),
+                "missingCategories": missing_categories
+            })
 
     # 🔥 SORTING LOGIC
     sorted_results = sorted(

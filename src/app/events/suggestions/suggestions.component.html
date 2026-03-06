@@ -1,0 +1,52 @@
+<div class="container">
+
+    <h2 class="title">Recommended Events</h2>
+
+    <button class="load-btn" (click)="loadSuggestions()">
+        Get Suggestions
+    </button>
+
+    <div *ngIf="loading" class="loading">
+        Loading recommendations...
+    </div>
+
+    <div class="event-grid">
+
+        <div *ngFor="let event of events" class="event-card">
+
+            <div class="card-header" >
+
+                <h3>{{event.name}}</h3>
+
+                <span class="match-badge">
+                    {{event.interestMatchPercentage}}%
+                    Match
+                </span>
+
+            </div>
+
+            <p><b>Type:</b> {{event.type}}</p>
+            <p><b>Date:</b> {{event.date}}</p>
+            <p><b>Time:</b> {{event.timing}}</p>
+            <p><b>Mode:</b> {{event.mode}}</p>
+            <p><b>Location:</b> {{event.location}}</p>
+
+            <p class="rating">
+                ⭐ Host Rating: {{event.avg_host_rating}}
+            </p>
+
+            <div *ngIf="event.missingCategories.length>0" class="missing">
+
+                <b>Missing Interests:</b>
+
+                <span *ngFor="let m of event.missingCategories" class="tag">
+                    {{m}}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
