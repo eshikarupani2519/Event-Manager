@@ -10,6 +10,7 @@ import { AttendeesModule } from './attendees/attendees.module';
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
+import { WebinarModule } from './webinar/webinar.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { SharedModule } from './shared/shared.module';
     EventsModule,
     AttendeesModule,
     DashboardModule,
-    SharedModule
+    SharedModule, WebinarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

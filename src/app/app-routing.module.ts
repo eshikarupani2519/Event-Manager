@@ -8,6 +8,9 @@ import { RegisterAttendeeComponent } from './attendees/register-attendee/registe
 import { AttendeesListComponent } from './attendees/attendees-list/attendees-list.component';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { SuggestionsComponent } from './events/suggestions/suggestions.component';
+import { ScheduleWebinarComponent } from './webinar/schedule-webinar/schedule-webinar.component';
+import { WebinarListComponent } from './webinar/webinar-list/webinar-list.component';
+import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -19,6 +22,12 @@ const routes: Routes = [
   {path:'attendees-list',component:AttendeesListComponent},
   {path:'dashboard',component:DashboardComponent},
   {path:'event-suggestions',component:SuggestionsComponent},
+  { path:'schedule-webinar', component: ScheduleWebinarComponent },
+
+{ path:'webinars', component: WebinarListComponent },
+
+{ path:'webinar/:id', component: WebinarMeetingComponent }
+
 ];
 
 @NgModule({

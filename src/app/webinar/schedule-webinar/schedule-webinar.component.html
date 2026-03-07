@@ -1,0 +1,22 @@
+<h2>Schedule Webinar</h2>
+
+<form (ngSubmit)="schedule()">
+
+<label>Webinar Name</label>
+<input type="text" [(ngModel)]="webinar.event_name" name="name">
+
+<br>
+
+<label>Date</label>
+<input type="date" [(ngModel)]="webinar.event_date" name="date">
+
+<br>
+
+<label>Time</label>
+<input type="time" [(ngModel)]="webinar.timing" name="time">
+
+<br>
+
+<button type="submit">Schedule Webinar</button>
+
+</form>

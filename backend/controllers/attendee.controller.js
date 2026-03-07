@@ -1,14 +1,24 @@
 const db = require("../models/db");
-
+// import db from "../models/db.js";
+// const nodemailer = require("nodemailer");
+// import dotenv from "dotenv";
+// dotenv.config();
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL,
+//     pass: process.env.EMAIL_PASS
+//   }
+// });
 // REGISTER ATTENDEE
 exports.registerAttendee = async (req, res) => {
   try {
     console.log("Starting attendee add...");
     console.log("Received body:", req.body);
 
-    const { name, phone, email, event } = req.body;
+    const { name, email, phone, city, state, country, password, interests } = req.body;
 
-    if (!name || !phone || !email || !event) {
+    if (!name || !phone || !email || !city || !state || !country || !password) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -26,7 +36,7 @@ exports.registerAttendee = async (req, res) => {
 
     // Insert attendee
     const [insertResult] = await db.query(
-      `INSERT INTO attendees (name,email,phone) VALUES (?,?,?)`,
+      `INSERT INTO attendees (name, email, phone, city, state, country, password, interests) VALUES (?,?,?,?,?,?,?,?)`,
       [name, email, phone]
     );
 
@@ -64,7 +74,6 @@ exports.registerAttendee = async (req, res) => {
     });
   }
 };
-
 
 
 // GET ATTENDEES BY EVENT ID

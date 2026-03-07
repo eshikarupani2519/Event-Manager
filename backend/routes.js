@@ -10,6 +10,11 @@ const authenticate=require("./middleware/auth.middleware")
 // dashboard stats
 router.get("/dashboard",authenticate,authorize("admin"),dashboardController.getStats);
 
+
+router.post("/signup", authController.signUp);
+
+router.get("/verify/:token", authController.verifyAccount);
+
 // login
 router.post("/login", authController.login);
 
@@ -30,6 +35,168 @@ router.post("/attendees",authenticate,authorize("admin"),attendeeController.regi
 
 router.get("/attendees/:id",authenticate,authorize("admin"),attendeeController.getAttendeeByEventId);
 
-router.get("/webinar/:meetingId",eventController.joinWebinar);
+// router.get("/webinar/:meetingId",eventController.joinWebinar);
+
+router.get("/:meetingId", async(req,res)=>{
+
+    try{
+
+        const {meetingId} = req.params
+
+        const [event] = await db.query(`
+        SELECT * FROM events
+        WHERE meeting_id=?
+        `,[meetingId])
+
+        if(event.length === 0){
+
+            return res.status(404).json({
+                message:"Webinar not found"
+            })
+
+        }
+
+        res.json(event[0])
+
+    }
+    catch(err){
+
+        console.log(err)
+
+        res.status(500).json({
+            message:"Server error"
+        })
+
+    }
+
+})
+
+
+// ==========================
+// ADMIN START WEBINAR
+// ==========================
+
+router.post("/start/:meetingId", async(req,res)=>{
+
+    try{
+
+        const {meetingId} = req.params
+
+        await db.query(`
+        UPDATE events
+        SET webinar_status='live'
+        WHERE meeting_id=?
+        `,[meetingId])
+
+        res.json({
+            message:"Webinar started successfully"
+        })
+
+    }
+    catch(err){
+
+        console.log(err)
+
+        res.status(500).json({
+            message:"Server error"
+        })
+
+    }
+
+})
+
+
+// ==========================
+// END WEBINAR
+// ==========================
+
+router.post("/end/:meetingId", async(req,res)=>{
+
+    try{
+
+        const {meetingId} = req.params
+
+        await db.query(`
+        UPDATE events
+        SET webinar_status='ended'
+        WHERE meeting_id=?
+        `,[meetingId])
+
+        res.json({
+            message:"Webinar ended successfully"
+        })
+
+    }
+    catch(err){
+
+        console.log(err)
+
+        res.status(500).json({
+            message:"Server error"
+        })
+
+    }
+
+})
+
+
+router.post("/join", async(req,res)=>{
+
+    try{
+
+        const {meetingId,email} = req.body
+
+        const [event] = await db.query(`
+        SELECT * FROM events
+        WHERE meeting_id=?
+        `,[meetingId])
+
+        if(event.length === 0){
+
+            return res.status(404).json({
+                message:"Invalid meeting link"
+            })
+
+        }
+
+        if(event[0].webinar_status === "ended"){
+
+            return res.status(400).json({
+                message:"Webinar already ended"
+            })
+
+        }
+
+        const [attendee] = await db.query(`
+        SELECT * FROM attendees
+        WHERE email=?
+        `,[email])
+
+        if(attendee.length === 0){
+
+            return res.status(404).json({
+                message:"Attendee not registered"
+            })
+
+        }
+
+        res.json({
+            message:"Join allowed",
+            webinar:event[0],
+            user:attendee[0]
+        })
+
+    }
+    catch(err){
+
+        console.log(err)
+
+        res.status(500).json({
+            message:"Server error"
+        })
+
+    }
+
+})
 
 module.exports = router;

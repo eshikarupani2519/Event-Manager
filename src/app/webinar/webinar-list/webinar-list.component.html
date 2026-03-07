@@ -1,0 +1,28 @@
+<h2>Scheduled Webinars</h2>
+
+<table border="1">
+
+<tr>
+<th>Name</th>
+<th>Date</th>
+<th>Time</th>
+<th>Join</th>
+</tr>
+
+<tr *ngFor="let w of webinars">
+
+<td>{{w.event_name}}</td>
+<td>{{w.event_date}}</td>
+<td>{{w.timing}}</td>
+
+<td>
+
+<a [routerLink]="['/webinar',w.meeting_id]">
+Join
+</a>
+
+</td>
+
+</tr>
+
+</table>

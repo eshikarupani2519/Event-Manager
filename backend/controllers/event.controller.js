@@ -160,3 +160,31 @@ exports.joinWebinar = (req,res)=>{
     })
 
 }
+exports.registerForEvent = async (req,res)=>{
+
+  try{
+
+    const {attendee_id,event_id} = req.body
+
+    await db.query(
+      `INSERT INTO event_attendee(event_id,att_id)
+       VALUES (?,?)`,
+      [event_id,attendee_id]
+    )
+
+    res.json({
+      message:"Successfully registered for event"
+    })
+
+  }
+  catch(err){
+
+    console.log(err)
+
+    res.status(500).json({
+      message:"Event registration failed"
+    })
+
+  }
+
+}
