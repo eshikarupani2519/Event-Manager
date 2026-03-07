@@ -1,90 +1,151 @@
+// // // // import { Injectable } from '@angular/core';
+// // // // import { HttpClient } from '@angular/common/http';
+
+// // // // @Injectable({
+// // // //   providedIn: 'root'
+// // // // })
+// // // // export class WebinarService {
+
+// // // //   api = "http://localhost:5000/api/events";
+
+// // // //   constructor(private http: HttpClient) {}
+
+// // // //   scheduleWebinar(data:any){
+// // // //     return this.http.post(this.api,data)
+// // // //   }
+
+// // // //   getWebinars(){
+// // // //     return this.http.get(this.api)
+// // // //   }
+
+// // // // }
+
+// // // import { Injectable } from '@angular/core';
+// // // import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+// // // @Injectable({
+// // //   providedIn: 'root'
+// // // })
+// // // export class WebinarService {
+
+// // //   constructor(private http: HttpClient) {}
+
+// // //   scheduleWebinar(webinar:any){
+
+// // //     const token = localStorage.getItem("token");
+
+// // //     const headers = new HttpHeaders({
+// // //       Authorization: `Bearer ${token}`
+// // //     });
+
+// // //     return this.http.post(
+// // //       "http://localhost:5000/api/events",
+// // //       webinar,
+// // //       { headers }
+// // //     );
+// // //   }
+
+// // // }
+
+
 // // import { Injectable } from '@angular/core';
-// // import { HttpClient } from '@angular/common/http';
+// // import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // // @Injectable({
 // //   providedIn: 'root'
 // // })
 // // export class WebinarService {
 
-// //   api = "http://localhost:5000/api/events";
-
 // //   constructor(private http: HttpClient) {}
 
-// //   scheduleWebinar(data:any){
-// //     return this.http.post(this.api,data)
+// //   scheduleWebinar(webinar:any){
+
+// //     const token = localStorage.getItem("token")
+
+// //     const headers = new HttpHeaders({
+// //       Authorization:`Bearer ${token}`
+// //     })
+
+// //     return this.http.post(
+// //       "http://localhost:5000/api/events",
+// //       webinar,
+// //       {headers}
+// //     )
 // //   }
 
 // //   getWebinars(){
-// //     return this.http.get(this.api)
+
+// //     const token = localStorage.getItem("token")
+
+// //     const headers = new HttpHeaders({
+// //       Authorization:`Bearer ${token}`
+// //     })
+
+// //     return this.http.get(
+// //       "http://localhost:5000/api/events",
+// //       {headers}
+// //     )
+
 // //   }
 
 // // }
 
 // import { Injectable } from '@angular/core';
-// import { HttpClient, HttpHeaders } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 
 // @Injectable({
 //   providedIn: 'root'
 // })
 // export class WebinarService {
 
-//   constructor(private http: HttpClient) {}
+//   api="http://localhost:5000/api"
 
-//   scheduleWebinar(webinar:any){
+//   constructor(private http:HttpClient) {}
 
-//     const token = localStorage.getItem("token");
+//   scheduleWebinar(data:any){
 
-//     const headers = new HttpHeaders({
-//       Authorization: `Bearer ${token}`
-//     });
+//     return this.http.post(this.api+"/events",data)
 
-//     return this.http.post(
-//       "http://localhost:5000/api/events",
-//       webinar,
-//       { headers }
-//     );
+//   }
+
+//   getWebinars(){
+
+//     return this.http.get(this.api+"/webinars")
+
 //   }
 
 // }
 
 
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebinarService {
 
-  constructor(private http: HttpClient) {}
+  api="http://localhost:5000/api"
 
-  scheduleWebinar(webinar:any){
+  constructor(private http:HttpClient){}
 
-    const token = localStorage.getItem("token")
+  scheduleWebinar(data:any, token:any){
 
     const headers = new HttpHeaders({
       Authorization:`Bearer ${token}`
     })
 
-    return this.http.post(
-      "http://localhost:5000/api/events",
-      webinar,
-      {headers}
-    )
+    return this.http.post(`${this.api}/events`,data,{headers})
+
   }
 
-  getWebinars(){
-
-    const token = localStorage.getItem("token")
+  getWebinars(token:any){
 
     const headers = new HttpHeaders({
       Authorization:`Bearer ${token}`
     })
 
-    return this.http.get(
-      "http://localhost:5000/api/events",
-      {headers}
-    )
+    return this.http.get(`${this.api}/events`,{headers})
 
   }
 

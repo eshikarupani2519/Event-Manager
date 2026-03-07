@@ -119,13 +119,71 @@ let user;
 
 // };
 
+// exports.login = async (req, res) => {
+//   const { username, password } = req.body;
+
+//   try {
+
+//     // 1️⃣ Check Admin Table
+//     // const result= await db.query("SELECT * FROM admin WHERE username = ?", [username]);
+//     const [adminResult] = await db.query(
+//       "SELECT * FROM admin WHERE username = ?",
+//       [username]
+//     );
+
+//     let user = adminResult[0];
+//     let role = "admin";
+
+//     // 2️⃣ If not admin, check Attendees table
+//     if (!user) {
+//       const [attendeeResult] = await db.query(
+//         "SELECT * FROM attendees WHERE name = ?",
+//         [username]   // frontend can send email in username field
+//       );
+
+//       user = attendeeResult[0];
+//       role = "attendee";
+//     }
+
+//     // 3️⃣ If still no user
+//     if (!user) {
+//       return res.status(401).json({ message: "User not found" });
+//     }
+
+//     // 4️⃣ Password check
+//     if (password !== user.password) {
+//       return res.status(401).json({ message: "Invalid password" });
+//     }
+
+//     // 5️⃣ Generate JWT
+//     const token = jwt.sign(
+//       { id: user.id, role: role },
+//       process.env.JWT_SECRET,
+//       { expiresIn: "1d" }
+//     );
+
+//     // 6️⃣ Send response
+//     res.json({
+//       token,
+//       role,
+//       user: {
+//         id: user.id,
+//         name: user.name,
+//         username: user.username || user.email
+//       }
+//     });
+
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
 
-    // 1️⃣ Check Admin Table
-    // const result= await db.query("SELECT * FROM admin WHERE username = ?", [username]);
+    // Check admin
     const [adminResult] = await db.query(
       "SELECT * FROM admin WHERE username = ?",
       [username]
@@ -133,36 +191,50 @@ exports.login = async (req, res) => {
 
     let user = adminResult[0];
     let role = "admin";
+    let table = "admin";
 
-    // 2️⃣ If not admin, check Attendees table
+    // If not admin check attendees
     if (!user) {
+
       const [attendeeResult] = await db.query(
         "SELECT * FROM attendees WHERE name = ?",
-        [username]   // frontend can send email in username field
+        [username]
       );
 
       user = attendeeResult[0];
       role = "attendee";
+      table = "attendees";
     }
 
-    // 3️⃣ If still no user
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    // 4️⃣ Password check
     if (password !== user.password) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // 5️⃣ Generate JWT
+    // Generate token
     const token = jwt.sign(
       { id: user.id, role: role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
-    // 6️⃣ Send response
+    // Save token in DB
+    // if(role === "admin"){
+    //     await db.query(
+    //     "UPDATE admin SET verification_token=? WHERE username=?",
+    //     [token, username]
+    //     );
+    // }else
+      {
+        await db.query(
+        "UPDATE attendees SET verification_token=? WHERE id=?",
+        [token, user.id]
+        );
+    }
+
     res.json({
       token,
       role,

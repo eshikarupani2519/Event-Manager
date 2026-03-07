@@ -34,25 +34,34 @@ module.exports = function (io) {
         // JOIN MEETING
         // =========================
 
-        socket.on("join-meeting", ({ meetingId, userId, role }) => {
+socket.on("join-meeting", ({ meetingId, userId, role }) => {
 
-            socket.join(meetingId)
+    socket.join(meetingId)
 
-            users[socket.id] = {
-                meetingId,
-                userId,
-                role
-            }
+    users[socket.id] = {
+        meetingId,
+        userId,
+        role
+    }
 
-            console.log(userId, "joined meeting", meetingId)
+    console.log(userId, "joined meeting", meetingId)
 
-            socket.to(meetingId).emit("user-connected", {
-                userId,
-                socketId: socket.id,
-                role
-            })
+    // get existing users in this meeting
+    const existingUsers = Object.keys(users).filter(id =>
+        users[id].meetingId === meetingId && id !== socket.id
+    )
 
-        })
+    // send existing users to the new user
+    socket.emit("existing-users", existingUsers)
+
+    // notify others
+    socket.to(meetingId).emit("user-connected", {
+        userId,
+        socketId: socket.id,
+        role
+    })
+
+})
 
 
         // =========================

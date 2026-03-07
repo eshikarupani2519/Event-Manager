@@ -2,8 +2,62 @@
 
 <p>Meeting ID : {{meetingId}}</p>
 
-<div>
+<hr>
 
-<video id="localVideo" autoplay muted></video>
+<div style="display:flex">
+
+<!-- VIDEO SECTION -->
+
+<div style="flex:2">
+
+<h3>Participants</h3>
+
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+
+<!-- Local Video -->
+<div>
+<p>You</p>
+<video #localVideo autoplay muted width="250"></video>
+</div>
+
+<!-- Remote Videos -->
+<div id="remoteVideos" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+
+</div>
+
+<br>
+
+<button (click)="shareScreen()">Share Screen</button>
+
+<button (click)="toggleMic()">Mic</button>
+
+<button (click)="toggleCamera()">Camera</button>
+
+</div>
+
+
+<!-- CHAT SECTION -->
+
+<div style="flex:1;border-left:1px solid black;padding-left:10px">
+
+<h3>Chat</h3>
+
+<div style="height:300px;overflow:auto;border:1px solid gray;padding:5px">
+
+<div *ngFor="let m of messages">
+
+<b>{{m.user}}</b> : {{m.message}}
+
+</div>
+
+</div>
+
+<br>
+
+<input [(ngModel)]="message" placeholder="Type message">
+
+<button (click)="sendMessage()">Send</button>
+
+</div>
 
 </div>

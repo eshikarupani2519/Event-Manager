@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 import { AttendeesModule } from './attendees/attendees.module';
-
+import { HttpClientModule } from '@angular/common/http';
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
@@ -25,7 +25,8 @@ import { WebinarModule } from './webinar/webinar.module';
     EventsModule,
     AttendeesModule,
     DashboardModule,
-    SharedModule, WebinarModule
+    SharedModule, WebinarModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
