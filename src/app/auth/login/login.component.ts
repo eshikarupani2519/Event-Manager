@@ -55,6 +55,7 @@ validateLogin() {
     this.http.post(`${environment.apiUrl}/login`, { username, password }, {headers: { 'Content-Type': 'application/json' }})
       .subscribe({
         next: (res: any) => {
+          console.log(res);
           localStorage.setItem('token', res.token);
           
            localStorage.setItem('eventLoggedIn','true');

@@ -115,3 +115,26 @@ exports.getAttendeeByEventId = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+exports.getAttendeeByAttendeeId = async (req, res) => {
+   const userId = req.user.id;
+   console.log("requested user with id:",userId);
+
+  try {
+    const [attendee] = await db.query(
+      `SELECT * FROM attendees WHERE id = ?`,
+      [id]
+    );
+
+    if (attendee.length === 0) {
+      return res.status(404).json({ error: "Attendee not found" });
+    }
+    res.json({
+      attendee
+    });
+
+  } catch (error) {
+    console.error("Error fetching attendees:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};

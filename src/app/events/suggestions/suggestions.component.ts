@@ -31,7 +31,12 @@ export class SuggestionsComponent {
    let headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        
+    this.eventService.getAttendeeById().subscribe({
+      next:(res:any)=>{
+        console.log("attendee:",res);
+        payload.attendee=res;
+      }
+    })
     this.eventService.getAllEvents({headers:headers}).subscribe({
       next:(res:any)=>{
         payload.event=res;
