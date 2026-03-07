@@ -5,7 +5,8 @@ const authController=require("./controllers/auth.controller")
 const dashboardController=require("./controllers/dashboard.controller")
 const eventController=require("./controllers/event.controller")
 const attendeeController=require("./controllers/attendee.controller")
-const authenticate=require("./middleware/auth.middleware")
+const authenticate=require("./middleware/auth.middleware");
+const offlineEvenetController = require("./controllers/offlineEvenet.controller");
 
 // dashboard stats
 router.get("/dashboard",authenticate,dashboardController.getStats);
@@ -199,5 +200,9 @@ router.post("/join", async(req,res)=>{
     }
 
 })
+router.post("/events/book", authenticate, eventController.bookSeats);
+
+router.post("/payment/create", authenticate, eventController.createPaymentOrder);
+router.post("/payment/verify", authenticate, eventController.verifyPayment);
 
 module.exports = router;
