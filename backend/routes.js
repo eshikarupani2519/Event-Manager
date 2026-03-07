@@ -34,7 +34,7 @@ router.get("/event/:id",authenticate,authorize("admin"),eventController.getEvent
 router.post("/attendees",authenticate,authorize("admin"),attendeeController.registerAttendee);
 
 router.get("/attendees/:id",authenticate,authorize("admin"),attendeeController.getAttendeeByEventId);
-
+router.get("/attendee",authenticate,authorize("attendee"),attendeeController.getAttendeeByAttendeeId);
 // router.get("/webinar/:meetingId",eventController.joinWebinar);
 
 router.get("/:meetingId", async(req,res)=>{

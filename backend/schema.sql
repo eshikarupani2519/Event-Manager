@@ -1,5 +1,7 @@
-create database eventManagementSystem;
-use eventManagementSystem;
+
+
+create database eventManagement;
+use eventManagement;
 drop table events;
 
 CREATE TABLE events (
@@ -198,3 +200,75 @@ INSERT INTO event_host (event_id, host_id)
 VALUES (2,2);
 INSERT INTO event_host (event_id, host_id)
 VALUES (3,3);
+
+ALTER TABLE events 
+ADD COLUMN meeting_id VARCHAR(20),
+ADD COLUMN meeting_link VARCHAR(255),
+ADD COLUMN webinar_status ENUM('scheduled','live','ended') DEFAULT 'scheduled';
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    attendee_id INT,
+    event_id INT,
+    message VARCHAR(255),
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Pending','Sent') DEFAULT 'Pending',
+    FOREIGN KEY (attendee_id) REFERENCES attendees(id),
+    FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
+DESCRIBE attendees;
+
+INSERT INTO event_attendee(event_id,att_id)
+VALUES(4,4);
+
+INSERT INTO event_attendee(event_id,att_id)
+VALUES(10,1);
+
+select * from events;
+INSERT INTO event_attendee(event_id,att_id)
+VALUES(6,4);
+
+
+SELECT event_id,event_name,meeting_id,meeting_link FROM events;
+
+ALTER TABLE notifications
+ADD COLUMN reminder_type ENUM('1_DAY','30_MIN');
+
+INSERT INTO events
+(event_name,event_description,event_date,timing,event_type,event_category,event_mode)
+VALUES
+(
+"CRON TEST WEBINAR AGAIN",
+"Testing 1 day reminder email",
+CURDATE(),
+ADDTIME(CURTIME(),"00:02:00"),
+"Workshop",
+'["Testing"]',
+"Online"
+);
+
+INSERT INTO event_attendee(event_id,att_id)
+VALUES(12,5);
+
+INSERT INTO event_attendee(event_id,att_id)
+VALUES(11,1);
+
+select * from event_attendee;
+select * from attendees;
+
+INSERT INTO attendees 
+(name, email, phone, city, state, country, password, interests)
+VALUES
+('ANSHU SACHDEV',
+ 'anshusachdev22@gmail.com',
+ 9123456780,
+ 'Mumbai',
+ 'Maharashtra',
+ 'India',
+ 'hashed_password_2',
+ '["Startups","Networking"]');
+ DELETE from attendees where id=6;
+select * from attendees; 
+ALTER TABLE attendees
+
+ADD COLUMN verification_token VARCHAR(255),
+ADD COLUMN verified BOOLEAN DEFAULT FALSE;

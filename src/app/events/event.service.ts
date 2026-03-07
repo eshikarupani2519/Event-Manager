@@ -36,4 +36,7 @@ export class EventService {
       headers: { 'Content-Type': 'application/json' }
     });
   }
+  getAttendeeById(){
+    return this.http.get(`${this.baseUrl}/attendee`);
+  }
 }

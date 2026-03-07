@@ -142,6 +142,7 @@ exports.login = async (req, res) => {
       );
 
       user = attendeeResult[0];
+      console.log("user:",user)
       role = "attendee";
     }
 
