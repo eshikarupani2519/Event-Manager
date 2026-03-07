@@ -11,6 +11,7 @@ import { SuggestionsComponent } from './events/suggestions/suggestions.component
 import { ScheduleWebinarComponent } from './webinar/schedule-webinar/schedule-webinar.component';
 import { WebinarListComponent } from './webinar/webinar-list/webinar-list.component';
 import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
+import { PaymentComponent } from './payment/payment.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -26,7 +27,8 @@ const routes: Routes = [
 
 { path:'webinars', component: WebinarListComponent },
 
-{ path:'webinar/:id', component: WebinarMeetingComponent }
+{ path:'webinar/:id', component: WebinarMeetingComponent },
+{ path: 'payment', component: PaymentComponent},  // payment page route
 
 ];
 

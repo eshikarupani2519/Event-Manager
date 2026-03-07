@@ -11,10 +11,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
 import { WebinarModule } from './webinar/webinar.module';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    PaymentComponent,
     
    
   ],
