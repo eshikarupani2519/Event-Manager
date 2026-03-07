@@ -1,91 +1,184 @@
-/* ✅ Only outer container gets the gradient + shadow */
-.container {
-  margin: 2rem auto;
-  width:60%;
-  padding: 2rem;
-  max-width: 500px;
-  background: linear-gradient(135deg, #9ecdfc 0%, #ffffff 100%);
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  font-family: 'Poppins', sans-serif;
+/* ===== Page Background ===== */
+
+.event-form-page{
+
+    min-height:100vh;
+
+    background:#020617;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+
 }
 
-/* Form title */
-h2 {
-  color: #1e3a8a;
-  text-align: center;
-  margin-bottom: 1rem;
+/* ===== Form Card ===== */
+
+.event-form-card{
+
+    width:100%;
+    max-width:500px;
+
+    background:linear-gradient(145deg,#0f172a,#020617);
+
+    padding:35px;
+
+    border-radius:14px;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+
 }
 
-/* Each label+input wrapper */
-.label-input {
-  margin-bottom: 1rem;
-  /* no background or shadow here */
+/* ===== Title ===== */
+
+.form-title{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    color:white;
+
 }
 
-/* Labels */
-.label-input label {
-  display: block;
-  font-weight: 500;
-  color: #1e3a8a;
-  font-size: 0.9rem;
-  margin-bottom: 0.3rem;
+/* ===== Form Layout ===== */
+
+.event-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
 }
 
-/* Inputs & select */
+/* ===== Group ===== */
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* ===== Labels ===== */
+
+.form-group label{
+
+    font-size:14px;
+
+    margin-bottom:6px;
+
+    color:#cbd5f5;
+
+}
+
+/* ===== Inputs ===== */
+
 input,
-select {
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 0.5rem;
-  width: 100%;
-  font-size: 0.9rem;
-  outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+select{
+
+    background:#020617;
+
+    border:1px solid #334155;
+
+    padding:10px;
+
+    border-radius:6px;
+
+    color:white;
+
+    font-size:14px;
+
+    transition:0.25s;
+
 }
+
+/* Focus */
 
 input:focus,
-select:focus {
-  border-color: #1e90ff;
-  box-shadow: 0 0 4px rgba(30, 144, 255, 0.4);
+select:focus{
+
+    outline:none;
+
+    border-color:#6366f1;
+
+    box-shadow:0 0 8px rgba(99,102,241,0.5);
+
 }
 
-/* Error messages */
-.errors {
-  color: #dc2626;
-  font-size: 0.8rem;
-  margin-top: 0.2rem;
-  font-weight: 500;
+/* ===== Errors ===== */
+
+.errors{
+
+    font-size:12px;
+
+    margin-top:4px;
+
+    color:#ef4444;
+
 }
 
-/* Submit button */
-button[type="submit"] {
-  background-color: #1e90ff;
-  color: #ffffff;
-  width: 100%;
-  padding: 0.6rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+/* ===== Button ===== */
+
+.submit-btn{
+
+    margin-top:10px;
+
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
 }
 
-button[type="submit"]:hover:enabled {
-  background-color: #1c86ee;
+/* Hover */
+
+.submit-btn:hover:enabled{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 25px rgba(99,102,241,0.6);
+
 }
 
-button[disabled] {
-  background-color: #93c5fd;
-  cursor: not-allowed;
+/* Disabled */
+
+.submit-btn:disabled{
+
+    opacity:0.5;
+
+    cursor:not-allowed;
+
 }
 
-/* Links (if any) */
-a {
-  color: #1e40af;
-  text-decoration: none;
+/* ===== Responsive ===== */
+
+@media(max-width:600px){
+
+.event-form-card{
+
+    padding:25px;
+
 }
 
-a:hover {
-  text-decoration: underline;
 }

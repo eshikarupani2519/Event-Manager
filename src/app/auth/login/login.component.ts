@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -43,6 +43,7 @@ showPassword(passwordField: HTMLInputElement, icon: HTMLElement){
     console.log(this.loginForm.value)
     
     this.validateLogin()
+    
   }
 validateLogin() {
       if (this.loginForm.invalid) {

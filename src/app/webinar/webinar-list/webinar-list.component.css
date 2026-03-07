@@ -1,0 +1,205 @@
+/* ===== Page ===== */
+
+.webinar-page{
+
+min-height:100vh;
+
+background:#020617;
+
+display:flex;
+
+justify-content:center;
+
+align-items:flex-start;
+
+padding:40px;
+
+color:white;
+
+}
+
+/* ===== Card ===== */
+
+.webinar-card{
+
+width:100%;
+
+max-width:900px;
+
+background:linear-gradient(145deg,#0f172a,#020617);
+
+padding:30px;
+
+border-radius:14px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+
+}
+
+/* ===== Header ===== */
+
+.header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:20px;
+
+flex-wrap:wrap;
+
+gap:10px;
+
+}
+
+/* Title */
+
+.title{
+
+font-size:26px;
+
+}
+
+/* ===== Schedule Button ===== */
+
+.schedule-btn{
+
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+
+color:white;
+
+padding:10px 16px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+font-weight:600;
+
+transition:0.3s;
+
+}
+
+.schedule-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 10px 25px rgba(99,102,241,0.5);
+
+}
+
+/* ===== Table Wrapper ===== */
+
+.table-wrapper{
+
+overflow-x:auto;
+
+}
+
+/* ===== Table ===== */
+
+.webinar-table{
+
+width:100%;
+
+border-collapse:collapse;
+
+background:#020617;
+
+border-radius:8px;
+
+overflow:hidden;
+
+}
+
+/* Head */
+
+.webinar-table thead{
+
+background:#0f172a;
+
+}
+
+.webinar-table th{
+
+padding:14px;
+
+text-align:left;
+
+color:#cbd5f5;
+
+font-weight:600;
+
+}
+
+/* Body */
+
+.webinar-table td{
+
+padding:14px;
+
+border-top:1px solid #334155;
+
+}
+
+/* Hover */
+
+.webinar-table tbody tr:hover{
+
+background:#0f172a;
+
+}
+
+/* Event Name */
+
+.event-name{
+
+font-weight:500;
+
+}
+
+/* ===== Join Button ===== */
+
+.join-btn{
+
+background:#10b981;
+
+padding:6px 14px;
+
+border-radius:6px;
+
+text-decoration:none;
+
+color:white;
+
+font-weight:600;
+
+transition:0.25s;
+
+}
+
+.join-btn:hover{
+
+background:#059669;
+
+transform:scale(1.05);
+
+}
+
+/* ===== Responsive ===== */
+
+@media(max-width:600px){
+
+.header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+}

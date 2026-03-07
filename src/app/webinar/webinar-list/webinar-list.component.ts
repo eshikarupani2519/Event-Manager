@@ -29,7 +29,8 @@ import { WebinarService } from '../webinar.service';
 
 @Component({
   selector: 'app-webinar-list',
-  templateUrl: './webinar-list.component.html'
+  templateUrl: './webinar-list.component.html',
+  styleUrls: ['./webinar-list.component.css']
 })
 export class WebinarListComponent implements OnInit{
 

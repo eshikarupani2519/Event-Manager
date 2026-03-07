@@ -1,32 +1,57 @@
-<div class="event-info">
-  <h2>{{ event_name }}</h2>
-  <div class="info-line">
-    <strong>Description:</strong>
-    <span>{{ event_description }}</span>
-  </div>
+<div class="event-page">
 
-  <div class="info-line">
-    <strong>Date:</strong>
-    <span>{{event_date}} </span>
-  </div>
+<div class="event-card">
 
-  <div class="info-line">
-    <strong>Total Attendees:</strong>
-    <span>{{totalAttendees}} </span>
-  </div>
+<h2 class="event-title">🎉 {{ event_name }}</h2>
 
-  <div class="info-line">
-    <strong>Type:</strong>
-    <span>{{ event_type }}</span>
-  </div>
+<div class="info-line">
 
-  <div class="info-line">
-    <strong>Timing:</strong>
-    <span>{{ timing }}</span>
-  </div>
+<span class="label">Description</span>
 
-     
+<span class="value">{{ event_description }}</span>
+
 </div>
+
+<div class="info-grid">
+
+<div class="info-item">
+
+<span class="label">📅 Date</span>
+
+<span class="value">{{ event_date }}</span>
+
+</div>
+
+<div class="info-item">
+
+<span class="label">👥 Attendees</span>
+
+<span class="value">{{ totalAttendees }}</span>
+
+</div>
+
+<div class="info-item">
+
+<span class="label">🎤 Type</span>
+
+<span class="badge">{{ event_type }}</span>
+
+</div>
+
+<div class="info-item">
+
+<span class="label">⏰ Timing</span>
+
+<span class="value">{{ timing }}</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <div *ngIf="isLoading" class="loader-overlay">
   <div class="spinner"></div>
   <p>Processing request...</p>

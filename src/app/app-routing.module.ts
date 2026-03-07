@@ -11,9 +11,10 @@ import { SuggestionsComponent } from './events/suggestions/suggestions.component
 import { ScheduleWebinarComponent } from './webinar/schedule-webinar/schedule-webinar.component';
 import { WebinarListComponent } from './webinar/webinar-list/webinar-list.component';
 import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
-import { PaymentComponent } from './payment/payment.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
+  {path:'register',component:RegisterComponent},
   {path:'',component:LoginComponent},
   {path:'add-event',component:AddEventComponent},
   {path:'update-event/:id',component:AddEventComponent},
@@ -27,8 +28,8 @@ const routes: Routes = [
 
 { path:'webinars', component: WebinarListComponent },
 
-{ path:'webinar/:id', component: WebinarMeetingComponent },
-{ path: 'payment', component: PaymentComponent},  // payment page route
+{ path:'webinar/:id', component: WebinarMeetingComponent }
+// { path: 'payment', component: PaymentComponent},  // payment page route
 
 ];
 

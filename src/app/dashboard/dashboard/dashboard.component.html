@@ -1,17 +1,15 @@
+<div class="dashboard-container">
 
-<h2 class="text-center">Dashboard</h2>
-<div class="text-end mx-5">
-    <h5>Total Events: {{totalEvents}}</h5>
-</div>
-<div class="body">
+    <h2 class="dashboard-title">🚀 Event Dashboard</h2>
 
+    <!-- Stats Cards -->
+    <div class="stats-grid">
 
-
-    <div class="d-flex main-body flex-column">
-
-        <div class="chart-container" style="height: 250px; width: 250px; margin: 0 auto; position: relative;">
-            <canvas id="mainBoardIpoChart"></canvas>
+        <div class="stat-card">
+            <h4>Total Events</h4>
+            <p class="stat-number">{{totalEvents}}</p>
         </div>
+<<<<<<< HEAD
         <a routerLink="/payment">Go to Payment Page</a>
         <div class="d-flex justify-content-around mt-4">
             <div class="text-center">
@@ -21,23 +19,69 @@
                 <span class="text-muted">{{ conferences }}</span>
             </div>
             <a routerLink="/schedule-webinar">Schedule Webinar</a>
+=======
+>>>>>>> ce5e4f908cafd30a1b4afb6ac09044ab18410786
 
-<br>
+        <div class="stat-card">
+            <h4>Conferences</h4>
+            <p class="stat-number">{{conferences}}</p>
+        </div>
 
-<a routerLink="/webinars">View Webinars</a>
-            <div class="text-center">
-                <div class="legend-circle bg-info me-2 d-inline-block"></div>
-                <span class="fw-bold">Workshops</span>
-                <br>
-                <span class="text-muted">{{ workShops }}</span>
-            </div>
-            <div class="text-center">
-                <div class="legend-circle bg-success me-2 d-inline-block"></div>
-                <span class="fw-bold">Meetups</span>
-                <br>
-                <span class="text-muted">{{ meetUps }}</span>
-            </div>
+        <div class="stat-card">
+            <h4>Workshops</h4>
+            <p class="stat-number">{{workShops}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h4>Meetups</h4>
+            <p class="stat-number">{{meetUps}}</p>
         </div>
 
     </div>
+
+
+    <!-- Chart Section -->
+    <div class="chart-card">
+
+        <h4 class="chart-title">Event Distribution</h4>
+
+        <div class="chart-container">
+            <canvas id="mainBoardIpoChart"></canvas>
+        </div>
+
+        <div class="legend-row">
+
+            <div class="legend-item">
+                <span class="legend-circle conference"></span>
+                Conferences
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-circle workshop"></span>
+                Workshops
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-circle meetup"></span>
+                Meetups
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Actions -->
+    <div class="dashboard-actions">
+
+        <a routerLink="/schedule-webinar" class="action-btn primary-btn">
+            🎤 Schedule Webinar
+        </a>
+
+        <a routerLink="/webinars" class="action-btn secondary-btn">
+            📺 View Webinars
+        </a>
+
+    </div>
+
 </div>

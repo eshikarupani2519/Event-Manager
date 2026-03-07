@@ -1,85 +1,129 @@
-<app-navbar></app-navbar>
+<div class="events-container">
 
-<div style="width:90%;" class="p-lg-3 p-sm-1 font-poppins container col-md-7">
-    <div>
-        <h2 class="text-center">Events</h2>
-        <h6 class="text-center" *ngIf="events">Total events: {{events.length}}</h6>
-        <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-primary" (click)="addEvent()" [class.disabled-link]="isLoading">
+    <div class="events-card">
+
+        <h2 class="page-title">🎉 Events</h2>
+        <h6 class="event-count" *ngIf="events">Total events: {{events.length}}</h6>
+
+        <!-- Actions -->
+        <div class="events-actions">
+
+            <button class="add-event-btn" (click)="addEvent()" [class.disabled-link]="isLoading">
                 <i class="fa-solid fa-plus me-2"></i>Add Event
             </button>
-            <select name="type" id="type" [(ngModel)]="selectedType" (change)="filterByType()" class="form-select ms-3"
-                style="width: 150px;" [class.disabled-link]="isLoading">
+
+            <select name="type"
+                [(ngModel)]="selectedType"
+                (change)="filterByType()"
+                class="event-filter"
+                [class.disabled-link]="isLoading">
+
                 <option value="Workshop">Workshop</option>
                 <option value="Conference">Conference</option>
                 <option value="Meetup">Meetup</option>
                 <option value="All">All</option>
+
             </select>
+
         </div>
 
-        <div>
-            <table class="table table-striped">
+
+        <!-- Table -->
+        <div class="table-wrapper">
+
+            <table class="event-table">
+
                 <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Delete/View/Edit</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
+
                 <tbody>
+
                     <tr *ngFor="let event of paginatedEvents">
-                        <td scope="row">{{event.event_name}}</td>
-                        <td>{{event.event_type}}</td>
+
+                        <td>{{event.event_name}}</td>
+                        <td>
+                            <span class="type-badge">
+                                {{event.event_type}}
+                            </span>
+                        </td>
+
                         <td>{{event.event_date}}</td>
 
-                        <td>
+                        <td class="actions">
 
-                            <a (click)="deleteEvent(event.event_id)" [class.disabled-link]="isLoading">
-                                <i class="fa-regular fa-trash-can  mx-2 fw-100"
-                                    [style.color]="isLoading ? '#a0a0a0' : '#d8002b'" style="font-size: 1.6rem;"></i>
-                            </a>
-                            <a (click)="editEvent(event.event_id)" [class.disabled-link]="isLoading">
-                                <i class="fa-solid fa-pen-to-square  mx-2 text-primary fw-100"
-                                    style="font-size: 1.6rem;"></i>
+                            <i class="fa-regular fa-trash-can delete-icon"
+                                (click)="deleteEvent(event.event_id)"
+                                [class.disabled-link]="isLoading"></i>
 
-                            </a>
-                            <a (click)="viewDetails(event)" [class.disabled-link]="isLoading">
-                                <i class="fa-regular fa-eye  fw-100 text-muted"
-                                    [style.color]="isLoading ? '#a0a0a0' : '#242628'" style="font-size: 1.6rem;"></i>
-                            </a>
+                            <i class="fa-solid fa-pen-to-square edit-icon"
+                                (click)="editEvent(event.event_id)"
+                                [class.disabled-link]="isLoading"></i>
+
+                            <i class="fa-regular fa-eye view-icon"
+                                (click)="viewDetails(event)"
+                                [class.disabled-link]="isLoading"></i>
+
                         </td>
+
                     </tr>
+
                     <tr *ngIf="paginatedEvents.length === 0 && !isLoading">
-                        <td colspan="10" class="text-center py-4">No Events found.</td>
+                        <td colspan="4" class="no-events">No Events Found</td>
                     </tr>
+
                 </tbody>
+
             </table>
-            <ul class="pagination d-flex justify-content-center">
-                <li class="page-item" [class.disabled]="currentPage === 1 || isLoading">
-                    <a class="page-link" href="#" (click)="goToPreviousPage($event)">
-                        <i class="fa-solid fa-angle-left" style="color: #2d3034;"></i>
-                    </a>
-                </li>
-
-                <li class="page-item" *ngFor="let page of totalPagesArray" [class.active]="page === currentPage"
-                    [class.disabled]="isLoading">
-                    <a class="page-link mx-2" href="#" (click)="goToPage($event, page)">{{ page }}</a>
-                </li>
-
-                <li class="page-item" [class.disabled]="currentPage === totalPages || isLoading">
-                    <a class="page-link" href="#" (click)="goToNextPage($event)">
-                        <i class="fa-solid fa-angle-right" style="color: #2d3034;"></i>
-                    </a>
-                </li>
-            </ul>
 
         </div>
 
+
+        <!-- Pagination -->
+
+        <ul class="pagination">
+
+            <li [class.disabled]="currentPage === 1 || isLoading">
+
+                <a href="#" (click)="goToPreviousPage($event)">
+                    <i class="fa-solid fa-angle-left"></i>
+                </a>
+
+            </li>
+
+            <li *ngFor="let page of totalPagesArray"
+                [class.active]="page === currentPage"
+                [class.disabled]="isLoading">
+
+                <a href="#" (click)="goToPage($event, page)">
+                    {{page}}
+                </a>
+
+            </li>
+
+            <li [class.disabled]="currentPage === totalPages || isLoading">
+
+                <a href="#" (click)="goToNextPage($event)">
+                    <i class="fa-solid fa-angle-right"></i>
+                </a>
+
+            </li>
+
+        </ul>
+
     </div>
 
-    <!-- Loader/Spinner HTML -->
-    <div *ngIf="isLoading" class="loader-overlay">
-        <div class="spinner"></div>
-        <p>Processing request...</p>
-    </div>
+</div>
+
+
+<!-- Loader -->
+
+<div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Processing request...</p>
+</div>

@@ -1,63 +1,64 @@
-<h2>Webinar Room</h2>
+<div class="webinar-container">
 
-<p>Meeting ID : {{meetingId}}</p>
+  <h2 class="title">🎥 Webinar Room</h2>
+  <p class="meeting-id">Meeting ID : {{meetingId}}</p>
 
-<hr>
+  <div class="main-layout">
 
-<div style="display:flex">
+    <!-- VIDEO SECTION -->
+    <div class="video-section">
 
-<!-- VIDEO SECTION -->
+      <h3>Participants</h3>
 
-<div style="flex:2">
+      <div class="video-grid">
 
-<h3>Participants</h3>
+        <!-- Local Video -->
+        <div class="video-card">
+          <p class="video-label">You</p>
+          <video #localVideo autoplay muted></video>
+        </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:10px">
+        <!-- Remote Videos -->
+        <div id="remoteVideos" class="remote-videos"></div>
 
-<!-- Local Video -->
-<div>
-<p>You</p>
-<video #localVideo autoplay muted width="250"></video>
-</div>
+      </div>
 
-<!-- Remote Videos -->
-<div id="remoteVideos" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+      <div class="controls">
 
-</div>
+        <button class="btn screen" (click)="shareScreen()">Share Screen</button>
 
-<br>
+        <button class="btn mic" (click)="toggleMic()">Mic</button>
 
-<button (click)="shareScreen()">Share Screen</button>
+        <button class="btn camera" (click)="toggleCamera()">Camera</button>
 
-<button (click)="toggleMic()">Mic</button>
+      </div>
 
-<button (click)="toggleCamera()">Camera</button>
+    </div>
 
-</div>
+    <!-- CHAT SECTION -->
 
+    <div class="chat-section">
 
-<!-- CHAT SECTION -->
+      <h3>Chat</h3>
 
-<div style="flex:1;border-left:1px solid black;padding-left:10px">
+      <div class="chat-box">
 
-<h3>Chat</h3>
+        <div *ngFor="let m of messages" class="chat-message">
+          <b>{{m.user}}</b> : {{m.message}}
+        </div>
 
-<div style="height:300px;overflow:auto;border:1px solid gray;padding:5px">
+      </div>
 
-<div *ngFor="let m of messages">
+      <div class="chat-input">
 
-<b>{{m.user}}</b> : {{m.message}}
+        <input [(ngModel)]="message" placeholder="Type message">
 
-</div>
+        <button (click)="sendMessage()">Send</button>
 
-</div>
+      </div>
 
-<br>
+    </div>
 
-<input [(ngModel)]="message" placeholder="Type message">
-
-<button (click)="sendMessage()">Send</button>
-
-</div>
+  </div>
 
 </div>

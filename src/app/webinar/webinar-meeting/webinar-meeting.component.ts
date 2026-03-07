@@ -4,7 +4,8 @@ import { io } from "socket.io-client";
 
 @Component({
   selector: 'app-webinar-meeting',
-  templateUrl: './webinar-meeting.component.html'
+  templateUrl: './webinar-meeting.component.html',
+  styleUrls: ['./webinar-meeting.component.css']
 })
 export class WebinarMeetingComponent implements OnInit {
 

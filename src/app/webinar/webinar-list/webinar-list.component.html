@@ -1,32 +1,56 @@
-<h2>Scheduled Webinars</h2>
+<div class="webinar-page">
 
-<a routerLink="/schedule">Schedule New Webinar</a>
+<div class="webinar-card">
 
-<br><br>
+<div class="header">
 
-<table border="1">
+<h2 class="title">📅 Scheduled Webinars</h2>
+
+<a routerLink="/schedule-webinar" class="schedule-btn">
++ Schedule Webinar
+</a>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="webinar-table">
+
+<thead>
 
 <tr>
-<th>Name</th>
+<th>Webinar</th>
 <th>Date</th>
 <th>Time</th>
 <th>Join</th>
 </tr>
 
+</thead>
+
+<tbody>
+
 <tr *ngFor="let w of webinars">
 
-<td>{{w.event_name}}</td>
+<td class="event-name">{{w.event_name}}</td>
+
 <td>{{w.event_date | date}}</td>
+
 <td>{{w.timing}}</td>
 
 <td>
-
-<a [routerLink]="['/webinar',w.meeting_id]">
-Join Webinar
+<a class="join-btn" [routerLink]="['/webinar',w.meeting_id]">
+Join
 </a>
-
 </td>
 
 </tr>
 
+</tbody>
+
 </table>
+
+</div>
+
+</div>
+
+</div>
