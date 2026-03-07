@@ -8,7 +8,7 @@ const attendeeController=require("./controllers/attendee.controller")
 const authenticate=require("./middleware/auth.middleware")
 
 // dashboard stats
-router.get("/dashboard",authenticate,authorize("admin"),dashboardController.getStats);
+router.get("/dashboard",authenticate,dashboardController.getStats);
 
 
 router.post("/signup", authController.signUp);
@@ -19,22 +19,22 @@ router.get("/verify/:token", authController.verifyAccount);
 router.post("/login", authController.login);
 
 // events
-router.get("/events",authenticate,authorize("admin"),eventController.getAllEvents);
+router.get("/events",authenticate,eventController.getAllEvents);
 
-router.post("/events",authenticate,authorize("admin"),eventController.addEvent);
+router.post("/events",authenticate,eventController.addEvent);
 
-router.put("/event/:id",authenticate,authorize("admin"),eventController.updateEvent);
+router.put("/event/:id",authenticate,eventController.updateEvent);
 
-router.delete("/event/:id",authenticate,authorize("admin"),eventController.deleteEvent);
+router.delete("/event/:id",authenticate,eventController.deleteEvent);
 
-router.get("/event/:id",authenticate,authorize("admin"),eventController.getEventById);
+router.get("/event/:id",authenticate,eventController.getEventById);
 
 // attendees
 
-router.post("/attendees",authenticate,authorize("admin"),attendeeController.registerAttendee);
+router.post("/attendees",authenticate,attendeeController.registerAttendee);
 
-router.get("/attendees/:id",authenticate,authorize("admin"),attendeeController.getAttendeeByEventId);
-router.get("/attendee",authenticate,authorize("attendee"),attendeeController.getAttendeeByAttendeeId);
+router.get("/attendees/:id",authenticate,attendeeController.getAttendeeByEventId);
+router.get("/attendee",authenticate,attendeeController.getAttendeeByAttendeeId);
 // router.get("/webinar/:meetingId",eventController.joinWebinar);
 
 router.get("/:meetingId", async(req,res)=>{
