@@ -252,8 +252,12 @@ VALUES(12,5);
 INSERT INTO event_attendee(event_id,att_id)
 VALUES(11,1);
 
+INSERT INTO event_attendee(event_id,att_id)
+VALUES(16,7);
+
 select * from event_attendee;
 select * from attendees;
+select * from events;
 
 INSERT INTO attendees 
 (name, email, phone, city, state, country, password, interests)
@@ -266,3 +270,9 @@ VALUES
  'India',
  'hashed_password_2',
  '["Startups","Networking"]');
+ DELETE from attendees where id=6;
+select * from attendees; 
+ALTER TABLE attendees
+
+ADD COLUMN verification_token VARCHAR(255),
+ADD COLUMN verified BOOLEAN DEFAULT FALSE;

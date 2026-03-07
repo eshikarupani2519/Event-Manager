@@ -1,190 +1,477 @@
-const db = require("../models/db")
-exports.getAllEvents = async (req, res) => {
-    try {
+// const db = require("../models/db")
+// exports.getAllEvents = async (req, res) => {
+//     try {
 
-        const query = `
-      SELECT * from events;
-    `;
-        const result = await db.query(query);
+//         const query = `
+//       SELECT * from events;
+//     `;
+//         const result = await db.query(query);
      
-      return  res.json(result[0]);
-    }
-    catch (err) {
-        console.error(err);
-      return  res.status(500).json({ message: 'Error fetching events' });
-    }
-}
+//       return  res.json(result[0]);
+//     }
+//     catch (err) {
+//         console.error(err);
+//       return  res.status(500).json({ message: 'Error fetching events' });
+//     }
+// }
 
-exports.addEvent=async (req,res)=>{
+// exports.addEvent=async (req,res)=>{
    
-    try{
-        console.log("Starting event add...");
-    console.log("Received files:", req.files);
-    console.log("Received body:", req.body);
+//     try{
+//         console.log("Starting event add...");
+//     console.log("Received files:", req.files);
+//     console.log("Received body:", req.body);
     
-    // Extract data from the request body
-    const {
-      event_name,event_description,event_date,event_type,timing
-    } = req.body;
+//     // Extract data from the request body
+//     const {
+//       event_name,event_description,event_date,event_type,timing
+//     } = req.body;
 
  
     
    
     
-    // Check if the event already exists
-    const eventCheckResult = await db.query(
-      `SELECT event_id FROM events WHERE event_name LIKE ?`,
-      [event_name]
-    );
+//     // Check if the event already exists
+//     const eventCheckResult = await db.query(
+//       `SELECT event_id FROM events WHERE event_name LIKE ?`,
+//       [event_name]
+//     );
   
 
-    if (eventCheckResult[0].length > 0) {
-     return res.status(409).json({ error: 'Event already exists!' });
+//     if (eventCheckResult[0].length > 0) {
+//      return res.status(409).json({ error: 'Event already exists!' });
       
-    } else {
+//     } else {
 
-      const eventInsertResult = await db.query(
-        `INSERT INTO events (event_name,event_description,event_date,timing,event_type ) VALUES (?, ?, ?, ?, ?) `,
-        [event_name,event_description,event_date,timing,event_type]
-      );
+//       const eventInsertResult = await db.query(
+//         `INSERT INTO events (event_name,event_description,event_date,timing,event_type ) VALUES (?, ?, ?, ?, ?) `,
+//         [event_name,event_description,event_date,timing,event_type]
+//       );
 
-      console.log("New event inserted ",eventInsertResult);
-    }
+//       console.log("New event inserted ",eventInsertResult);
+//     }
     
  
-    console.log("event inserted ")
-    return res.status(201).json("wowwww,areyyy eshika kya daali h tu ye wowww, wow kya hota h");
+//     console.log("event inserted ")
+//     return res.status(201).json("wowwww,areyyy eshika kya daali h tu ye wowww, wow kya hota h");
 
-    }
-    catch(err){
+//     }
+//     catch(err){
 
-    console.error("Error during event registration:", err);
-   return res.status(500).json({ message: "Internal Server Error during event registration." });
-    }
+//     console.error("Error during event registration:", err);
+//    return res.status(500).json({ message: "Internal Server Error during event registration." });
+//     }
 
-}
+// }
 
-exports.getEventById = async (req, res) => {
-  const { id } = req.params;
+// exports.getEventById = async (req, res) => {
+//   const { id } = req.params;
 
+//   try {
+//     const result = await db.query(`
+//      SELECT e.event_name,e.event_description,e.event_date,e.timing,e.event_type FROM events as e WHERE e.event_id = ?
+//     `, [id]);
+//     const event = result[0][0];
+//     if (!event) {
+//       return res.status(404).json({ error: 'event not found' });
+//     }
+//     const totalAttendeesResult=await db.query(`SELECT COUNT(*) FROM event_attendee WHERE event_attendee.event_id=?`,[id])
+//     const totalAttendees= totalAttendeesResult[0];
+//     res.json({event,totalAttendees});
+//   } catch (error) {
+//     console.error('Error fetching event by ID:', error);
+//    return res.status(500).json({ error: 'Server error' });
+//   }
+// };
+
+// exports.updateEvent = async (req, res) => {
+
+  
+//   try {
+//     const { id } = req.params;
+//     const {
+//       event_name,event_description,event_date,timing,event_type
+//     } = req.body;
+    
+
+//     const eventResult = await db.query('SELECT event_id FROM events WHERE events.event_id = ?', [id]);
+//     if (eventResult.length === 0) {
+//       return res.status(404).json({ message: 'event not found' });
+//     }
+      
+//       const updateResult=await db.query(`UPDATE events SET event_name=?,event_description=?,event_date=?,timing=?,event_type=? WHERE event_id = ?`,[event_name,event_description,event_date,timing,event_type,id]);
+//     console.log("updated event")
+
+
+    
+//     res.status(200).json({ message: 'event updated successfully' });
+//   } catch (err) {
+
+//     console.error(err);
+//     res.status(500).json({ message: 'Failed to update event' });
+//   } 
+// };
+
+// exports.deleteEvent = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     await db.query(`DELETE FROM events WHERE event_id = ?`, [id]);
+//     res.json({ message: 'event deleted successfully' });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error deleting event' });
+//   }
+// };
+
+// exports.joinWebinar = (req,res)=>{
+
+//     const meetingId = req.params.meetingId
+
+//     const query = `
+//     SELECT * FROM events
+//     WHERE meeting_id = ?
+//     `
+
+//     db.query(query,[meetingId],(err,result)=>{
+
+//         if(err) throw err
+
+//         if(result.length === 0){
+
+//             return res.status(404).json({
+//                 message:"Invalid meeting link"
+//             })
+
+//         }
+
+//         if(result[0].webinar_status !== "live"){
+
+//             return res.json({
+//                 message:"Webinar has not started yet"
+//             })
+
+//         }
+
+//         res.json({
+//             meetingId,
+//             event:result[0]
+//         })
+
+//     })
+
+// }
+// exports.registerForEvent = async (req,res)=>{
+
+//   try{
+
+//     const {attendee_id,event_id} = req.body
+
+//     await db.query(
+//       `INSERT INTO event_attendee(event_id,att_id)
+//        VALUES (?,?)`,
+//       [event_id,attendee_id]
+//     )
+
+//     res.json({
+//       message:"Successfully registered for event"
+//     })
+
+//   }
+//   catch(err){
+
+//     console.log(err)
+
+//     res.status(500).json({
+//       message:"Event registration failed"
+//     })
+
+//   }
+
+// }
+
+const db = require("../models/db"); // your MySQL pool
+const crypto = require("crypto");
+const razorpay = require("../services/razorPayService");
+
+// Get all events
+exports.getAllEvents = async (req, res) => {
   try {
-    const result = await db.query(`
-     SELECT e.event_name,e.event_description,e.event_date,e.timing,e.event_type FROM events as e WHERE e.event_id = ?
-    `, [id]);
-    const event = result[0][0];
-    if (!event) {
-      return res.status(404).json({ error: 'event not found' });
-    }
-    const totalAttendeesResult=await db.query(`SELECT COUNT(*) FROM event_attendee WHERE event_attendee.event_id=?`,[id])
-    const totalAttendees= totalAttendeesResult[0];
-    res.json({event,totalAttendees});
-  } catch (error) {
-    console.error('Error fetching event by ID:', error);
-   return res.status(500).json({ error: 'Server error' });
+    const [events] = await db.query(`SELECT * FROM events WHERE activeYN=1`);
+    res.json(events);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching events" });
   }
 };
 
-exports.updateEvent = async (req, res) => {
+// Add new event
+exports.addEvent = async (req, res) => {
+  try {
+    const {
+      event_name,
+      event_description,
+      event_date,
+      timing,
+      event_type,
+      event_category = [],
+      event_mode,
+      location,
+      total_seats
+    } = req.body;
 
-  
+    // Validate online/offline & seats
+    if (!["Online", "Offline"].includes(event_mode)) {
+      return res.status(400).json({ message: "event_mode must be Online or Offline" });
+    }
+    let finalLocation = event_mode === "Offline" ? location : "Virtual";
+
+    let available_seats = null;
+    if (event_mode === "Offline") {
+      if (!total_seats || total_seats <= 0) {
+        return res.status(400).json({ message: "Offline events must have total_seats > 0" });
+      }
+      available_seats = total_seats;
+    }
+
+    // Check duplicate event
+    const [existing] = await db.query(
+      `SELECT event_id FROM events WHERE event_name=?`,
+      [event_name]
+    );
+    if (existing.length > 0) {
+      return res.status(409).json({ message: "Event with this name already exists" });
+    }
+
+    // Insert event
+    const [result] = await db.query(
+      `INSERT INTO events 
+      (event_name, event_description, event_date, timing, event_type, event_category, event_mode, location, total_seats, available_seats)
+      VALUES (?,?,?,?,?,?,?,?,?,?)`,
+      [
+        event_name,
+        event_description,
+        event_date,
+        timing,
+        event_type,
+        JSON.stringify(event_category),
+        event_mode,
+        finalLocation,
+        total_seats || null,
+        available_seats
+      ]
+    );
+
+    res.status(201).json({ message: "wow eshika event add ho gaya", event_id: result.insertId });
+  } catch (err) {
+    console.error("Error adding event:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Get event by ID
+exports.getEventById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await db.query(`SELECT * FROM events WHERE event_id=?`, [id]);
+    if (result.length === 0) return res.status(404).json({ message: "Event not found" });
+
+    // Count attendees
+    const [attendeesCount] = await db.query(
+      `SELECT COUNT(*) AS total_attendees FROM event_attendee WHERE event_id=?`,
+      [id]
+    );
+
+    res.json({ event: result[0], total_attendees: attendeesCount[0].total_attendees });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error fetching event" });
+  }
+};
+
+// Update event
+exports.updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      event_name,event_description,event_date,timing,event_type
+      event_name,
+      event_description,
+      event_date,
+      timing,
+      event_type,
+      event_category,
+      event_mode,
+      location,
+      total_seats
     } = req.body;
-    
 
-    const eventResult = await db.query('SELECT event_id FROM events WHERE events.event_id = ?', [id]);
-    if (eventResult.length === 0) {
-      return res.status(404).json({ message: 'event not found' });
+    const [existing] = await db.query(`SELECT * FROM events WHERE event_id=?`, [id]);
+    if (existing.length === 0) return res.status(404).json({ message: "Event not found" });
+
+    let finalLocation = event_mode === "Offline" ? location : "Virtual";
+    let available_seats = existing[0].available_seats;
+    if (event_mode === "Offline" && total_seats) {
+      // Adjust available seats proportionally
+      const bookedSeats = existing[0].total_seats - existing[0].available_seats;
+      available_seats = total_seats - bookedSeats;
     }
-      
-      const updateResult=await db.query(`UPDATE events SET event_name=?,event_description=?,event_date=?,timing=?,event_type=? WHERE event_id = ?`,[event_name,event_description,event_date,timing,event_type,id]);
-    console.log("updated event")
 
+    await db.query(
+      `UPDATE events SET event_name=?, event_description=?, event_date=?, timing=?, event_type=?, event_category=?, event_mode=?, location=?, total_seats=?, available_seats=? WHERE event_id=?`,
+      [
+        event_name,
+        event_description,
+        event_date,
+        timing,
+        event_type,
+        JSON.stringify(event_category),
+        event_mode,
+        finalLocation,
+        total_seats || null,
+        available_seats,
+        id
+      ]
+    );
 
-    
-    res.status(200).json({ message: 'event updated successfully' });
+    res.json({ message: "Event updated successfully" });
   } catch (err) {
-
     console.error(err);
-    res.status(500).json({ message: 'Failed to update event' });
-  } 
+    res.status(500).json({ message: "Server error updating event" });
+  }
 };
 
+// Delete event
 exports.deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    await db.query(`DELETE FROM events WHERE event_id = ?`, [id]);
-    res.json({ message: 'event deleted successfully' });
+    await db.query(`DELETE FROM events WHERE event_id=?`, [id]);
+    res.json({ message: "Event deleted successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error deleting event' });
+    res.status(500).json({ message: "Error deleting event" });
   }
 };
 
-exports.joinWebinar = (req,res)=>{
+// Book seats for offline event
+exports.bookSeats = async (req, res) => {
+  try {
+    const { event_id, attendee_id, seats_to_book } = req.body;
 
-    const meetingId = req.params.meetingId
+    const [events] = await db.query(`SELECT * FROM events WHERE event_id=?`, [event_id]);
+    if (events.length === 0) return res.status(404).json({ message: "Event not found" });
 
-    const query = `
-    SELECT * FROM events
-    WHERE meeting_id = ?
-    `
+    const event = events[0];
 
-    db.query(query,[meetingId],(err,result)=>{
+    if (event.event_mode === "Offline") {
+      if (event.available_seats < seats_to_book)
+        return res.status(400).json({ message: "Not enough seats available" });
 
-        if(err) throw err
+      await db.query(
+        `UPDATE events SET available_seats = available_seats - ? WHERE event_id=?`,
+        [seats_to_book, event_id]
+      );
+    }
 
-        if(result.length === 0){
+    // Add attendee(s)
+    for (let i = 0; i < seats_to_book; i++) {
+      await db.query(
+        `INSERT INTO event_attendee(event_id, att_id) VALUES(?, ?)`,
+        [event_id, attendee_id]
+      );
+    }
 
-            return res.status(404).json({
-                message:"Invalid meeting link"
-            })
-
-        }
-
-        if(result[0].webinar_status !== "live"){
-
-            return res.json({
-                message:"Webinar has not started yet"
-            })
-
-        }
-
-        res.json({
-            meetingId,
-            event:result[0]
-        })
-
-    })
-
-}
-exports.registerForEvent = async (req,res)=>{
-
-  try{
-
-    const {attendee_id,event_id} = req.body
-
-    await db.query(
-      `INSERT INTO event_attendee(event_id,att_id)
-       VALUES (?,?)`,
-      [event_id,attendee_id]
-    )
+    const [attendees] = await db.query(
+      `SELECT a.id, a.name, a.email, a.phone FROM attendees a
+       JOIN event_attendee ea ON a.id = ea.att_id
+       WHERE ea.event_id=?`,
+      [event_id]
+    );
 
     res.json({
-      message:"Successfully registered for event"
-    })
-
+      message: "Booking successful",
+      attendees,
+      available_seats: event.available_seats - seats_to_book
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error during booking" });
   }
-  catch(err){
+};
 
-    console.log(err)
+exports.createPaymentOrder = async (req, res) => {
+  try {
+    const { event_id, attendee_id, seats_to_book } = req.body;
 
-    res.status(500).json({
-      message:"Event registration failed"
-    })
+    const [events] = await db.query(`SELECT * FROM events WHERE event_id=?`, [event_id]);
+    if (events.length === 0) return res.status(404).json({ message: "Event not found" });
 
+    const event = events[0];
+
+    if (event.event_mode === "Offline") {
+      if (event.available_seats < seats_to_book)
+        return res.status(400).json({ message: "Not enough seats available" });
+
+      const amountPerSeat = 1000; // ₹1000 per ticket, you can change
+      const totalAmount = seats_to_book * amountPerSeat * 100; // in paise
+
+      const options = {
+        amount: totalAmount,
+        currency: "INR",
+        receipt: `receipt_event_${event_id}_att_${attendee_id}_${Date.now()}`,
+      };
+
+      const order = await razorpay.orders.create(options);
+      res.json({ order });
+    } else {
+      return res.status(400).json({ message: "Payment not required for online events" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error creating Razorpay order" });
   }
+};
 
-}
+// Verify payment webhook / callback
+exports.verifyPayment = async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      event_id,
+      attendee_id,
+      seats_to_book
+    } = req.body;
+
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ message: "Payment verification failed" });
+    }
+
+    // Payment verified → reduce seats and register attendee
+    const [events] = await db.query(`SELECT * FROM events WHERE event_id=?`, [event_id]);
+    const event = events[0];
+
+    await db.query(
+      `UPDATE events SET available_seats = available_seats - ? WHERE event_id=?`,
+      [seats_to_book, event_id]
+    );
+
+    // Add attendee(s)
+    for (let i = 0; i < seats_to_book; i++) {
+      await db.query(
+        `INSERT INTO event_attendee(event_id, att_id) VALUES(?, ?)`,
+        [event_id, attendee_id]
+      );
+    }
+
+    res.json({ message: "Payment verified and seats booked successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Payment verification failed" });
+  }
+};
