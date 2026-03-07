@@ -5,9 +5,9 @@ require('dotenv').config();
 
 const pool = mysql.createPool({
   host: 'localhost',
-  user: 'root',
-  password: 'EshikaR#2510',
-  database: 'eventManagement'
+  user: 'Manwani',
+  password: 'Gaurav123',
+  database: 'eventManagementSystem'
 });
 
 module.exports = pool;

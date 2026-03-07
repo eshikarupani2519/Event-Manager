@@ -1,40 +1,116 @@
-<div class="container">
-    <h2 class=" text-center my-2">{{formTitle}}</h2>
-    <form class="add-event-form" [formGroup]="addEventForm" (ngSubmit)="onSubmit()">
-        <div class="label-input">
-            <label for="name">Name</label>
-            <input type="text" name="name" required formControlName="event_name">
-        </div>
-        <p *ngIf="isFormControlError('name')" class="errors">name required</p>
+<div class="event-form-page">
 
-        <div class="label-input">
-            <label for="description">Description</label>
-            <input type="description" name="description" required formControlName="event_description">
-        </div>
-        <p *ngIf="isFormControlError('description')" class="errors">description required</p>
-        <div class="label-input">
-            <label for="date">Date</label>
-            <input type="date" name="date" required formControlName="event_date">
-        </div>
-        <p *ngIf="isFormControlError('date')" class="errors">date required</p>
+    <div class="event-form-card">
+
+        <h2 class="form-title">🎤 {{formTitle}}</h2>
+
+        <form class="event-form"
+            [formGroup]="addEventForm"
+            (ngSubmit)="onSubmit()">
+
+            <!-- Name -->
+            <div class="form-group">
+
+                <label>Name</label>
+
+                <input
+                    type="text"
+                    formControlName="event_name"
+                    placeholder="Enter event name">
+
+                <p *ngIf="isFormControlError('name')" class="errors">
+                    Name is required
+                </p>
+
+            </div>
 
 
-        <div class="label-input">
-            <label for="type">Type</label>
-            <select name="type" formControlName="event_type">
-                <option value="Conference">Conference</option>
-                <option value="Workshop">Workshop</option>
-                <option value="Meetup">Meetup</option>
-            </select>
-        </div>
-        <p *ngIf="isFormControlError('type')" class="errors">type required</p>
+            <!-- Description -->
 
-        <div class="label-input">
-            <label for="timing">Timing</label>
-            <input type="time" name="timing" required formControlName="timing">
-        </div>
-        <p *ngIf="isFormControlError('timing')" class="errors">Timing required</p>
+            <div class="form-group">
 
-        <button type="submit" [disabled]="addEventForm.invalid">{{formTitle}}</button>
-    </form>
+                <label>Description</label>
+
+                <input
+                    type="text"
+                    formControlName="event_description"
+                    placeholder="Enter event description">
+
+                <p *ngIf="isFormControlError('description')" class="errors">
+                    Description is required
+                </p>
+
+            </div>
+
+
+            <!-- Date -->
+
+            <div class="form-group">
+
+                <label>Date</label>
+
+                <input
+                    type="date"
+                    formControlName="event_date">
+
+                <p *ngIf="isFormControlError('date')" class="errors">
+                    Date is required
+                </p>
+
+            </div>
+
+
+            <!-- Type -->
+
+            <div class="form-group">
+
+                <label>Type</label>
+
+                <select formControlName="event_type">
+
+                    <option value="Conference">Conference</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Meetup">Meetup</option>
+
+                </select>
+
+                <p *ngIf="isFormControlError('type')" class="errors">
+                    Type is required
+                </p>
+
+            </div>
+
+
+            <!-- Timing -->
+
+            <div class="form-group">
+
+                <label>Timing</label>
+
+                <input
+                    type="time"
+                    formControlName="timing">
+
+                <p *ngIf="isFormControlError('timing')" class="errors">
+                    Timing is required
+                </p>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="addEventForm.invalid">
+
+                {{formTitle}}
+
+            </button>
+
+        </form>
+
+    </div>
+
 </div>

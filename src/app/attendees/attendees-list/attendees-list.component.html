@@ -1,32 +1,71 @@
-<app-navbar></app-navbar>
-<div class="container">
-  <h2>Select Event to View Attendees</h2>
+<!-- <app-navbar></app-navbar> -->
 
-  <!-- Dropdown -->
-  <label for="eventSelect">Event:</label>
-  <select id="eventSelect" [(ngModel)]="selectedEventId" (change)="onEventChange()">
-    <option [ngValue]="null"> Select an Event </option>
-    <option *ngFor="let event of events" [ngValue]="event.event_id">
-      {{ event.event_name }} 
-    </option>
-  </select>
+<div class="attendees-page">
 
-  <!-- Attendees List -->
-  <div class="attendees-section" *ngIf="selectedEventId">
+  <div class="attendees-card">
 
-    
-    <ul class="attendees-list" *ngIf="attendees">
-      <h3>Attendees:</h3>
-      <li *ngFor="let attendee of attendees">
-        {{ attendee.att_name }}
-      </li>
-    </ul>
-    <ng-template [ngIf]="attendeesLength==0">
-      <p>No attendees for this event.</p>
-    </ng-template>
-  </div>
-</div>
-<div *ngIf="isLoading" class="loader-overlay">
-        <div class="spinner"></div>
-        <p>Processing request...</p>
+    <h2 class="page-title">👥 Event Attendees</h2>
+
+    <!-- Dropdown -->
+
+    <div class="select-group">
+
+      <label for="eventSelect">Select Event</label>
+
+      <select
+        id="eventSelect"
+        [(ngModel)]="selectedEventId"
+        (change)="onEventChange()">
+
+        <option [ngValue]="null">Select an Event</option>
+
+        <option
+          *ngFor="let event of events"
+          [ngValue]="event.event_id">
+
+          {{ event.event_name }}
+
+        </option>
+
+      </select>
+
     </div>
+
+
+    <!-- Attendees -->
+
+    <div class="attendees-section" *ngIf="selectedEventId">
+
+      <h3 class="attendees-title">Attendees</h3>
+
+      <ul class="attendees-list" *ngIf="attendees">
+
+        <li *ngFor="let attendee of attendees">
+
+          <span class="attendee-icon">🎟</span>
+
+          {{ attendee.att_name }}
+
+        </li>
+
+      </ul>
+
+      <p class="no-attendees" *ngIf="attendeesLength==0">
+        No attendees registered for this event.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Loader -->
+
+<div *ngIf="isLoading" class="loader-overlay">
+
+  <div class="spinner"></div>
+
+  <p>Loading attendees...</p>
+
+</div>

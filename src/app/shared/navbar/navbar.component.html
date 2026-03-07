@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary tech-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand">Event Manager</a>
+        <a class="navbar-brand brand-logo">Event Manager</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,9 +24,30 @@
                     <a class="nav-link" (click)="navigateToPage('register-attendee')">Register attendee</a>
                 </li>
             </ul>
-            <div class="d-flex" role="search" *ngIf="!isLoggedIn">
-                <button class="btn btn-outline-success" type="submit">Login</button>
-            </div>
+            <div class="d-flex align-items-center">
+
+    <!-- When user NOT logged in -->
+    <button
+        *ngIf="!isLoggedIn"
+        class="login-btn"
+        (click)="navigateToPage('login')">
+
+        Login
+
+    </button>
+
+    <!-- When user logged in -->
+
+    <button
+        *ngIf="isLoggedIn"
+        class="logout-btn"
+        (click)="logout()">
+
+        Logout
+
+    </button>
+
+</div>
         </div>
     </div>
 </nav>

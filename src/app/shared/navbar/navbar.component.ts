@@ -10,10 +10,26 @@ export class NavbarComponent {
   isLoggedIn:any=false;
 constructor(private router:Router){}
 ngOnInit(){
-  this.isLoggedIn=localStorage.getItem('eventLoggedIn');
-  this.isLoggedIn=!!this.isLoggedIn;
+  // this.isLoggedIn=localStorage.getItem('eventLoggedIn');
+  const loginStatus = localStorage.getItem("eventLoggedIn");
+  this.isLoggedIn = loginStatus === "true";
+  
 }
 navigateToPage(page:string){
   this.router.navigate([page]);
 }
+
+logout(){
+
+localStorage.removeItem("token");
+localStorage.removeItem("eventLoggedIn");
+
+this.isLoggedIn = false;
+
+this.router.navigate(['/']);
+
 }
+}
+
+
+

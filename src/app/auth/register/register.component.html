@@ -1,0 +1,107 @@
+<div class="event-bg">
+<div class="bg-animation">
+
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+</div>
+
+<div class="register-container">
+
+  <div class="register-card">
+
+    <h2>User Registration</h2>
+    <p class="subtitle">Join the event community🎉</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" formControlName="name">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" formControlName="email">
+        </div>
+
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" formControlName="phone">
+        </div>
+
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" formControlName="city">
+        </div>
+
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" formControlName="state">
+        </div>
+
+        <div class="form-group">
+          <label>Country</label>
+          <input type="text" formControlName="country">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Password</label>
+          <input type="password" formControlName="password">
+        </div>
+
+        <div class="form-group full-width">
+
+  <label>Interests</label>
+
+  <div class="interest-container">
+
+    <span
+      *ngFor="let interest of interestOptions"
+      class="interest-chip"
+      [class.selected]="selectedInterests.includes(interest)"
+      (click)="toggleInterest(interest)"
+    >
+      {{interest}}
+    </span>
+
+  </div>
+
+  <div class="selected-interests" *ngIf="selectedInterests.length">
+
+    <span class="selected-tag"
+      *ngFor="let interest of selectedInterests">
+
+      {{interest}}
+
+      <span class="remove-tag"
+      (click)="removeInterest(interest)">×</span>
+
+    </span>
+
+  </div>
+
+</div>
+
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid || loading">
+
+        <span *ngIf="!loading">Register</span>
+        <span *ngIf="loading">Registering...</span>
+
+      </button>
+
+      <div class="success-msg" *ngIf="successMessage">
+        {{successMessage}}
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+</div>

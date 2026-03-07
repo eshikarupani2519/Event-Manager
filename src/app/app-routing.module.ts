@@ -11,8 +11,10 @@ import { SuggestionsComponent } from './events/suggestions/suggestions.component
 import { ScheduleWebinarComponent } from './webinar/schedule-webinar/schedule-webinar.component';
 import { WebinarListComponent } from './webinar/webinar-list/webinar-list.component';
 import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
+  {path:'register',component:RegisterComponent},
   {path:'',component:LoginComponent},
   {path:'add-event',component:AddEventComponent},
   {path:'update-event/:id',component:AddEventComponent},

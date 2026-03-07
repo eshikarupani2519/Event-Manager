@@ -31,7 +31,8 @@ import { WebinarService } from '../webinar.service';
 
 @Component({
   selector: 'app-schedule-webinar',
-  templateUrl: './schedule-webinar.component.html'
+  templateUrl: './schedule-webinar.component.html',
+  styleUrls: ['./schedule-webinar.component.css']
 })
 export class ScheduleWebinarComponent {
 

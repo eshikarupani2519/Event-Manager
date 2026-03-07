@@ -1,0 +1,280 @@
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:'Poppins',sans-serif;
+}
+
+/* ===== Page Background ===== */
+
+.event-bg{
+min-height:100vh;
+background:#020617;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:40px;
+overflow:hidden;
+}
+
+/* ===== Animated Gradient ===== */
+
+.bg-animation{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:-1;
+background:linear-gradient(120deg,#020617,#0f172a);
+}
+
+/* ===== Floating blobs ===== */
+
+.blob{
+position:absolute;
+width:420px;
+height:420px;
+border-radius:50%;
+filter:blur(120px);
+opacity:0.6;
+animation:float 18s infinite alternate ease-in-out;
+}
+
+.blob1{
+background:#6366f1;
+top:-120px;
+left:-120px;
+}
+
+.blob2{
+background:#8b5cf6;
+bottom:-150px;
+right:-120px;
+animation-duration:22s;
+}
+
+.blob3{
+background:#38bdf8;
+top:45%;
+left:60%;
+animation-duration:20s;
+}
+
+@keyframes float{
+
+0%{
+transform:translate(0,0) scale(1);
+}
+
+50%{
+transform:translate(180px,-80px) scale(1.15);
+}
+
+100%{
+transform:translate(-120px,120px) scale(0.9);
+}
+
+}
+
+/* ===== Register Container ===== */
+
+.register-container{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+width:100%;
+}
+
+/* ===== Register Card ===== */
+
+.register-card{
+
+background:linear-gradient(145deg,#0f172a,#020617);
+
+padding:40px;
+
+border-radius:16px;
+
+width:100%;
+max-width:720px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+
+backdrop-filter:blur(12px);
+
+transition:0.3s;
+
+}
+
+.register-card:hover{
+transform:translateY(-5px);
+}
+
+/* ===== Title ===== */
+
+h2{
+text-align:center;
+color:white;
+margin-bottom:5px;
+}
+
+.subtitle{
+text-align:center;
+color:#94a3b8;
+margin-bottom:28px;
+}
+
+/* ===== Form Grid ===== */
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+}
+
+.full-width{
+grid-column:span 2;
+}
+
+/* ===== Labels ===== */
+
+label{
+font-size:14px;
+margin-bottom:6px;
+color:#cbd5f5;
+font-weight:500;
+}
+
+/* ===== Inputs ===== */
+
+input{
+padding:11px;
+border-radius:7px;
+border:1px solid #334155;
+background:#020617;
+color:white;
+font-size:14px;
+transition:0.25s;
+}
+
+input:focus{
+outline:none;
+border-color:#6366f1;
+box-shadow:0 0 8px rgba(99,102,241,0.6);
+}
+
+/* ===== Register Button ===== */
+
+button{
+margin-top:25px;
+width:100%;
+padding:13px;
+border:none;
+border-radius:8px;
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover:enabled{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(99,102,241,0.6);
+}
+
+button:disabled{
+opacity:0.5;
+cursor:not-allowed;
+}
+
+/* ===== Success Message ===== */
+
+.success-msg{
+margin-top:14px;
+text-align:center;
+color:#22c55e;
+font-weight:500;
+}
+
+/* ===== Interest Chips ===== */
+
+.interest-container{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:8px;
+}
+
+.interest-chip{
+padding:7px 14px;
+border-radius:20px;
+background:#020617;
+cursor:pointer;
+font-size:13px;
+border:1px solid #334155;
+color:#cbd5f5;
+transition:0.25s;
+}
+
+.interest-chip:hover{
+border-color:#6366f1;
+}
+
+.interest-chip.selected{
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+color:white;
+}
+
+/* ===== Selected Tags ===== */
+
+.selected-interests{
+margin-top:12px;
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+}
+
+.selected-tag{
+background:#8b5cf6;
+color:white;
+padding:6px 10px;
+border-radius:15px;
+font-size:12px;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.remove-tag{
+cursor:pointer;
+font-weight:bold;
+}
+
+/* ===== Responsive ===== */
+
+@media(max-width:768px){
+
+.form-grid{
+grid-template-columns:1fr;
+}
+
+.full-width{
+grid-column:span 1;
+}
+
+.register-card{
+padding:28px;
+}
+
+}
