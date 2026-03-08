@@ -1,31 +1,136 @@
-# EventManagementSystem
+# Event Management Platform 🎉
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.1.
+This project is a full-stack **Event Management Platform** built during **Elite Hacks**.  
+It allows users to create events, register attendees, manage check-ins, and provide AI-based event recommendations.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🚀 Tech Stack
 
-## Code scaffolding
+### Frontend
+- Angular
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Backend
+- Node.js
+- Express.js
 
-## Build
+### Database
+- MySQL
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### AI / ML Service
+- Python
+- Flask
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 📌 Features
+- Event creation and management
+- Event registration system
+- Attendee check-in
+- Razorpay payment integration
+- AI-powered event recommendations
+- Engagement tracking
 
-## Running end-to-end tests
+---
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## ⚙️ Environment Setup
 
-## Further help
+Before running the project, create a `.env` file in the backend and add the following variables:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```
+PORT=your_port_number
 
-Structure Of project:
-Event management system
-____Auth Module:Login,Register,Profile,Forgot Password,service and guard
+DB_HOST=your_database_host
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_NAME=your_database_name
+
+RAZORPAY_KEY=your_razorpay_key
+RAZORPAY_SECRET=your_razorpay_secret
+```
+
+You must:
+- Create your **own MySQL database**
+- Add your **Razorpay API keys**
+- Configure the **port number**
+
+---
+
+# ▶️ How to Run the Project
+
+You need to run **three services**: Backend, Frontend, and ML Recommendation Service.
+
+---
+
+## 1️⃣ Start Backend Server
+
+Open a terminal:
+
+```bash
+cd backend
+npm install
+node server.js
+```
+
+---
+
+## 2️⃣ Start Frontend (Angular)
+
+Open another terminal:
+
+```bash
+npm install
+ng serve
+```
+
+The Angular app will start on:
+
+```
+http://localhost:4200
+```
+
+---
+
+## 3️⃣ Start ML Recommendation Service
+
+Open a third terminal:
+
+```bash
+cd ml-recommendations
+py ml-recommendations.py
+```
+
+This will start the **Python Flask AI recommendation service**.
+
+---
+
+## 📂 Project Structure
+
+```
+Event-Manager
+│
+├── backend
+│   └── Node.js + Express API
+│
+├── frontend
+│   └── Angular Application
+│
+├── ml-recommendations
+│   └── Python Flask AI Service
+│
+└── README.md
+```
+
+---
+
+## 👨‍💻 Developed For
+
+**Elite Hacks Hackathon**
+
+---
+
+## ⭐ Future Improvements
+- Advanced AI recommendation models
+- Real-time analytics dashboard
+- Improved UI/UX
+- Notification system
