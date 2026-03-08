@@ -123,7 +123,7 @@ Event-Manager
 ├── frontend
 │   └── Angular Application
 │
-├── ml-recommendations
+├── mLRecommendations
 │   └── Python Flask AI Service
 │
 └── README.md
