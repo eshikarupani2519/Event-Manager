@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 from dotenv import load_dotenv
 import os
-
+CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
 load_dotenv()  # Reads variables from .env
 
 db_user = os.environ.get("DB_USER")
@@ -221,8 +221,53 @@ def predict_attendance():
 # @app.route('/checkin', methods=['POST'])
 # def checkin():
 
+# @app.route('/checkin', methods=['POST'])
+# def checkin():
+
+# --------------------------------------------------
+# QR CHECKIN CROWD ANALYTICS
+# --------------------------------------------------
+
 @app.route('/checkin', methods=['POST'])
 def checkin():
+    data = request.json
+    event_id = data.get('event_id')
+    name = data.get('name')
+
+    # Create a fresh cursor for this request
+    cursor = conn.cursor(dictionary=True)
+
+    # Find attendee
+    cursor.execute("SELECT id FROM attendees WHERE name = %s", (name,))
+    attendee = cursor.fetchone()
+
+    if not attendee:
+        cursor.close()
+        return jsonify({"message": "Attendee not found"}), 404
+
+    # Check if already checked in
+    cursor.execute(
+        "SELECT * FROM event_attendee WHERE event_id=%s AND att_id=%s",
+        (event_id, attendee['id'])
+    )
+    existing = cursor.fetchone()
+
+    if existing:
+        cursor.close()
+        return jsonify({"message": "Attendance already marked"})
+
+    # Mark attendance
+    cursor.execute(
+        "INSERT INTO event_attendee (event_id, att_id) VALUES (%s, %s)",
+        (event_id, attendee['id'])
+    )
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": f"Attendance marked for {name}"})
+
+
+
     data = request.json
     event_id = data.get('event_id')
     name = data.get('name')
