@@ -57,18 +57,36 @@ loadEvents(){
     console.log(entry)
     this.loadAttendees(entry.event_id)
   }
-   loadAttendees(eventId: string): void {
-    this.attendeeService.getAttendeeByEventId(eventId,this.headers).subscribe({
-      next: (res:any) => {
-        console.log('Fetched attendees', res[0]);
+  //  loadAttendees(eventId: string): void {
+  //   this.attendeeService.getAttendeeByEventId(eventId,this.headers).subscribe({
+  //     next: (res:any) => {
+  //       console.log('Fetched attendees', res[0]);
      
-        this.attendees = res[0];
-        this.attendeesLength=this.attendees.length;
-        console.log(this.attendeesLength)
-      },
-      error: (err) => {
-        console.error('Error fetching attendees', err);
-      }
-    });
-  }
+  //       this.attendees = res[0];
+  //       this.attendeesLength=this.attendees.length;
+  //       console.log(this.attendeesLength)
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching attendees', err);
+  //     }
+  //   });
+  // }
+  loadAttendees(eventId: string): void {
+  this.attendeeService.getAttendeeByEventId(eventId, this.headers).subscribe({
+    next: (res: any) => {
+
+      console.log('API Response:', res);
+
+      this.attendees = res.attendees || [];
+
+      this.attendeesLength = this.attendees.length;
+
+      console.log("Attendees:", this.attendees);
+      console.log("Total:", this.attendeesLength);
+    },
+    error: (err) => {
+      console.error('Error fetching attendees', err);
+    }
+  });
+}
 }

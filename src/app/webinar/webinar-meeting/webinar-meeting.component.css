@@ -335,5 +335,13 @@ flex-direction:column;
 width:100%;
 
 }
+.btn.end{
+  background:#ff3b3b;
+  color:white;
+}
+
+.btn.end:hover{
+  background:#cc0000;
+}
 
 }

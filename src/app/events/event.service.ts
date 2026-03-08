@@ -39,4 +39,8 @@ export class EventService {
   getAttendeeById(){
     return this.http.get(`${this.baseUrl}/attendee`);
   }
+  getSummary(eventId:any){
+    return this.http.get(`${this.baseUrl}/event-summary/${eventId}`)
+  }
+
 }

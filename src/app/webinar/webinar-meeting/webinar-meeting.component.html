@@ -30,6 +30,7 @@
         <button class="btn mic" (click)="toggleMic()">Mic</button>
 
         <button class="btn camera" (click)="toggleCamera()">Camera</button>
+         <button class="btn end" (click)="endCall()">End Call</button>
 
       </div>
 
@@ -60,5 +61,22 @@
     </div>
 
   </div>
+  <h2>AI Webinar Summary</h2>
+
+<div *ngIf="summary">
+  <p>{{summary}}</p>
+</div>
+
+<h3>Recording</h3>
+
+<video *ngIf="recording" width="500" controls>
+  <source [src]="'http://localhost:5000/' + recording" type="video/webm">
+</video>
+
+<h3>Transcript</h3>
+
+<div *ngIf="transcript">
+  <p>{{transcript}}</p>
+</div>
 
 </div>

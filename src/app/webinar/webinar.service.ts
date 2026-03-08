@@ -148,5 +148,9 @@ export class WebinarService {
     return this.http.get(`${this.api}/events`,{headers})
 
   }
+  getSummary(eventId:any){
+    // return this.http.get(`${this.api}/event-summary/${eventId}`)
+   return this.http.get(`http://localhost:5000/api/event-summary/${eventId}`)
+  }
 
 }

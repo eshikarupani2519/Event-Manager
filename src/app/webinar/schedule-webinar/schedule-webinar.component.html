@@ -1,54 +1,79 @@
 <div class="schedule-page">
 
-<div class="schedule-card">
+  <div class="schedule-card">
 
-<h2 class="title">🎥 Schedule Webinar</h2>
+    <h2 class="title">🎥 Schedule Webinar</h2>
 
-<form (ngSubmit)="schedule()" class="webinar-form">
+    <form (ngSubmit)="schedule()" class="webinar-form">
 
-<div class="form-group">
+      <div class="form-group">
+        <label>Name</label>
+        <input
+          type="text"
+          [(ngModel)]="webinar.event_name"
+          name="name"
+          placeholder="Enter webinar name"
+          required>
+      </div>
 
-<label>Name</label>
+      <div class="form-group">
+        <label>Date</label>
+        <input
+          type="date"
+          [(ngModel)]="webinar.event_date"
+          name="date"
+          required>
+      </div>
 
-<input
-type="text"
-[(ngModel)]="webinar.event_name"
-name="name"
-placeholder="Enter webinar name"
-required>
+      <div class="form-group">
+        <label>Time</label>
+        <input
+          type="time"
+          [(ngModel)]="webinar.timing"
+          name="time"
+          required>
+      </div>
 
-</div>
+      <!-- Event Mode -->
+      <div class="form-group">
+        <label>Event Mode</label>
+        <select
+          [(ngModel)]="webinar.event_mode"
+          name="event_mode"
+          required>
 
-<div class="form-group">
+          <option value="Online">Online</option>
+          <option value="Offline">Offline</option>
 
-<label>Date</label>
+        </select>
+      </div>
 
-<input
-type="date"
-[(ngModel)]="webinar.event_date"
-name="date"
-required>
+      <!-- Location (only if Offline) -->
+      <div *ngIf="webinar.event_mode === 'Offline'" class="form-group">
+        <label>Location</label>
+        <input
+          type="text"
+          [(ngModel)]="webinar.location"
+          name="location"
+          placeholder="Enter location">
+      </div>
 
-</div>
+      <!-- Seats (only if Offline) -->
+      <div *ngIf="webinar.event_mode === 'Offline'" class="form-group">
+        <label>Total Seats</label>
+        <input
+          type="number"
+          [(ngModel)]="webinar.total_seats"
+          name="total_seats"
+          placeholder="Enter number of seats">
+      </div>
 
-<div class="form-group">
+      <button class="schedule-btn" type="submit">
+        Schedule Webinar
+      </button>
 
-<label>Time</label>
+    </form>
 
-<input
-type="time"
-[(ngModel)]="webinar.timing"
-name="time"
-required>
-
-</div>
-
-<button class="schedule-btn" type="submit">
-Schedule Webinar
-</button>
-
-</form>
-
-</div>
+  </div>
 
 </div>

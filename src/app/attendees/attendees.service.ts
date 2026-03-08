@@ -11,7 +11,7 @@ baseUrl=environment.apiUrl
     return this.http.get(`${this.baseUrl}/events`,headers)
   }
    registerAttendee(attendeeData: any,headers:any){
-    return this.http.post(`${this.baseUrl}/attendees`, attendeeData,  {headers} );
+    return this.http.post(`${this.baseUrl}/registerAttendeeWebinar`, attendeeData,  {headers} );
   }
 
   // GET: get attendees by event ID
