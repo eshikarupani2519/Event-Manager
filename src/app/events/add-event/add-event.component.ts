@@ -69,16 +69,29 @@ export class AddEventComponent {
     if (this.addEventForm.valid) {
       if (this.eventId) {
         // Update Logic
-        this.eventService.updateEvent(this.eventId, this.addEventForm.value, { headers: this.headers }).subscribe({
-          next: (response: any) => {
-            console.log('event updated successfully', response);
-            alert('event updated successfully')
-            this.router.navigate(['/event-list']);
-          },
-          error: (error: any) => {
-            console.error('Error updating event', error);
-          }
-        });
+        // this.eventService.updateEvent(this.eventId, this.addEventForm.value, { headers: this.headers }).subscribe({
+        //   next: (response: any) => {
+        //     console.log('event updated successfully', response);
+        //     alert('event updated successfully')
+        //     this.router.navigate(['/event-list']);
+        //   },
+        //   error: (error: any) => {
+        //     console.error('Error updating event', error);
+        //   }
+        // });
+
+        // Update Logic
+this.eventService.updateEvent(this.eventId, this.addEventForm.value, { headers: this.headers }).subscribe({
+  next: (response: any) => {
+    console.log('Event updated successfully', response);
+    alert('Event updated successfully');
+    this.router.navigate(['/event-list']);
+  },
+  error: (error: any) => {
+    console.error('Error updating event', error);
+    alert('Failed to update event. ' + (error.error?.message || ''));
+  }
+});
       } else {
         // Add Logic
         this.eventService.addEvent(this.addEventForm.value, { headers: this.headers }).subscribe({

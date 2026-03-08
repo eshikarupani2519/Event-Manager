@@ -7,15 +7,19 @@ import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 import { AttendeesModule } from './attendees/attendees.module';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FormsModule } from '@angular/forms';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
 import { WebinarModule } from './webinar/webinar.module';
+import { QRCodeModule } from 'angularx-qrcode'; 
+import { CheckinFormComponent } from './checkin-form/checkin-form.component';
 // import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    CheckinFormComponent,
+    
     
    
   ],
@@ -26,8 +30,10 @@ import { WebinarModule } from './webinar/webinar.module';
     EventsModule,
     AttendeesModule,
     DashboardModule,
+    QRCodeModule, 
     SharedModule, WebinarModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

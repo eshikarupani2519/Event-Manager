@@ -207,8 +207,7 @@ router.post("/join", async(req,res)=>{
 })
 router.post("/events/book", authenticate, eventController.bookSeats);
 
-// router.post("/payment/create", authenticate, eventController.createPaymentOrder);
-// router.post("/payment/verify", authenticate, eventController.verifyPayment);
+
 router.post("/payment/simulate", authenticate, eventController.simulatePayment);
 router.get("/event-summary/:meetingId", eventController.getEventSummary);
 

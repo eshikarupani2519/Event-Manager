@@ -123,10 +123,10 @@ export class EventListComponent {
     }
   }
 
-  editEvent(id: number) {
-    console.log(id)
-    this.router.navigate(['/update-event', id], { queryParams: { id: id } });
-  }
+  // editEvent(id: number) {
+  //   console.log(id)
+  //   this.router.navigate(['/update-event']);
+  // }
 
 
 

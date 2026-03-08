@@ -12,12 +12,13 @@ import { ScheduleWebinarComponent } from './webinar/schedule-webinar/schedule-we
 import { WebinarListComponent } from './webinar/webinar-list/webinar-list.component';
 import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { CheckinFormComponent } from './checkin-form/checkin-form.component';
 
 const routes: Routes = [
   {path:'register',component:RegisterComponent},
   {path:'',component:LoginComponent},
   {path:'add-event',component:AddEventComponent},
-  {path:'update-event/:id',component:AddEventComponent},
+  {path:'update-event',component:AddEventComponent},
   {path:'event-list',component:EventListComponent},
   {path:'event/:id',component:SingleEventComponent},
   {path:'register-attendee',component:RegisterAttendeeComponent},
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path:'schedule-webinar', component: ScheduleWebinarComponent },
 
 { path:'webinars', component: WebinarListComponent },
+  { path: 'checkin-form/:id', component: CheckinFormComponent },
 
 { path:'webinar/:id', component: WebinarMeetingComponent }
 // { path: 'payment', component: PaymentComponent},  // payment page route

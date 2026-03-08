@@ -1,70 +1,3 @@
-<!-- <div class="event-page">
-
-<div class="event-card">
-
-<h2 class="event-title">🎉 {{ event_name }}</h2>
-
-<div class="info-line">
-
-<span class="label">Description</span>
-
-<span class="value">{{ event_description }}</span>
-
-</div>
-
-<div class="info-grid">
-
-<div class="info-item">
-
-<span class="label">📅 Date</span>
-
-<span class="value">{{ event_date }}</span>
-
-</div>
-
-<div class="info-item">
-
-<span class="label">👥 Attendees</span>
-
-<span class="value">{{ totalAttendees }}</span>
-
-</div>
-
-<div class="info-item">
-
-<span class="label">🎤 Type</span>
-
-<span class="badge">{{ event_type }}</span>
-
-</div>
-
-<div class="info-item">
-
-<span class="label">⏰ Timing</span>
-
-<span class="value">{{ timing }}</span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div *ngIf="event_mode === 'Offline'" class="info-item">
-  <span class="label">🎟 Total Seats</span>
-  <span class="value">{{ total_seats }}</span>
-</div>
-
-<div *ngIf="event_mode === 'Offline'" class="info-item">
-  <span class="label">💺 Available Seats</span>
-  <span class="value">{{ available_seats }}</span>
-</div>
-<div *ngIf="isLoading" class="loader-overlay">
-  <div class="spinner"></div>
-  <p>Processing request...</p>
-</div> -->
-
 <div class="event-page">
   <div class="event-card">
     <h2 class="event-title">🎉 {{ event_name }}</h2>
@@ -95,6 +28,7 @@
         <span class="value">{{ timing }}</span>
       </div>
 
+      <!-- Offline event details -->
       <div *ngIf="event_mode === 'Offline'" class="info-item">
         <span class="label">🎟 Total Seats</span>
         <span class="value">{{ total_seats }}</span>
@@ -104,12 +38,25 @@
         <span class="label">💺 Available Seats</span>
         <span class="value">{{ available_seats }}</span>
       </div>
-    </div> 
-    </div>
+
+      <!-- QR code for check-in -->
+      <div *ngIf="event_mode === 'Offline'" class="info-item">
+        <h3>Scan this QR to check in:</h3>
+        <!-- <ngx-qrcode [qrc-value]="getCheckinUrl()"></ngx-qrcode> -->
+        <!-- <qrcode [qrdata]="getCheckinUrl()"></qrcode> -->
+         <div *ngIf="event_mode === 'Offline'" style="text-align:center; margin-top:20px;">
+<img [src]="'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + getCheckinUrl()" alt="QR Code">
+
 </div>
+      </div>
 
-<code>Debug Mode: {{ event_mode }}</code>
+    </div> <!-- End of info-grid -->
+  </div> <!-- End of event-card -->
+</div> <!-- End of event-page -->
 
+<!-- <code>Debug Mode: {{ event_mode }}</code> -->
+
+<!-- Loader overlay -->
 <div *ngIf="isLoading" class="loader-overlay">
   <div class="spinner"></div>
   <p>Processing request...</p>

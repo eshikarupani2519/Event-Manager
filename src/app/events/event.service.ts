@@ -42,5 +42,11 @@ export class EventService {
   getSummary(eventId:any){
     return this.http.get(`${this.baseUrl}/event-summary/${eventId}`)
   }
+  checkInAttendee(eventId: string, name: string) {
+  return this.http.post('http://127.0.0.1:5001/checkin', {
+    event_id: eventId,
+    name: name
+  });
+}
 
 }

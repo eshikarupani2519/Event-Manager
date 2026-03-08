@@ -25,8 +25,22 @@ available_seats: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private eventService: EventService
+    private eventService: EventService,
+    // private sanitizer: DomSanitizer
   ) { }
+//   getCheckinUrl(): string {
+//   // Replace localhost:4200 with your frontend domain if deployed
+//   return `http://localhost:4200/checkin-form/${this.id}`;
+// }
+getCheckinUrl(): string {
+  const url = `http://localhost:4200/checkin-form/${this.id}`;
+  return encodeURIComponent(url);
+}
+
+// encodeUrl(value: string): string {
+//   return encodeURIComponent(value);
+// }
+
 
   ngOnInit(): void {
     const token = localStorage.getItem('token'); // token saved after login
@@ -113,6 +127,8 @@ available_seats: any;
 //     console.error('Error fetching event data:', error);
 //   }
 // });
+
+
 this.eventService.getEventById(+this.id).subscribe({
   next: (res: any) => {
 

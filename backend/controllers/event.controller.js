@@ -391,6 +391,83 @@ exports.getEventById = async (req, res) => {
 };
 
 // Update event
+// exports.updateEvent = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const {
+//       event_name,
+//       event_description,
+//       event_date,
+//       timing,
+//       event_type,
+//       event_category,
+//       event_mode,
+//       location,
+//       total_seats
+//     } = req.body;
+
+//     const [existing] = await db.query(`SELECT * FROM events WHERE event_id=?`, [id]);
+//     if (existing.length === 0) return res.status(404).json({ message: "Event not found" });
+
+//     let finalLocation = event_mode === "Offline" ? location : "Virtual";
+//     let available_seats = existing[0].available_seats;
+//     if (event_mode === "Offline" && total_seats) {
+//       // Adjust available seats proportionally
+//       const bookedSeats = existing[0].total_seats - existing[0].available_seats;
+//       available_seats = total_seats - bookedSeats;
+//     }
+
+//     await db.query(
+//       `UPDATE events SET event_name=?, event_description=?, event_date=?, timing=?, event_type=?, event_category=?, event_mode=?, location=?, total_seats=?, available_seats=? WHERE event_id=?`,
+//       [
+//         event_name,
+//         event_description,
+//         event_date,
+//         timing,
+//         event_type,
+//         JSON.stringify(event_category),
+//         event_mode,
+//         finalLocation,
+//         total_seats || null,
+//         available_seats,
+//         id
+//       ]
+//     );
+
+//     res.json({ message: "Event updated successfully" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error updating event" });
+//   }
+// };
+
+// exports.updateEvent = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { event_name, event_description, event_date, timing, event_type, event_category, event_mode, location, total_seats } = req.body;
+
+//     const [existing] = await db.query(`SELECT * FROM events WHERE event_id=?`, [id]);
+//     if (existing.length === 0) return res.status(404).json({ message: "Event not found" });
+
+//     let finalLocation = event_mode === "Offline" ? location : "Virtual";
+//     let available_seats = existing[0].available_seats;
+//     if (event_mode === "Offline" && total_seats) {
+//       const bookedSeats = existing[0].total_seats - existing[0].available_seats;
+//       available_seats = total_seats - bookedSeats;
+//     }
+
+//     await db.query(
+//       `UPDATE events SET event_name=?, event_description=?, event_date=?, timing=?, event_type=?, event_category=?, event_mode=?, location=?, total_seats=?, available_seats=? WHERE event_id=?`,
+//       [event_name, event_description, event_date, timing, event_type, JSON.stringify(event_category), event_mode, finalLocation, total_seats || null, available_seats, id]
+//     );
+
+//     res.json({ message: "Event updated successfully" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error updating event" });
+//   }
+// };
+
 exports.updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -400,32 +477,39 @@ exports.updateEvent = async (req, res) => {
       event_date,
       timing,
       event_type,
-      event_category,
+      event_category = [],
       event_mode,
       location,
       total_seats
     } = req.body;
 
     const [existing] = await db.query(`SELECT * FROM events WHERE event_id=?`, [id]);
-    if (existing.length === 0) return res.status(404).json({ message: "Event not found" });
+    if (!existing.length) return res.status(404).json({ message: "Event not found" });
 
     let finalLocation = event_mode === "Offline" ? location : "Virtual";
+
     let available_seats = existing[0].available_seats;
-    if (event_mode === "Offline" && total_seats) {
-      // Adjust available seats proportionally
+
+    if (event_mode === "Offline" && total_seats != null) {
       const bookedSeats = existing[0].total_seats - existing[0].available_seats;
       available_seats = total_seats - bookedSeats;
+      if (available_seats < 0) available_seats = 0; // prevent negative seats
     }
 
+    // Ensure event_category is always string for DB
+    const categoryString = JSON.stringify(event_category || []);
+
     await db.query(
-      `UPDATE events SET event_name=?, event_description=?, event_date=?, timing=?, event_type=?, event_category=?, event_mode=?, location=?, total_seats=?, available_seats=? WHERE event_id=?`,
+      `UPDATE events 
+       SET event_name=?, event_description=?, event_date=?, timing=?, event_type=?, event_category=?, event_mode=?, location=?, total_seats=?, available_seats=? 
+       WHERE event_id=?`,
       [
         event_name,
         event_description,
         event_date,
         timing,
         event_type,
-        JSON.stringify(event_category),
+        categoryString,
         event_mode,
         finalLocation,
         total_seats || null,
@@ -436,8 +520,8 @@ exports.updateEvent = async (req, res) => {
 
     res.json({ message: "Event updated successfully" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error updating event" });
+    console.error("UPDATE EVENT ERROR:", err);
+    res.status(500).json({ message: "Server error updating event", error: err.message });
   }
 };
 
@@ -842,5 +926,12 @@ exports.getEventSummary = async (req,res)=>{
     console.log("ERROR IN getEventSummary:",err)
     res.status(500).json({message:"Server error"})
   }
+  const QRCode = require('qrcode');
+app.get('/qr/:id', async (req, res) => {
+  const url = `http://localhost:4200/checkin-form/${req.params.id}`;
+  const qr = await QRCode.toDataURL(url);
+  res.send(`<img src="${qr}" />`);
+});
+
 
 }
