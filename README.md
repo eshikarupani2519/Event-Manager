@@ -40,10 +40,8 @@ Before running the project, create a `.env` file in the backend and add the foll
 ```
 PORT=your_port_number
 
-DB_HOST=your_database_host
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-DB_NAME=your_database_name
+EMAIL=your_email_id
+EMAIL_PASS=your_emial_passsword
 
 RAZORPAY_KEY=your_razorpay_key
 RAZORPAY_SECRET=your_razorpay_secret
@@ -57,6 +55,14 @@ You must:
 - Configure the **port number**
 
 ---
+
+Before running the project, create a `.env` file in the MLRecommendations and add the following variables:
+DB_USER=root
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_NAME=eventManagementSystem
+
+
 
 # ▶️ How to Run the Project
 
