@@ -15,6 +15,7 @@ exports.registerAttendee = async (req, res) => {
   try {
     console.log("Starting attendee add...");
     console.log("Received body:", req.body);
+    const event_id=request.body.event_id;
 
     const { name, email, phone, city, state, country, password, interests } = req.body;
 
@@ -37,7 +38,7 @@ exports.registerAttendee = async (req, res) => {
     // Insert attendee
     const [insertResult] = await db.query(
       `INSERT INTO attendees (name, email, phone, city, state, country, password, interests) VALUES (?,?,?,?,?,?,?,?)`,
-      [name, email, phone]
+      [name, email, phone, city, state, country, password, interests]
     );
 
     const attId = insertResult.insertId;
@@ -45,7 +46,7 @@ exports.registerAttendee = async (req, res) => {
     // Get event id safely
     const [eventResult] = await db.query(
       `SELECT event_id FROM events WHERE event_name = ?`,
-      [event]
+      [event_id]
     );
 
     if (eventResult.length === 0) {
@@ -136,5 +137,74 @@ exports.getAttendeeByAttendeeId = async (req, res) => {
   } catch (error) {
     console.error("Error fetching attendees:", error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+exports.registerAttendeeWebinar = async (req, res) => {
+  try {
+
+    const { name, email, phone, event } = req.body;
+
+    if (!name || !email || !phone || !event) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Check if attendee already exists
+    const [existing] = await db.query(
+      `SELECT id FROM attendees WHERE email = ?`,
+      [email]
+    );
+
+    let attId;
+
+    if (existing.length > 0) {
+      attId = existing[0].id;
+    } else {
+
+      // Insert new attendee
+      const [insertResult] = await db.query(
+        `INSERT INTO attendees (name, email, phone) VALUES (?,?,?)`,
+        [name, email, phone]
+      );
+
+      attId = insertResult.insertId;
+    }
+
+    // Get event id
+    const [eventResult] = await db.query(
+      `SELECT event_id FROM events WHERE event_name = ?`,
+      [event]
+    );
+
+    if (eventResult.length === 0) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    const eventId = eventResult[0].event_id;
+
+    // Check if already registered
+    const [existingMap] = await db.query(
+      `SELECT * FROM event_attendee WHERE event_id=? AND att_id=?`,
+      [eventId, attId]
+    );
+
+    if (existingMap.length > 0) {
+      return res.status(409).json({ message: "Already registered for this event" });
+    }
+
+    // Map attendee to event
+    await db.query(
+      `INSERT INTO event_attendee (event_id, att_id) VALUES (?,?)`,
+      [eventId, attId]
+    );
+
+    res.status(201).json({
+      message: "Successfully registered for event"
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 };

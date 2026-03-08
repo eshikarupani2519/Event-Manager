@@ -1,3 +1,4 @@
+// routes.js:
 const express=require("express")
 const router=express.Router()
 const authorize = require("./middleware/role.middleware");
@@ -7,10 +8,13 @@ const eventController=require("./controllers/event.controller")
 const attendeeController=require("./controllers/attendee.controller")
 const authenticate=require("./middleware/auth.middleware");
 const offlineEvenetController = require("./controllers/offlineEvenet.controller");
-
+const db=require("./models/db");
+const webinarController = require("./controllers/webinar.controller")
 // dashboard stats
 router.get("/dashboard",authenticate,dashboardController.getStats);
 
+
+router.post("/save-recording",webinarController.saveRecording)
 
 router.post("/signup", authController.signUp);
 
@@ -33,6 +37,7 @@ router.get("/event/:id",authenticate,eventController.getEventById);
 // attendees
 
 router.post("/attendees",authenticate,attendeeController.registerAttendee);
+router.post("/registerAttendeeWebinar",authenticate,attendeeController.registerAttendeeWebinar);
 
 router.get("/attendees/:id",authenticate,attendeeController.getAttendeeByEventId);
 
@@ -204,5 +209,7 @@ router.post("/events/book", authenticate, eventController.bookSeats);
 
 router.post("/payment/create", authenticate, eventController.createPaymentOrder);
 router.post("/payment/verify", authenticate, eventController.verifyPayment);
+router.post("/payment/simulate", authenticate, eventController.simulatePayment);
+router.get("/event-summary/:meetingId", eventController.getEventSummary);
 
 module.exports = router;

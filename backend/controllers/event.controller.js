@@ -1,3 +1,4 @@
+// event.controller.js:
 // const db = require("../models/db")
 // exports.getAllEvents = async (req, res) => {
 //     try {
@@ -192,6 +193,7 @@
 const db = require("../models/db"); // your MySQL pool
 const crypto = require("crypto");
 const razorpay = require("../services/razorPayService");
+const { v4: uuidv4 } = require("uuid")
 
 // Get all events
 exports.getAllEvents = async (req, res) => {
@@ -205,8 +207,74 @@ exports.getAllEvents = async (req, res) => {
 };
 
 // Add new event
+// exports.addEvent = async (req, res) => {
+//   try {
+//     const {
+//       event_name,
+//       event_description,
+//       event_date,
+//       timing,
+//       event_type,
+//       event_category = [],
+//       event_mode,
+//       location,
+//       total_seats
+//     } = req.body;
+
+//     // Validate online/offline & seats
+//     if (!["Online", "Offline"].includes(event_mode)) {
+//       return res.status(400).json({ message: "event_mode must be Online or Offline" });
+//     }
+//     let finalLocation = event_mode === "Offline" ? location : "Virtual";
+
+//     let available_seats = null;
+//     if (event_mode === "Offline") {
+//       if (!total_seats || total_seats <= 0) {
+//         return res.status(400).json({ message: "Offline events must have total_seats > 0" });
+//       }
+//       available_seats = total_seats;
+//     }
+
+//     // Check duplicate event
+//     const [existing] = await db.query(
+//       `SELECT event_id FROM events WHERE event_name=?`,
+//       [event_name]
+//     );
+//     if (existing.length > 0) {
+//       return res.status(409).json({ message: "Event with this name already exists" });
+//     }
+
+//     // Insert event
+//     const [result] = await db.query(
+//       `INSERT INTO events 
+//       (event_name, event_description, event_date, timing, event_type, event_category, event_mode, location, total_seats, available_seats)
+//       VALUES (?,?,?,?,?,?,?,?,?,?)`,
+//       [
+//         event_name,
+//         event_description,
+//         event_date,
+//         timing,
+//         event_type,
+//         JSON.stringify(event_category),
+//         event_mode,
+//         finalLocation,
+//         total_seats || null,
+//         available_seats
+//       ]
+//     );
+
+//     res.status(201).json({ message: "wow eshika event add ho gaya", event_id: result.insertId });
+//   } catch (err) {
+//     console.error("Error adding event:", err);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+// const { v4: uuidv4 } = require("uuid")
+
 exports.addEvent = async (req, res) => {
   try {
+
     const {
       event_name,
       event_description,
@@ -219,18 +287,38 @@ exports.addEvent = async (req, res) => {
       total_seats
     } = req.body;
 
-    // Validate online/offline & seats
+    // Validate online/offline
     if (!["Online", "Offline"].includes(event_mode)) {
       return res.status(400).json({ message: "event_mode must be Online or Offline" });
     }
+
     let finalLocation = event_mode === "Offline" ? location : "Virtual";
 
     let available_seats = null;
+
     if (event_mode === "Offline") {
+
       if (!total_seats || total_seats <= 0) {
         return res.status(400).json({ message: "Offline events must have total_seats > 0" });
       }
+
       available_seats = total_seats;
+
+    }
+
+    // ============================
+    // GENERATE MEETING FOR ONLINE
+    // ============================
+
+    let meetingId = null;
+    let meetingLink = null;
+
+    if (event_mode === "Online") {
+
+      meetingId = uuidv4().substring(0,8);
+
+      meetingLink = `http://localhost:4200/webinar/${meetingId}`;
+
     }
 
     // Check duplicate event
@@ -238,15 +326,19 @@ exports.addEvent = async (req, res) => {
       `SELECT event_id FROM events WHERE event_name=?`,
       [event_name]
     );
+
     if (existing.length > 0) {
       return res.status(409).json({ message: "Event with this name already exists" });
     }
 
-    // Insert event
+    // ============================
+    // INSERT EVENT
+    // ============================
+
     const [result] = await db.query(
       `INSERT INTO events 
-      (event_name, event_description, event_date, timing, event_type, event_category, event_mode, location, total_seats, available_seats)
-      VALUES (?,?,?,?,?,?,?,?,?,?)`,
+      (event_name, event_description, event_date, timing, event_type, event_category, event_mode, location, total_seats, available_seats, meeting_id, meeting_link)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         event_name,
         event_description,
@@ -257,14 +349,24 @@ exports.addEvent = async (req, res) => {
         event_mode,
         finalLocation,
         total_seats || null,
-        available_seats
+        available_seats,
+        meetingId,
+        meetingLink
       ]
     );
 
-    res.status(201).json({ message: "wow eshika event add ho gaya", event_id: result.insertId });
-  } catch (err) {
+    res.status(201).json({
+      message: "wow eshika event add ho gaya",
+      event_id: result.insertId,
+      meeting_link: meetingLink
+    });
+
+  } 
+  catch (err) {
+
     console.error("Error adding event:", err);
     res.status(500).json({ message: "Internal server error" });
+
   }
 };
 
@@ -447,7 +549,9 @@ exports.verifyPayment = async (req, res) => {
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body.toString())
       .digest("hex");
-
+    console.log("BODY STRING:", razorpay_order_id + "|" + razorpay_payment_id);
+console.log("EXPECTED:", expectedSignature);
+console.log("RECEIVED:", razorpay_signature);
     if (expectedSignature !== razorpay_signature) {
       return res.status(400).json({ message: "Payment verification failed" });
     }
@@ -475,3 +579,91 @@ exports.verifyPayment = async (req, res) => {
     res.status(500).json({ message: "Payment verification failed" });
   }
 };
+
+
+
+exports.simulatePayment = async (req, res) => {
+  try {
+    const { event_id, attendee_id, seats_to_book, amount } = req.body;
+
+    // 1️⃣ Create Razorpay Order
+    const order = await razorpay.orders.create({
+      amount: amount * 100,
+      currency: "INR",
+      receipt: "receipt_" + Date.now()
+    });
+
+    const razorpay_order_id = order.id;
+
+    // 2️⃣ Simulate Razorpay payment_id
+    const razorpay_payment_id = "pay_" + Date.now();
+
+    // 3️⃣ Generate signature exactly like Razorpay
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+    const razorpay_signature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+
+    // 4️⃣ Verify signature (same logic as real payment verification)
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ message: "Payment verification failed" });
+    }
+
+    // 5️⃣ Booking logic (your DB logic here)
+    // Example:
+    /*
+    await Booking.create({
+      event_id,
+      attendee_id,
+      seats_booked: seats_to_book,
+      payment_id: razorpay_payment_id,
+      order_id: razorpay_order_id
+    });
+    */
+
+    res.json({
+      message: "Payment simulated & verified successfully",
+      order_id: razorpay_order_id,
+      payment_id: razorpay_payment_id,
+      signature: razorpay_signature
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Payment simulation failed" });
+  }
+};
+
+exports.getEventSummary = async (req,res)=>{
+
+  try{
+
+    const meetingId = req.params.meetingId
+
+    const [event] = await db.query(
+      `SELECT summary, transcript 
+       FROM events 
+       WHERE meeting_id=?`,
+      [meetingId]
+    )
+
+    if(event.length === 0){
+      return res.status(404).json({message:"Event not found"})
+    }
+
+    res.json(event[0])
+
+  }
+  catch(err){
+    console.log(err)
+    res.status(500).json({message:"Server error"})
+  }
+
+}

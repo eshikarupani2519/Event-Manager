@@ -63,44 +63,44 @@ console.log("Diff minutes:", diffMinutes)
             // GENERATE MEETING LINK + SEND EMAIL
             // ============================
 
-            if(!event.meeting_id){
+//             if(!event.meeting_id){
 
-                console.log("Generating meeting for:",event.event_name)
+//                 console.log("Generating meeting for:",event.event_name)
 
-                const meetingId = generateMeetingId()
-                const meetingLink = `http://localhost:4200/webinar/${meetingId}`
+//                 const meetingId = generateMeetingId()
+//                 const meetingLink = `http://localhost:4200/webinar/${meetingId}`
 
-                await db.query(`
-                    UPDATE events
-                    SET meeting_id=?, meeting_link=?
-                    WHERE event_id=?
-                `,[meetingId,meetingLink,event.event_id])
+//                 await db.query(`
+//                     UPDATE events
+//                     SET meeting_id=?, meeting_link=?
+//                     WHERE event_id=?
+//                 `,[meetingId,meetingLink,event.event_id])
 
-                event.meeting_id = meetingId
-                event.meeting_link = meetingLink
+//                 event.meeting_id = meetingId
+//                 event.meeting_link = meetingLink
 
-                const msg = `
-Hello,
+//                 const msg = `
+// Hello,
 
-Your webinar "${event.event_name}" has been scheduled.
+// Your webinar "${event.event_name}" has been scheduled.
 
-Meeting ID: ${meetingId}
-Join Link: ${meetingLink}
+// Meeting ID: ${meetingId}
+// Join Link: ${meetingLink}
 
-Date: ${event.event_date}
-Time: ${event.timing}
+// Date: ${event.event_date}
+// Time: ${event.timing}
 
-See you there!
-                `
+// See you there!
+//                 `
 
-                await sendEmail(
-                    event.email,
-                    "Webinar Scheduled - Join Link",
-                    msg
-                )
+//                 await sendEmail(
+//                     event.email,
+//                     "Webinar Scheduled - Join Link",
+//                     msg
+//                 )
 
-                console.log("Initial webinar email sent to:",event.email)
-            }
+//                 console.log("Initial webinar email sent to:",event.email)
+//             }
 
             // ============================
             // 1 DAY REMINDER
@@ -196,16 +196,82 @@ Join Link: ${event.meeting_link}
             // END WEBINAR
             // ============================
 
-            if(diffMinutes === -120 && event.webinar_status === "live"){
+            // if(diffMinutes === -120 && event.webinar_status === "live"){
 
-                await db.query(`
-                    UPDATE events
-                    SET webinar_status='ended'
-                    WHERE event_id=?
-                `,[event.event_id])
+            //     await db.query(`
+            //         UPDATE events
+            //         SET webinar_status='ended'
+            //         WHERE event_id=?
+            //     `,[event.event_id])
 
-                console.log("Webinar Ended:",event.event_name)
-            }
+            //     console.log("Webinar Ended:",event.event_name)
+            // }
+
+            // ============================
+// END WEBINAR + AI PROCESSING
+// ============================
+
+if(diffMinutes === -120 && event.webinar_status === "live"){
+
+    await db.query(`
+        UPDATE events
+        SET webinar_status='ended'
+        WHERE event_id=?
+    `,[event.event_id])
+
+    console.log("Webinar Ended:",event.event_name)
+
+    try{
+
+        // GET RECORDING FILE
+        const [data] = await db.query(
+            `SELECT recording_url FROM events WHERE event_id=?`,
+            [event.event_id]
+        )
+
+        const recording = data[0]?.recording_url
+
+        if(!recording){
+            console.log("No recording found for event:",event.event_id)
+            continue
+        }
+
+        console.log("Processing recording:",recording)
+
+        // ======================
+        // SPEECH → TEXT
+        // ======================
+
+        const transcript = await transcribe(recording)
+
+        await db.query(`
+            UPDATE events
+            SET transcript=?
+            WHERE event_id=?
+        `,[transcript,event.event_id])
+
+        console.log("Transcript generated")
+
+        // ======================
+        // AI SUMMARY
+        // ======================
+
+        const summary = await generateSummary(transcript)
+
+        await db.query(`
+            UPDATE events
+            SET summary=?
+            WHERE event_id=?
+        `,[summary,event.event_id])
+
+        console.log("AI Summary generated")
+
+    }
+    catch(err){
+        console.log("AI processing error:",err)
+    }
+
+}
 
         }
 
