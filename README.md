@@ -133,7 +133,7 @@ Event-Manager
 
 ## 👨‍💻 Developed For
 
-**Elite Hacks Hackathon**
+**Elite Hack Hackathon**
 
 ---
 
