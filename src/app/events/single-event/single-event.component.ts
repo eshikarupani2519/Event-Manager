@@ -19,6 +19,9 @@ export class SingleEventComponent {
   totalAttendees: any;
   isLoading: boolean = false;
   headers: any;
+  event_mode: any;
+total_seats: any;
+available_seats: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -83,6 +86,33 @@ export class SingleEventComponent {
 //     console.error('Error fetching event data:', error);
 //   }
 // });
+// this.eventService.getEventById(+this.id).subscribe({
+//   next: (res: any) => {
+
+//     console.log("event data loaded:", res);
+
+//     const eventData = res.event || res;
+
+//     this.event_name = eventData.event_name;
+//     this.event_description = eventData.event_description;
+//     this.event_type = eventData.event_type;
+//     this.timing = eventData.timing;
+
+//     if (eventData.event_date) {
+//       this.event_date = eventData.event_date.substring(0, 10);
+//     }
+
+//     if (res.totalAttendees && res.totalAttendees.length > 0) {
+//       this.totalAttendees = res.totalAttendees[0]['COUNT(*)'];
+//     } else {
+//       this.totalAttendees = 0;
+//     }
+
+//   },
+//   error: (error) => {
+//     console.error('Error fetching event data:', error);
+//   }
+// });
 this.eventService.getEventById(+this.id).subscribe({
   next: (res: any) => {
 
@@ -99,11 +129,17 @@ this.eventService.getEventById(+this.id).subscribe({
       this.event_date = eventData.event_date.substring(0, 10);
     }
 
-    if (res.totalAttendees && res.totalAttendees.length > 0) {
-      this.totalAttendees = res.totalAttendees[0]['COUNT(*)'];
-    } else {
-      this.totalAttendees = 0;
-    }
+    // 👇 ADD THESE
+    this.event_mode = eventData.event_mode;
+    this.total_seats = eventData.total_seats;
+    this.available_seats = eventData.available_seats;
+
+    // if (res.totalAttendees && res.totalAttendees.length > 0) {
+    //   this.totalAttendees = res.totalAttendees[0]['COUNT(*)'];
+    // } else {
+    //   this.totalAttendees = 0;
+    // }
+    this.totalAttendees = res.total_attendees !== undefined ? res.total_attendees : 0;
 
   },
   error: (error) => {

@@ -68,20 +68,70 @@ loadEvents(){
     return this.registerFormGroup.get(name)?.touched && this.registerFormGroup.get(name)?.errors?.['required']
   }
 
+// submitData() {
+//   if (this.registerFormGroup.invalid) return;
+
+//   const { name,phone, email, event } = this.registerFormGroup.value;
+
+//   this.attendeeService.registerAttendee(this.registerFormGroup.value,this.headers).subscribe({
+//       next: (res) => {
+//         console.log('Attendee registered successfully', res);
+//         alert('Attendee registered successfully');
+//       },
+//       error: (err) => {
+//         console.error('Error registering attendee', err);
+//       }
+//     });
+// }
+
 submitData() {
+
   if (this.registerFormGroup.invalid) return;
 
-  const { name,phone, email, event } = this.registerFormGroup.value;
+  const { name, phone, email, event } = this.registerFormGroup.value;
 
-  this.attendeeService.registerAttendee(this.registerFormGroup.value,this.headers).subscribe({
-      next: (res) => {
-        console.log('Attendee registered successfully', res);
-        alert('Attendee registered successfully');
-      },
-      error: (err) => {
-        console.error('Error registering attendee', err);
-      }
-    });
+  const options: any = {
+    key: environment.razorpayKey, 
+    amount: 500 * 100, 
+    currency: "INR",
+    name: "Event Registration",
+    description: "Event Ticket",
+
+    handler: (response: any) => {
+
+      console.log("Payment successful:", response);
+
+      // After payment success register attendee
+      this.attendeeService.registerAttendee(
+        this.registerFormGroup.value,
+        this.headers
+      ).subscribe({
+        next: (res) => {
+          console.log("Attendee registered", res);
+          alert("Payment successful & attendee registered!");
+        },
+        error: (err) => {
+          console.error("Error registering attendee", err);
+        }
+      });
+
+    },
+
+    prefill: {
+      name: name,
+      email: email,
+      contact: phone
+    },
+
+    theme: {
+      color: "#3399cc"
+    }
+
+  };
+
+  const rzp = new (window as any).Razorpay(options);
+  rzp.open();
+
 }
 
 }

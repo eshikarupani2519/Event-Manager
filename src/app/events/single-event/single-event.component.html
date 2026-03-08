@@ -1,4 +1,4 @@
-<div class="event-page">
+<!-- <div class="event-page">
 
 <div class="event-card">
 
@@ -51,6 +51,64 @@
 </div>
 
 </div>
+<div *ngIf="event_mode === 'Offline'" class="info-item">
+  <span class="label">🎟 Total Seats</span>
+  <span class="value">{{ total_seats }}</span>
+</div>
+
+<div *ngIf="event_mode === 'Offline'" class="info-item">
+  <span class="label">💺 Available Seats</span>
+  <span class="value">{{ available_seats }}</span>
+</div>
+<div *ngIf="isLoading" class="loader-overlay">
+  <div class="spinner"></div>
+  <p>Processing request...</p>
+</div> -->
+
+<div class="event-page">
+  <div class="event-card">
+    <h2 class="event-title">🎉 {{ event_name }}</h2>
+
+    <div class="info-line">
+      <span class="label">Description</span>
+      <span class="value">{{ event_description }}</span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="label">📅 Date</span>
+        <span class="value">{{ event_date }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">👥 Attendees</span>
+        <span class="value">{{ totalAttendees }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">🎤 Type</span>
+        <span class="badge">{{ event_type }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">⏰ Timing</span>
+        <span class="value">{{ timing }}</span>
+      </div>
+
+      <div *ngIf="event_mode === 'Offline'" class="info-item">
+        <span class="label">🎟 Total Seats</span>
+        <span class="value">{{ total_seats }}</span>
+      </div>
+
+      <div *ngIf="event_mode === 'Offline'" class="info-item">
+        <span class="label">💺 Available Seats</span>
+        <span class="value">{{ available_seats }}</span>
+      </div>
+    </div> 
+    </div>
+</div>
+
+<code>Debug Mode: {{ event_mode }}</code>
 
 <div *ngIf="isLoading" class="loader-overlay">
   <div class="spinner"></div>
