@@ -13,6 +13,7 @@ import { WebinarListComponent } from './webinar/webinar-list/webinar-list.compon
 import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { CheckinFormComponent } from './checkin-form/checkin-form.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {path:'register',component:RegisterComponent},
@@ -26,6 +27,7 @@ const routes: Routes = [
   {path:'dashboard',component:DashboardComponent},
   {path:'event-suggestions',component:SuggestionsComponent},
   { path:'schedule-webinar', component: ScheduleWebinarComponent },
+  { path:'profile', component: ProfileComponent },
 
 { path:'webinars', component: WebinarListComponent },
   { path: 'checkin-form/:id', component: CheckinFormComponent },

@@ -124,7 +124,7 @@ exports.getAttendeeByAttendeeId = async (req, res) => {
   try {
     const [attendee] = await db.query(
       `SELECT * FROM attendees WHERE id = ?`,
-      [id]
+      [userId]
     );
 
     if (attendee.length === 0) {

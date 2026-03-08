@@ -13,6 +13,7 @@ import { SharedModule } from './shared/shared.module';
 import { WebinarModule } from './webinar/webinar.module';
 import { QRCodeModule } from 'angularx-qrcode'; 
 import { CheckinFormComponent } from './checkin-form/checkin-form.component';
+import { ProfileComponent } from './profile/profile.component';
 // import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { CheckinFormComponent } from './checkin-form/checkin-form.component';
     AppComponent,
     CheckinFormComponent,
     
+    ProfileComponent,
     
    
   ],
@@ -31,7 +33,8 @@ import { CheckinFormComponent } from './checkin-form/checkin-form.component';
     AttendeesModule,
     DashboardModule,
     QRCodeModule, 
-    SharedModule, WebinarModule,
+    SharedModule, 
+    WebinarModule,
     HttpClientModule,
     FormsModule
   ],

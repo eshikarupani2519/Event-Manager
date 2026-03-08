@@ -36,16 +36,28 @@
 
     </button>
 
-    <!-- When user logged in -->
+    <!-- Profile Button -->
 
-    <button
+<button
+    *ngIf="isLoggedIn"
+    class="profile-btn me-2"
+    (click)="navigateToPage('profile')">
+
+    <i class="fa-solid fa-user me-1"></i>
+    Profile
+
+</button>
+
+<!-- When user logged in -->
+
+<button
         *ngIf="isLoggedIn"
         class="logout-btn"
         (click)="logout()">
 
         Logout
 
-    </button>
+</button>
 
 </div>
         </div>

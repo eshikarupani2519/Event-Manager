@@ -20,7 +20,7 @@ export class EventListComponent {
   totalPages: number = 0;
   totalPagesArray: number[] = [];
   paginatedEvents: any = [];
-  selectedType: String = '';
+  selectedType: String = 'All';
   isLoading: boolean = false; //  Property to control loader visibility
   headers: any;
   ngOnInit() {

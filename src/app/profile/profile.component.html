@@ -1,0 +1,62 @@
+<div class="profile-page">
+
+<div class="profile-card">
+
+<div class="profile-header">
+
+<div class="avatar">👤</div>
+
+<div>
+
+<h2>{{user.name}}</h2>
+
+<p>{{user.email}}</p>
+
+<span class="location">
+{{user.city}}, {{user.state}}, {{user.country}}
+</span>
+
+</div>
+
+</div>
+
+<div class="profile-details">
+
+<div class="detail">
+<strong>Phone</strong>
+<p>{{user.phone}}</p>
+</div>
+
+<div class="detail">
+<strong>Interests</strong>
+<p>{{user.interests}}</p>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- REGISTERED EVENTS -->
+
+<div class="section">
+
+<h3>🎟 Registered Events</h3>
+
+<div class="event-grid">
+
+<div class="event-card" *ngFor="let e of registeredEvents">
+
+<h4>{{e.event_name}}</h4>
+
+<p>{{e.event_date}}</p>
+
+<span class="badge">{{e.event_type}}</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
