@@ -47,6 +47,8 @@ DB_NAME=your_database_name
 
 RAZORPAY_KEY=your_razorpay_key
 RAZORPAY_SECRET=your_razorpay_secret
+OPENAI_API_KEY=your_open_api_key
+
 ```
 
 You must:
@@ -96,8 +98,8 @@ http://localhost:4200
 Open a third terminal:
 
 ```bash
-cd ml-recommendations
-py ml-recommendations.py
+cd MLRecommendations
+py ml_service.py
 ```
 
 This will start the **Python Flask AI recommendation service**.
