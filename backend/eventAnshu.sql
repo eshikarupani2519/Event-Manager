@@ -259,6 +259,7 @@ select * from event_attendee;
 select * from attendees;
 select * from events;
 
+
 INSERT INTO attendees 
 (name, email, phone, city, state, country, password, interests)
 VALUES
@@ -276,3 +277,15 @@ ALTER TABLE attendees
 
 ADD COLUMN verification_token VARCHAR(255),
 ADD COLUMN verified BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE events
+ADD COLUMN total_seats INT DEFAULT NULL,
+ADD COLUMN available_seats INT DEFAULT NULL;
+
+ALTER TABLE events
+ADD COLUMN recording_url VARCHAR(255),
+ADD COLUMN transcript LONGTEXT,
+ADD COLUMN summary TEXT;
+
+select * from events;
+select * from attendees;

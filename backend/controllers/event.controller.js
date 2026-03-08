@@ -582,11 +582,80 @@ console.log("RECEIVED:", razorpay_signature);
 
 
 
+// exports.simulatePayment = async (req, res) => {
+//   try {
+//     const { event_id, attendee_id, seats_to_book, amount } = req.body;
+
+//     // 1️⃣ Create Razorpay Order
+//     const order = await razorpay.orders.create({
+//       amount: amount * 100,
+//       currency: "INR",
+//       receipt: "receipt_" + Date.now()
+//     });
+
+//     const razorpay_order_id = order.id;
+
+//     // 2️⃣ Simulate Razorpay payment_id
+//     const razorpay_payment_id = "pay_" + Date.now();
+
+//     // 3️⃣ Generate signature exactly like Razorpay
+//     const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+//     const razorpay_signature = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//       .update(body)
+//       .digest("hex");
+
+//     // 4️⃣ Verify signature (same logic as real payment verification)
+//     const expectedSignature = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//       .update(body)
+//       .digest("hex");
+
+//     if (expectedSignature !== razorpay_signature) {
+//       return res.status(400).json({ message: "Payment verification failed" });
+//     }
+
+//     // 5️⃣ Booking logic (your DB logic here)
+//     // Example:
+//     /*
+//     await Booking.create({
+//       event_id,
+//       attendee_id,
+//       seats_booked: seats_to_book,
+//       payment_id: razorpay_payment_id,
+//       order_id: razorpay_order_id
+//     });
+//     */
+
+//     res.json({
+//       message: "Payment simulated & verified successfully",
+//       order_id: razorpay_order_id,
+//       payment_id: razorpay_payment_id,
+//       signature: razorpay_signature
+//     });
+
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Payment simulation failed" });
+//   }
+// };
+
+
 exports.simulatePayment = async (req, res) => {
+
   try {
+
+    console.log("===== PAYMENT SIMULATION STARTED =====");
+
     const { event_id, attendee_id, seats_to_book, amount } = req.body;
 
-    // 1️⃣ Create Razorpay Order
+    console.log("Request Body:", req.body);
+
+    // ===============================
+    // 1️⃣ CREATE RAZORPAY ORDER
+    // ===============================
+
     const order = await razorpay.orders.create({
       amount: amount * 100,
       currency: "INR",
@@ -595,10 +664,20 @@ exports.simulatePayment = async (req, res) => {
 
     const razorpay_order_id = order.id;
 
-    // 2️⃣ Simulate Razorpay payment_id
+    console.log("Order Created:", razorpay_order_id);
+
+    // ===============================
+    // 2️⃣ SIMULATE PAYMENT ID
+    // ===============================
+
     const razorpay_payment_id = "pay_" + Date.now();
 
-    // 3️⃣ Generate signature exactly like Razorpay
+    console.log("Simulated Payment ID:", razorpay_payment_id);
+
+    // ===============================
+    // 3️⃣ GENERATE SIGNATURE
+    // ===============================
+
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
     const razorpay_signature = crypto
@@ -606,39 +685,130 @@ exports.simulatePayment = async (req, res) => {
       .update(body)
       .digest("hex");
 
-    // 4️⃣ Verify signature (same logic as real payment verification)
+    console.log("Generated Signature:", razorpay_signature);
+
+    // ===============================
+    // 4️⃣ VERIFY SIGNATURE
+    // ===============================
+
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body)
       .digest("hex");
 
+    console.log("Expected Signature:", expectedSignature);
+
     if (expectedSignature !== razorpay_signature) {
-      return res.status(400).json({ message: "Payment verification failed" });
+
+      console.log("Signature verification FAILED");
+
+      return res.status(400).json({
+        message: "Payment verification failed"
+      });
+
     }
 
-    // 5️⃣ Booking logic (your DB logic here)
-    // Example:
-    /*
-    await Booking.create({
-      event_id,
-      attendee_id,
-      seats_booked: seats_to_book,
-      payment_id: razorpay_payment_id,
-      order_id: razorpay_order_id
-    });
-    */
+    console.log("Signature verified successfully");
+
+    // ===============================
+    // 5️⃣ FETCH EVENT
+    // ===============================
+
+    const [events] = await db.query(
+      `SELECT * FROM events WHERE event_id=?`,
+      [event_id]
+    );
+
+    console.log("Fetched Event:", events);
+
+    if (events.length === 0) {
+
+      console.log("Event not found");
+
+      return res.status(404).json({
+        message: "Event not found"
+      });
+
+    }
+
+    const event = events[0];
+
+    console.log("Available seats before booking:", event.available_seats);
+
+    // ===============================
+    // 6️⃣ CHECK SEAT AVAILABILITY
+    // ===============================
+
+    if (event.available_seats < seats_to_book) {
+
+      console.log("Not enough seats available");
+
+      return res.status(400).json({
+        message: "Not enough seats available"
+      });
+
+    }
+
+    // ===============================
+    // 7️⃣ REDUCE SEATS
+    // ===============================
+
+    await db.query(
+      `UPDATE events 
+       SET available_seats = available_seats - ? 
+       WHERE event_id=?`,
+      [seats_to_book, event_id]
+    );
+
+    console.log("Seats reduced by:", seats_to_book);
+
+    // ===============================
+    // 8️⃣ REGISTER ATTENDEE
+    // ===============================
+
+    for (let i = 0; i < seats_to_book; i++) {
+
+      console.log("Registering attendee:", attendee_id);
+
+      await db.query(
+        `INSERT INTO event_attendee(event_id, att_id) 
+         VALUES(?, ?)`,
+        [event_id, attendee_id]
+      );
+
+    }
+
+    console.log("Attendee(s) registered successfully");
+
+    // ===============================
+    // 9️⃣ FINAL RESPONSE
+    // ===============================
 
     res.json({
-      message: "Payment simulated & verified successfully",
+
+      message: "Payment simulated & seats booked successfully",
+
       order_id: razorpay_order_id,
+
       payment_id: razorpay_payment_id,
+
       signature: razorpay_signature
+
     });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Payment simulation failed" });
+    console.log("===== PAYMENT SIMULATION COMPLETED =====");
+
   }
+  catch (err) {
+
+    console.error("Payment simulation error:", err);
+
+    res.status(500).json({
+      error: "Payment simulation failed"
+    });
+
+  }
+
 };
 
 exports.getEventSummary = async (req,res)=>{
@@ -647,6 +817,8 @@ exports.getEventSummary = async (req,res)=>{
 
     const meetingId = req.params.meetingId
 
+    console.log("Fetching summary for meeting:", meetingId)
+
     const [event] = await db.query(
       `SELECT summary, transcript 
        FROM events 
@@ -654,15 +826,20 @@ exports.getEventSummary = async (req,res)=>{
       [meetingId]
     )
 
+    console.log("DB RESULT:", event)
+
     if(event.length === 0){
+      console.log("Event not found for meeting id:", meetingId)
       return res.status(404).json({message:"Event not found"})
     }
+
+    console.log("Sending summary response")
 
     res.json(event[0])
 
   }
   catch(err){
-    console.log(err)
+    console.log("ERROR IN getEventSummary:",err)
     res.status(500).json({message:"Server error"})
   }
 
