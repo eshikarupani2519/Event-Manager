@@ -1,14 +1,13 @@
 /* ===== Page ===== */
 
+/* Main container */
 .dashboard-container{
     padding:40px;
-    min-height:100vh;
-    background:#020617;
-    color:white;
+    max-width:1100px;
+    margin:auto;
 }
 
-/* ===== Title ===== */
-
+/* Title */
 .dashboard-title{
     text-align:center;
     font-size:28px;
@@ -16,8 +15,7 @@
     margin-bottom:35px;
 }
 
-/* ===== Stats Grid ===== */
-
+/* Stats grid */
 .stats-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -25,8 +23,7 @@
     margin-bottom:40px;
 }
 
-/* ===== Stat Cards ===== */
-
+/* Stat cards */
 .stat-card{
     background:#0f172a;
     border:1px solid rgba(255,255,255,0.05);
@@ -46,6 +43,7 @@
     color:#94a3b8;
 }
 
+/* Numbers */
 .stat-number{
     font-size:20px;
     font-weight:700;
@@ -82,8 +80,7 @@
     margin:auto;
 }
 
-/* ===== Legend ===== */
-
+/* Legend row */
 .legend-row{
     display:flex;
     justify-content:space-around;
@@ -91,6 +88,7 @@
     font-size:13px;
 }
 
+/* Legend items */
 .legend-item{
     display:flex;
     align-items:center;
@@ -104,19 +102,18 @@
 }
 
 .conference{
-    background:#38bdf8;
+    background:#3b82f6;
 }
 
 .workshop{
-    background:#a78bfa;
+    background:#06b6d4;
 }
 
 .meetup{
     background:#22c55e;
 }
 
-/* ===== Buttons ===== */
-
+/* Dashboard buttons */
 .dashboard-actions{
     display:flex;
     justify-content:center;
@@ -124,6 +121,7 @@
     flex-wrap:wrap;
 }
 
+/* Button base style */
 .action-btn{
     padding:8px 16px;
     border-radius:6px;
@@ -133,8 +131,7 @@
     transition:0.25s;
 }
 
-/* Primary */
-
+/* Schedule Webinar */
 .primary-btn{
     background:#6366f1;
     color:white;
@@ -144,8 +141,7 @@
     background:#4f46e5;
 }
 
-/* Secondary */
-
+/* View Webinar */
 .secondary-btn{
     border:1px solid #38bdf8;
     color:#38bdf8;

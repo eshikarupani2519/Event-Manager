@@ -12,6 +12,7 @@ import { ScheduleWebinarComponent } from './webinar/schedule-webinar/schedule-we
 import { WebinarListComponent } from './webinar/webinar-list/webinar-list.component';
 import { WebinarMeetingComponent } from './webinar/webinar-meeting/webinar-meeting.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { ProfileComponent } from './profile/profile.component';
 import { CheckinFormComponent } from './checkin-form/checkin-form.component';
 // import { ProfileComponent } from './profile/profile.component';
 

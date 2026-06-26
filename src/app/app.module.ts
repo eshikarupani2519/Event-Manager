@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
 import { WebinarModule } from './webinar/webinar.module';
+import { ProfileComponent } from './profile/profile.component';
 import { QRCodeModule } from 'angularx-qrcode'; 
 import { CheckinFormComponent } from './checkin-form/checkin-form.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -19,9 +20,11 @@ import { ProfileComponent } from './profile/profile.component';
 @NgModule({
   declarations: [
     AppComponent,
+    ProfileComponent,
     CheckinFormComponent,
     ProfileComponent,
     
+    ProfileComponent,
     
    
   ],
@@ -33,7 +36,8 @@ import { ProfileComponent } from './profile/profile.component';
     AttendeesModule,
     DashboardModule,
     QRCodeModule, 
-    SharedModule, WebinarModule,
+    SharedModule, 
+    WebinarModule,
     HttpClientModule,
     FormsModule
   ],

@@ -69,15 +69,32 @@
 
     </button> -->
 
-    <!-- When user logged in -->
+    <!-- Profile Button -->
 
+<<<<<<< HEAD
     <!-- <button
+=======
+<button
+    *ngIf="isLoggedIn"
+    class="profile-btn me-2"
+    (click)="navigateToPage('profile')">
+
+    <i class="fa-solid fa-user me-1"></i>
+    Profile
+
+</button>
+
+<!-- When user logged in -->
+
+<button
+>>>>>>> 7684c6c2cf0323940f0011d37c4ae66128d39e0e
         *ngIf="isLoggedIn"
         class="logout-btn"
         (click)="logout()">
 
         Logout
 
+<<<<<<< HEAD
     </button> -->
 
     <div class="d-flex align-items-center">
@@ -101,6 +118,9 @@ Logout
 </button>
 
 </div>
+=======
+</button>
+>>>>>>> 7684c6c2cf0323940f0011d37c4ae66128d39e0e
 
 </div>
         </div>
