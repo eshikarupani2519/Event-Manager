@@ -14,7 +14,7 @@ import { WebinarModule } from './webinar/webinar.module';
 import { ProfileComponent } from './profile/profile.component';
 import { QRCodeModule } from 'angularx-qrcode'; 
 import { CheckinFormComponent } from './checkin-form/checkin-form.component';
-import { ProfileComponent } from './profile/profile.component';
+
 // import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
