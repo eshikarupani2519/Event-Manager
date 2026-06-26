@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EventService {
-  mlUrl=environment.mlUrl
+  mlUrl=environment.mlUrl;
   baseUrl = environment.apiUrl
   constructor(private http: HttpClient) { }
   getEventById(id: number) {
@@ -36,8 +36,18 @@ export class EventService {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-  getAttendeeById(){
-    return this.http.get(`${this.baseUrl}/attendee`);
+  // getEventSuggestions(headers:any,payload: any) {
+  // return this.http.post('http://127.0.0.1:5001/event-suggestion', payload, {
+  //   headers: { 'Content-Type': 'application/json' }
+  // });
+
+  // getEventSuggestions(headers:any,payload: any) {
+  // return this.http.post('http://127.0.0.1:5001/event-suggestion', payload, {
+  //   headers: { 'Content-Type': 'application/json' }
+  // });
+
+  getAttendeeById(options: { headers: HttpHeaders; }){
+    return this.http.get(`${this.baseUrl}/attendee`, options);
   }
   getSummary(eventId:any){
     return this.http.get(`${this.baseUrl}/event-summary/${eventId}`)
@@ -48,5 +58,8 @@ export class EventService {
     name: name
   });
 }
-
 }
+
+  
+
+

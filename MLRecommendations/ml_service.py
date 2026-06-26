@@ -1,175 +1,506 @@
+# from flask import Flask, request, jsonify
+# from flask_cors import CORS
+# import mysql.connector
+# app = Flask(__name__)
+# # CORS(app)
+
+# from dotenv import load_dotenv
+# import os
+# CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
+# load_dotenv()  # Reads variables from .env
+
+# db_user = os.environ.get("DB_USER")
+# db_password = os.environ.get("DB_PASSWORD")
+# db_host = os.environ.get("DB_HOST")
+# db_name = os.environ.get("DB_NAME")
+# conn = mysql.connector.connect(
+#     host=db_host,
+#     user=db_user,
+#     password=db_password,
+#     database=db_name
+# )
+# db = conn.cursor(dictionary=True) 
+# # --------------------------------------------------
+# # 1️⃣ EVENT SUGGESTION (CURRENT interests COLLABORATIVE FILTERING)
+# # --------------------------------------------------
+# @app.route('/event-suggestion', methods=['POST'])
+# def event_suggestion():
+#     data = request.json
+    
+#     attendee = data['attendee']
+#     events = data['event']
+
+#     attendee_interests = set(attendee.get('interests', []))
+#     results = []
+
+#     for event in events:
+#         event_categories = set(event.get('event_category', []))
+#         common_interests = attendee_interests.intersection(event_categories)
+
+#         # Interest match %
+#         match_pct = (
+#             len(common_interests) / len(attendee_interests) * 100
+#         ) if attendee_interests else 0
+
+#         missing_categories = list(attendee_interests-event_categories)
+
+#         # 🔥 Calculate Average Host Rating
+#         hosts = event.get("hosts", [])
+        
+#         if hosts:
+#             avg_rating = sum(h.get("rating", 0) for h in hosts) / len(hosts)
+#         else:
+#             avg_rating = 0
+#         if match_pct>30:
+#             results.append({
+#                 "id": event.get("event_id"),
+#                 "name": event.get("event_name"),
+#                 "type": event.get("event_type"),
+#                 "date": event.get("event_date"),
+#                 "timing": event.get("timing"),
+#                 "mode": event.get("event_mode"),
+#                 "location": event.get("location"),
+#                 "avg_host_rating": round(avg_rating, 2),
+#                 "interestMatchPercentage": round(match_pct, 2),
+#                 "missingCategories": missing_categories
+#             })
+
+#     # 🔥 SORTING LOGIC
+#     sorted_results = sorted(
+#         results,
+#         key=lambda x: (
+#             -x["interestMatchPercentage"],   # 1️⃣ primary
+#             -x["avg_host_rating"]            # 2️⃣ secondary
+#         )
+#     )
+
+#     return jsonify(sorted_results)
+
+# # --------------------------------------------------
+# # 2️⃣ TARGET SKILLS (TARGET SKILLS COLLABORATIVE FILTERING)
+# # --------------------------------------------------
+# # @app.route('/target-skills', methods=['POST'])
+# # def target_skills():
+# #     data = request.json
+# #     attendee = data['attendee']
+# #     event = data['event']
+
+# #     target_skills = set(attendee.get('target_skills', []))
+# #     results = []
+
+# #     for event in event:
+# #         event_categories = set(event.get('skills', []))
+# #         common_targets = target_skills.intersection(event_categories)
+
+# #         match_pct = (len(common_targets) / len(target_skills) * 100) if target_skills else 0
+
+# #         results.append({
+# #             "name": event.get("name"),
+# #             "no_of_events_evented":event.get("no_of_events_evented"),
+# #             "jobTitle": event.get("jobTitle", ""),
+# #             "company": event.get("company", ""),
+# #             "targetSkillMatchPercentage": round(match_pct, 2),
+# #             "matchedTargetSkills": list(common_targets)
+# #         })
+
+# #     return jsonify(
+# #         sorted(results, key=lambda x: x["targetSkillMatchPercentage"], reverse=True)
+# #     )
+
+# # --------------------------------------------------
+# # 3️⃣ REAL TIME ENGAGEMENT ENGINE
+# # --------------------------------------------------
+
+# @app.route('/engagement-score', methods=['POST'])
+# def engagement_score():
+
+#     data = request.json
+
+#     polls = data.get("polls",0)
+#     chat = data.get("chatMsg",0)
+#     reactions = data.get("reactions",0)
+#     tab_focus = data.get("tabFocus",0)
+
+#     score = (polls*0.4) + (chat*0.3) + (reactions*0.2) + (tab_focus*0.1)
+
+#     alert = "LOW_ENGAGEMENT" if score < 40 else "GOOD"
+
+#     return jsonify({
+#         "engagementScore": round(score,2),
+#         "status": alert
+#     })
+
+# # --------------------------------------------------
+# # 4️⃣ AI TEAM MATCHMAKER
+# # --------------------------------------------------
+
+# @app.route('/team-match', methods=['POST'])
+# def team_match():
+
+#     users = request.json.get("users" or [])
+
+#     teams = []
+
+#     for i in range(len(users)):
+#         for j in range(i+1,len(users)):
+
+#             s1 = set(users[i]["skills"])
+#             s2 = set(users[j]["skills"])
+
+#             similarity = len(s1.intersection(s2)) / len(s1.union(s2))
+
+#             teams.append({
+#                 "member1": users[i]["name"],
+#                 "member2": users[j]["name"],
+#                 "skillSimilarity": round(similarity,2)
+#             })
+
+#     teams = sorted(teams, key=lambda x: x["skillSimilarity"])
+
+#     return jsonify(teams[:3])
+
+# # --------------------------------------------------
+# # 5️⃣ NO SHOW PREDICTOR
+# # --------------------------------------------------
+
+# @app.route('/predict-attendance', methods=['POST'])
+# def predict_attendance():
+
+#     users = request.json.get("users" or [])
+
+#     predicted = 0
+
+#     results = []
+
+#     for u in users:
+
+#         probability = 50
+
+#         if u.get("scheduleConflict"):
+#             probability = 20
+
+#         if u.get("notificationsClicked",0) >= 3:
+#             probability = 90
+
+#         predicted += probability/100
+
+#         results.append({
+#             "name":u["name"],
+#             "attendanceProbability":probability
+#         })
+
+#     return jsonify({
+#         "users":results,
+#         "predictedFinalAttendance":round(predicted)
+#     })
+
+# # --------------------------------------------------
+# # 6️⃣ QR CHECKIN CROWD ANALYTICS
+# # --------------------------------------------------
+
+# # checkins = []
+
+# # @app.route('/checkin', methods=['POST'])
+# # def checkin():
+
+# #     data = request.json
+
+# #     zone = data.get("zone")
+
+# #     checkins.append(zone)
+
+# #     zone_counts = {}
+
+# #     for z in checkins:
+# #         zone_counts[z] = zone_counts.get(z,0)+1
+
+# #     return jsonify({
+# #         "zones": zone_counts
+# #     })
+
+# # @app.route('/checkin', methods=['POST'])
+# # def checkin():
+
+# # @app.route('/checkin', methods=['POST'])
+# # def checkin():
+
+# # --------------------------------------------------
+# # QR CHECKIN CROWD ANALYTICS
+# # --------------------------------------------------
+
+# @app.route('/checkin', methods=['POST'])
+# def checkin():
+#     data = request.json
+#     event_id = data.get('event_id')
+#     name = data.get('name')
+
+#     # Create a fresh cursor for this request
+#     cursor = conn.cursor(dictionary=True)
+
+#     # Find attendee
+#     cursor.execute("SELECT id FROM attendees WHERE name = %s", (name,))
+#     attendee = cursor.fetchone()
+
+#     if not attendee:
+#         cursor.close()
+#         return jsonify({"message": "Attendee not found"}), 404
+
+#     # Check if already checked in
+#     cursor.execute(
+#         "SELECT * FROM event_attendee WHERE event_id=%s AND att_id=%s",
+#         (event_id, attendee['id'])
+#     )
+#     existing = cursor.fetchone()
+
+#     if existing:
+#         cursor.close()
+#         return jsonify({"message": "Attendance already marked"})
+
+#     # Mark attendance
+#     cursor.execute(
+#         "INSERT INTO event_attendee (event_id, att_id) VALUES (%s, %s)",
+#         (event_id, attendee['id'])
+#     )
+#     conn.commit()
+#     cursor.close()
+
+#     return jsonify({"message": f"Attendance marked for {name}"})
+
+
+
+#     data = request.json
+#     event_id = data.get('event_id')
+#     name = data.get('name')
+
+#     # Use the cursor to query
+#     db.execute("SELECT id FROM attendees WHERE name = %s", (name,))
+#     attendee = db.fetchone()
+
+#     if not attendee:
+#         return jsonify({"message": "Attendee not found"}), 404
+
+#     # Check if already checked in
+#     db.execute(
+#         "SELECT * FROM event_attendee WHERE event_id=%s AND att_id=%s",
+#         (event_id, attendee['id'])
+#     )
+#     existing = db.fetchone()
+
+#     if existing:
+#         return jsonify({"message": "Attendance already marked"})
+
+#     # Mark attendance
+#     db.execute(
+#         "INSERT INTO event_attendee (event_id, att_id) VALUES (%s, %s)",
+#         (event_id, attendee['id'])
+#     )
+#     conn.commit()   # ✅ commit on the connection, not the cursor
+
+#     return jsonify({"message": f"Attendance marked for {name}"})
+
+#     data = request.json
+#     event_id = data.get('event_id')
+#     name = data.get('name')
+
+#     # Query database to find attendee
+#     attendee = db.session.execute(
+#         "SELECT id FROM attendees WHERE name = :name", {"name": name}
+#     ).fetchone()
+
+#     if not attendee:
+#         return jsonify({"message": "Attendee not found"}), 404
+
+#     # Check if already checked in
+#     existing = db.session.execute(
+#         "SELECT * FROM event_attendee WHERE event_id=:event_id AND att_id=:att_id",
+#         {"event_id": event_id, "att_id": attendee.id}
+#     ).fetchone()
+
+#     if existing:
+#         return jsonify({"message": "Attendance already marked"})
+
+#     # Mark attendance
+#     db.session.execute(
+#         "INSERT INTO event_attendee (event_id, att_id) VALUES (:event_id, :att_id)",
+#         {"event_id": event_id, "att_id": attendee.id}
+#     )
+#     db.session.commit()
+
+#     return jsonify({"message": f"Attendance marked for {name}"})
+
+# # --------------------------------------------------
+# # RUN ML SERVICE
+# # --------------------------------------------------
+# if __name__ == '__main__':
+#     app.run(port=5001, debug=True)
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
-app = Flask(__name__)
-# CORS(app)
-
 from dotenv import load_dotenv
 import os
-CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
-load_dotenv()  # Reads variables from .env
+import json
 
-db_user = os.environ.get("DB_USER")
-db_password = os.environ.get("DB_PASSWORD")
-db_host = os.environ.get("DB_HOST")
-db_name = os.environ.get("DB_NAME")
+app = Flask(__name__)
+CORS(app)
+
+# ---------------------------
+# DB CONNECTION
+# ---------------------------
+load_dotenv()
+
 conn = mysql.connector.connect(
-    host=db_host,
-    user=db_user,
-    password=db_password,
-    database=db_name
+    host=os.environ.get("DB_HOST"),
+    user=os.environ.get("DB_USER"),
+    password=os.environ.get("DB_PASSWORD"),
+    database=os.environ.get("DB_NAME")
 )
-db = conn.cursor(dictionary=True) 
-# --------------------------------------------------
-# 1️⃣ EVENT SUGGESTION (CURRENT interests COLLABORATIVE FILTERING)
-# --------------------------------------------------
+
+# ---------------------------
+# EVENT SUGGESTIONS
+# ---------------------------
 @app.route('/event-suggestion', methods=['POST'])
 def event_suggestion():
-    data = request.json
-    
-    attendee = data['attendee']
-    events = data['event']
+    try:
+        data = request.json
 
-    attendee_interests = set(attendee.get('interests', []))
-    results = []
+        attendee = data.get("attendee", {})
+        events = data.get("event", [])
 
-    for event in events:
-        event_categories = set(event.get('event_category', []))
-        common_interests = attendee_interests.intersection(event_categories)
+        interests = attendee.get("interests") or []
 
-        # Interest match %
-        match_pct = (
-            len(common_interests) / len(attendee_interests) * 100
-        ) if attendee_interests else 0
+        if isinstance(interests, str):
+            interests = json.loads(interests)
 
-        missing_categories = list(attendee_interests-event_categories)
+        attendee_interests = set(interests)
 
-        # 🔥 Calculate Average Host Rating
-        hosts = event.get("hosts", [])
-        
-        if hosts:
-            avg_rating = sum(h.get("rating", 0) for h in hosts) / len(hosts)
-        else:
+        results = []
+
+        for event in events:
+
+            categories = event.get("event_category") or []
+
+            if isinstance(categories, str):
+                try:
+                    categories = json.loads(categories)
+                except:
+                    categories = [categories]
+
+            event_categories = set(categories)
+
+            common = attendee_interests.intersection(event_categories)
+
+            match_pct = (
+                len(common) / len(attendee_interests) * 100
+            ) if attendee_interests else 0
+
+            missing = list(attendee_interests - event_categories)
+
+            hosts = event.get("hosts") or []
+
             avg_rating = 0
-        if match_pct>30:
-            results.append({
-                "id": event.get("event_id"),
-                "name": event.get("event_name"),
-                "type": event.get("event_type"),
-                "date": event.get("event_date"),
-                "timing": event.get("timing"),
-                "mode": event.get("event_mode"),
-                "location": event.get("location"),
-                "avg_host_rating": round(avg_rating, 2),
-                "interestMatchPercentage": round(match_pct, 2),
-                "missingCategories": missing_categories
-            })
+            if hosts:
+                avg_rating = sum(
+                    h.get("rating", 0) for h in hosts
+                ) / len(hosts)
 
-    # 🔥 SORTING LOGIC
-    sorted_results = sorted(
-        results,
-        key=lambda x: (
-            -x["interestMatchPercentage"],   # 1️⃣ primary
-            -x["avg_host_rating"]            # 2️⃣ secondary
+            if match_pct > 0:
+                results.append({
+                    "id": event.get("event_id"),
+                    "name": event.get("event_name"),
+                    "type": event.get("event_type"),
+                    "date": event.get("event_date"),
+                    "timing": event.get("timing"),
+                    "mode": event.get("event_mode"),
+                    "location": event.get("location"),
+                    "avg_host_rating": round(avg_rating, 2),
+                    "interestMatchPercentage": round(match_pct, 2),
+                    "missingCategories": missing
+                })
+
+        sorted_results = sorted(
+            results,
+            key=lambda x: (
+                -x["interestMatchPercentage"],
+                -x["avg_host_rating"]
+            )
         )
-    )
 
-    return jsonify(sorted_results)
+        return jsonify(sorted_results)
 
-# --------------------------------------------------
-# 2️⃣ TARGET SKILLS (TARGET SKILLS COLLABORATIVE FILTERING)
-# --------------------------------------------------
-# @app.route('/target-skills', methods=['POST'])
-# def target_skills():
-#     data = request.json
-#     attendee = data['attendee']
-#     event = data['event']
+    except Exception as e:
+        print("EVENT SUGGESTION ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 
-#     target_skills = set(attendee.get('target_skills', []))
-#     results = []
 
-#     for event in event:
-#         event_categories = set(event.get('skills', []))
-#         common_targets = target_skills.intersection(event_categories)
-
-#         match_pct = (len(common_targets) / len(target_skills) * 100) if target_skills else 0
-
-#         results.append({
-#             "name": event.get("name"),
-#             "no_of_events_evented":event.get("no_of_events_evented"),
-#             "jobTitle": event.get("jobTitle", ""),
-#             "company": event.get("company", ""),
-#             "targetSkillMatchPercentage": round(match_pct, 2),
-#             "matchedTargetSkills": list(common_targets)
-#         })
-
-#     return jsonify(
-#         sorted(results, key=lambda x: x["targetSkillMatchPercentage"], reverse=True)
-#     )
-
-# --------------------------------------------------
-# 3️⃣ REAL TIME ENGAGEMENT ENGINE
-# --------------------------------------------------
-
+# ---------------------------
+# ENGAGEMENT SCORE
+# ---------------------------
 @app.route('/engagement-score', methods=['POST'])
 def engagement_score():
-
     data = request.json
 
-    polls = data.get("polls",0)
-    chat = data.get("chatMsg",0)
-    reactions = data.get("reactions",0)
-    tab_focus = data.get("tabFocus",0)
+    polls = data.get("polls", 0)
+    chat = data.get("chatMsg", 0)
+    reactions = data.get("reactions", 0)
+    tab_focus = data.get("tabFocus", 0)
 
-    score = (polls*0.4) + (chat*0.3) + (reactions*0.2) + (tab_focus*0.1)
-
-    alert = "LOW_ENGAGEMENT" if score < 40 else "GOOD"
+    score = (
+        polls * 0.4 +
+        chat * 0.3 +
+        reactions * 0.2 +
+        tab_focus * 0.1
+    )
 
     return jsonify({
-        "engagementScore": round(score,2),
-        "status": alert
+        "engagementScore": round(score, 2),
+        "status": "LOW_ENGAGEMENT" if score < 40 else "GOOD"
     })
 
-# --------------------------------------------------
-# 4️⃣ AI TEAM MATCHMAKER
-# --------------------------------------------------
 
+# ---------------------------
+# TEAM MATCH
+# ---------------------------
 @app.route('/team-match', methods=['POST'])
 def team_match():
-
     users = request.json.get("users", [])
 
     teams = []
 
     for i in range(len(users)):
-        for j in range(i+1,len(users)):
+        for j in range(i + 1, len(users)):
 
             s1 = set(users[i]["skills"])
             s2 = set(users[j]["skills"])
 
-            similarity = len(s1.intersection(s2)) / len(s1.union(s2))
+            similarity = len(
+                s1.intersection(s2)
+            ) / len(
+                s1.union(s2)
+            )
 
             teams.append({
                 "member1": users[i]["name"],
                 "member2": users[j]["name"],
-                "skillSimilarity": round(similarity,2)
+                "skillSimilarity": round(similarity, 2)
             })
 
-    teams = sorted(teams, key=lambda x: x["skillSimilarity"])
+    teams = sorted(
+        teams,
+        key=lambda x: x["skillSimilarity"]
+    )
 
     return jsonify(teams[:3])
 
-# --------------------------------------------------
-# 5️⃣ NO SHOW PREDICTOR
-# --------------------------------------------------
 
+# ---------------------------
+# PREDICT ATTENDANCE
+# ---------------------------
 @app.route('/predict-attendance', methods=['POST'])
 def predict_attendance():
-
-    users = request.json.get("users",[])
+    users = request.json.get("users", [])
 
     predicted = 0
-
     results = []
 
     for u in users:
@@ -179,157 +510,81 @@ def predict_attendance():
         if u.get("scheduleConflict"):
             probability = 20
 
-        if u.get("notificationsClicked",0) >= 3:
+        if u.get("notificationsClicked", 0) >= 3:
             probability = 90
 
-        predicted += probability/100
+        predicted += probability / 100
 
         results.append({
-            "name":u["name"],
-            "attendanceProbability":probability
+            "name": u["name"],
+            "attendanceProbability": probability
         })
 
     return jsonify({
-        "users":results,
-        "predictedFinalAttendance":round(predicted)
+        "users": results,
+        "predictedFinalAttendance": round(predicted)
     })
 
-# --------------------------------------------------
-# 6️⃣ QR CHECKIN CROWD ANALYTICS
-# --------------------------------------------------
 
-# checkins = []
-
-# @app.route('/checkin', methods=['POST'])
-# def checkin():
-
-#     data = request.json
-
-#     zone = data.get("zone")
-
-#     checkins.append(zone)
-
-#     zone_counts = {}
-
-#     for z in checkins:
-#         zone_counts[z] = zone_counts.get(z,0)+1
-
-#     return jsonify({
-#         "zones": zone_counts
-#     })
-
-# @app.route('/checkin', methods=['POST'])
-# def checkin():
-
-# @app.route('/checkin', methods=['POST'])
-# def checkin():
-
-# --------------------------------------------------
-# QR CHECKIN CROWD ANALYTICS
-# --------------------------------------------------
-
+# ---------------------------
+# CHECKIN
+# ---------------------------
 @app.route('/checkin', methods=['POST'])
 def checkin():
     data = request.json
-    event_id = data.get('event_id')
-    name = data.get('name')
+    event_id = data.get("event_id")
+    name = data.get("name")
 
-    # Create a fresh cursor for this request
     cursor = conn.cursor(dictionary=True)
 
-    # Find attendee
-    cursor.execute("SELECT id FROM attendees WHERE name = %s", (name,))
+    cursor.execute(
+        "SELECT id FROM attendees WHERE name=%s",
+        (name,)
+    )
+
     attendee = cursor.fetchone()
 
     if not attendee:
         cursor.close()
-        return jsonify({"message": "Attendee not found"}), 404
+        return jsonify({
+            "message": "Attendee not found"
+        }), 404
 
-    # Check if already checked in
     cursor.execute(
-        "SELECT * FROM event_attendee WHERE event_id=%s AND att_id=%s",
-        (event_id, attendee['id'])
+        """
+        SELECT * FROM event_attendee
+        WHERE event_id=%s AND att_id=%s
+        """,
+        (event_id, attendee["id"])
     )
+
     existing = cursor.fetchone()
 
     if existing:
         cursor.close()
-        return jsonify({"message": "Attendance already marked"})
+        return jsonify({
+            "message": "Attendance already marked"
+        })
 
-    # Mark attendance
     cursor.execute(
-        "INSERT INTO event_attendee (event_id, att_id) VALUES (%s, %s)",
-        (event_id, attendee['id'])
+        """
+        INSERT INTO event_attendee
+        (event_id, att_id)
+        VALUES (%s,%s)
+        """,
+        (event_id, attendee["id"])
     )
+
     conn.commit()
     cursor.close()
 
-    return jsonify({"message": f"Attendance marked for {name}"})
+    return jsonify({
+        "message": f"Attendance marked for {name}"
+    })
 
 
-
-    data = request.json
-    event_id = data.get('event_id')
-    name = data.get('name')
-
-    # Use the cursor to query
-    db.execute("SELECT id FROM attendees WHERE name = %s", (name,))
-    attendee = db.fetchone()
-
-    if not attendee:
-        return jsonify({"message": "Attendee not found"}), 404
-
-    # Check if already checked in
-    db.execute(
-        "SELECT * FROM event_attendee WHERE event_id=%s AND att_id=%s",
-        (event_id, attendee['id'])
-    )
-    existing = db.fetchone()
-
-    if existing:
-        return jsonify({"message": "Attendance already marked"})
-
-    # Mark attendance
-    db.execute(
-        "INSERT INTO event_attendee (event_id, att_id) VALUES (%s, %s)",
-        (event_id, attendee['id'])
-    )
-    conn.commit()   # ✅ commit on the connection, not the cursor
-
-    return jsonify({"message": f"Attendance marked for {name}"})
-
-    data = request.json
-    event_id = data.get('event_id')
-    name = data.get('name')
-
-    # Query database to find attendee
-    attendee = db.session.execute(
-        "SELECT id FROM attendees WHERE name = :name", {"name": name}
-    ).fetchone()
-
-    if not attendee:
-        return jsonify({"message": "Attendee not found"}), 404
-
-    # Check if already checked in
-    existing = db.session.execute(
-        "SELECT * FROM event_attendee WHERE event_id=:event_id AND att_id=:att_id",
-        {"event_id": event_id, "att_id": attendee.id}
-    ).fetchone()
-
-    if existing:
-        return jsonify({"message": "Attendance already marked"})
-
-    # Mark attendance
-    db.session.execute(
-        "INSERT INTO event_attendee (event_id, att_id) VALUES (:event_id, :att_id)",
-        {"event_id": event_id, "att_id": attendee.id}
-    )
-    db.session.commit()
-
-    return jsonify({"message": f"Attendance marked for {name}"})
-
-# --------------------------------------------------
-# RUN ML SERVICE
-# --------------------------------------------------
-if __name__ == '__main__':
+# ---------------------------
+# RUN
+# ---------------------------
+if __name__ == "__main__":
     app.run(port=5001, debug=True)

@@ -77,9 +77,9 @@ loadEvents(){
 
       console.log('API Response:', res);
 
-      this.attendees = res.attendees || [];
+      this.attendees = res.users || [];
 
-      this.attendeesLength = this.attendees.length;
+      this.attendeesLength = res.users.length;
 
       console.log("Attendees:", this.attendees);
       console.log("Total:", this.attendeesLength);

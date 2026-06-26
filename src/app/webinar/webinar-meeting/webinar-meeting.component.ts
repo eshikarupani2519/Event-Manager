@@ -482,6 +482,7 @@ export class WebinarMeetingComponent implements OnInit {
     this.socket = io("http://localhost:5000", {
       auth: { token: this.token }
     });
+    
 
     await this.startVideo();
 
@@ -695,17 +696,67 @@ export class WebinarMeetingComponent implements OnInit {
     console.log("Recording started");
   }
 
-  stopRecording() {
-    this.recorder.stop();
-    this.recorder.onstop = async () => {
-      const blob = new Blob(this.chunks, { type: 'video/webm' });
-      const formData = new FormData();
-      formData.append("file", blob, "webinar.webm");
+  // stopRecording() {
+  //   this.recorder.stop();
+  //   this.recorder.onstop = async () => {
+  //     const blob = new Blob(this.chunks, { type: 'video/webm' });
+  //     const formData = new FormData();
+  //     formData.append("file", blob, "webinar.webm");
 
-      await fetch("http://localhost:5000/api/upload", { method: "POST", body: formData });
-      console.log("Recording uploaded");
-    };
-  }
+  //     await fetch("http://localhost:5000/api/upload", { method: "POST", body: formData });
+  //     console.log("Recording uploaded");
+  //   };
+  // }
+  stopRecording() {
+
+  this.recorder.stop();
+
+  this.recorder.onstop = async () => {
+
+    const blob = new Blob(
+      this.chunks,
+      { type: 'video/webm' }
+    );
+
+    const formData = new FormData();
+
+    formData.append(
+      "file",
+      blob,
+      `meeting-${this.meetingId}.webm`
+    );
+
+    const uploadResponse = await fetch(
+      "http://localhost:5000/api/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const uploadData = await uploadResponse.json();
+
+    console.log(uploadData);
+
+    const recordingUrl = uploadData.url;
+
+    await fetch(
+      "http://localhost:5000/api/webinar/save-recording",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          eventId: this.meetingId,
+          recordingUrl
+        })
+      }
+    );
+
+    console.log("Recording saved in DB");
+  };
+}
 
   startEngagementTracking() {
     setInterval(() => {

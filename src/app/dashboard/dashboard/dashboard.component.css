@@ -1,4 +1,4 @@
-/* ===== Page Container ===== */
+/* ===== Page ===== */
 
 .dashboard-container{
     padding:40px;
@@ -11,74 +11,75 @@
 
 .dashboard-title{
     text-align:center;
-    font-size:30px;
-    margin-bottom:40px;
+    font-size:28px;
     font-weight:700;
-    letter-spacing:1px;
+    margin-bottom:35px;
 }
 
 /* ===== Stats Grid ===== */
 
 .stats-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:16px;
     margin-bottom:40px;
 }
 
 /* ===== Stat Cards ===== */
 
 .stat-card{
-    background:linear-gradient(145deg,#0f172a,#020617);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:12px;
-    padding:25px;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:10px;
+    padding:14px;
     text-align:center;
-    transition:0.3s;
-    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    transition:0.25s;
 }
 
 .stat-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 15px 40px rgba(0,0,0,0.6);
+    transform:translateY(-4px);
+    box-shadow:0 10px 20px rgba(0,0,0,0.5);
 }
 
-.stat-card h4{
-    font-size:16px;
+.stat-label{
+    font-size:13px;
     color:#94a3b8;
 }
 
 .stat-number{
-    font-size:28px;
+    font-size:20px;
     font-weight:700;
     color:#38bdf8;
-    margin-top:8px;
 }
 
-/* ===== Chart Card ===== */
+/* ===== Chart Section ===== */
+
+.chart-section{
+    display:flex;
+    justify-content:center;
+    margin-bottom:40px;
+}
 
 .chart-card{
-    background:linear-gradient(145deg,#0f172a,#020617);
+    width:350px;
+    background:#0f172a;
+    padding:25px;
     border-radius:14px;
-    padding:30px;
-    margin:0 auto;
-    max-width:420px;
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 15px 40px rgba(0,0,0,0.6);
-}
-
-.chart-title{
-    text-align:center;
-    margin-bottom:20px;
-    color:#cbd5f5;
+    border:1px solid rgba(255,255,255,0.05);
 }
 
 /* ===== Chart ===== */
 
+.chart-title{
+    text-align:center;
+    font-size:16px;
+    margin-bottom:18px;
+}
+
 .chart-container{
-    height:250px;
-    width:250px;
-    margin:0 auto;
+    width:220px;
+    height:220px;
+    margin:auto;
 }
 
 /* ===== Legend ===== */
@@ -86,21 +87,19 @@
 .legend-row{
     display:flex;
     justify-content:space-around;
-    margin-top:20px;
+    margin-top:18px;
+    font-size:13px;
 }
 
 .legend-item{
-    font-size:14px;
     display:flex;
     align-items:center;
-    gap:8px;
+    gap:6px;
 }
 
-/* ===== Legend Colors ===== */
-
 .legend-circle{
-    width:12px;
-    height:12px;
+    width:10px;
+    height:10px;
     border-radius:50%;
 }
 
@@ -119,38 +118,35 @@
 /* ===== Buttons ===== */
 
 .dashboard-actions{
-    margin-top:40px;
     display:flex;
     justify-content:center;
-    gap:20px;
+    gap:12px;
     flex-wrap:wrap;
 }
 
 .action-btn{
-    padding:12px 22px;
-    border-radius:8px;
+    padding:8px 16px;
+    border-radius:6px;
     text-decoration:none;
+    font-size:13px;
     font-weight:600;
-    transition:0.3s;
-    cursor: pointer;
+    transition:0.25s;
 }
 
 /* Primary */
 
 .primary-btn{
-    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    background:#6366f1;
     color:white;
 }
 
 .primary-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(99,102,241,0.5);
+    background:#4f46e5;
 }
 
 /* Secondary */
 
 .secondary-btn{
-    background:transparent;
     border:1px solid #38bdf8;
     color:#38bdf8;
 }
@@ -170,6 +166,11 @@
 
 .chart-card{
     width:100%;
+}
+
+.chart-container{
+    width:180px;
+    height:180px;
 }
 
 }

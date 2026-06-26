@@ -25,7 +25,7 @@ exports.registerAttendee = async (req, res) => {
 
     // Check duplicate using email
     const [existing] = await db.query(
-      `SELECT id FROM attendees WHERE email = ?`,
+      `SELECT id FROM users WHERE email = ?`,
       [email]
     );
 
@@ -37,7 +37,7 @@ exports.registerAttendee = async (req, res) => {
 
     // Insert attendee
     const [insertResult] = await db.query(
-      `INSERT INTO attendees (name, email, phone, city, state, country, password, interests) VALUES (?,?,?,?,?,?,?,?)`,
+      `INSERT INTO users (name, email, phone, city, state, country, password, interests) VALUES (?,?,?,?,?,?,?,?)`,
       [name, email, phone, city, state, country, password, interests]
     );
 
@@ -57,7 +57,7 @@ exports.registerAttendee = async (req, res) => {
 
     // Insert into mapping table
     await db.query(
-      `INSERT INTO event_attendee (event_id, att_id) VALUES (?,?)`,
+      `INSERT INTO event_registrations (event_id, user_id) VALUES (?,?)`,
       [ev_id, attId]
     );
 
@@ -77,7 +77,7 @@ exports.registerAttendee = async (req, res) => {
 };
 
 
-// GET ATTENDEES BY EVENT ID
+// GET users BY EVENT ID
 exports.getAttendeeByEventId = async (req, res) => {
   const { id } = req.params;
 
@@ -93,53 +93,84 @@ exports.getAttendeeByEventId = async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Fetch attendees
-    const [attendees] = await db.query(
+    // Fetch users
+    const [users] = await db.query(
       `SELECT 
         a.id,
         a.name,
         a.email,
         a.phone
-       FROM attendees a
-       JOIN event_attendee ea ON a.id = ea.att_id
+       FROM users a
+       JOIN event_registrations ea ON a.id = ea.user_id
        WHERE ea.event_id = ?`,
       [id]
     );
 
     res.json({
       event: event[0].event_name,
-      attendees
+      users
     });
 
   } catch (error) {
-    console.error("Error fetching attendees:", error);
+    console.error("Error fetching users:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
+
+// exports.getAttendeeByAttendeeId = async (req, res) => {
+//    const userId = req.user.userIdd;
+//    console.log("requested user with id:",userId);
+
+//   try {
+//     const [attendee] = await db.query(
+//       `SELECT * FROM users WHERE id = ?`,
+//       [userId]
+//     );
+
+//     if (attendee.length === 0) {
+//       return res.status(404).json({ error: "Attendee not found" });
+//     }
+//     res.json({
+//       attendee
+//     });
+
+//   } catch (error) {
+//     console.error("Error fetching users:", error);
+//     res.status(500).json({ error: "Server error" });
+//   }
+// };
 
 exports.getAttendeeByAttendeeId = async (req, res) => {
-   const userId = req.user.id;
-   console.log("requested user with id:",userId);
-
   try {
-    const [attendee] = await db.query(
-      `SELECT * FROM attendees WHERE id = ?`,
-      [id]
+    console.log("REQ USER:", req.user);
+
+    const userId = req.user.userId;
+
+    console.log("requested user with id:", userId);
+
+    const [rows] = await db.query(
+      "SELECT * FROM users WHERE id = ?",
+      [userId]
     );
 
-    if (attendee.length === 0) {
-      return res.status(404).json({ error: "Attendee not found" });
+    console.log("DB rows:", rows);
+
+    if (!rows.length) {
+      return res.status(404).json({
+        error: "Attendee not found"
+      });
     }
-    res.json({
-      attendee
-    });
+
+    res.json(rows[0]);
 
   } catch (error) {
-    console.error("Error fetching attendees:", error);
-    res.status(500).json({ error: "Server error" });
+    console.error("Error fetching users:", error);
+
+    res.status(500).json({
+      error: error.message
+    });
   }
 };
-
 
 exports.registerAttendeeWebinar = async (req, res) => {
   try {
@@ -152,7 +183,7 @@ exports.registerAttendeeWebinar = async (req, res) => {
 
     // Check if attendee already exists
     const [existing] = await db.query(
-      `SELECT id FROM attendees WHERE email = ?`,
+      `SELECT id FROM users WHERE email = ?`,
       [email]
     );
 
@@ -164,7 +195,7 @@ exports.registerAttendeeWebinar = async (req, res) => {
 
       // Insert new attendee
       const [insertResult] = await db.query(
-        `INSERT INTO attendees (name, email, phone) VALUES (?,?,?)`,
+        `INSERT INTO users (name, email, phone) VALUES (?,?,?)`,
         [name, email, phone]
       );
 
@@ -185,7 +216,7 @@ exports.registerAttendeeWebinar = async (req, res) => {
 
     // Check if already registered
     const [existingMap] = await db.query(
-      `SELECT * FROM event_attendee WHERE event_id=? AND att_id=?`,
+      `SELECT * FROM event_registrations WHERE event_id=? AND user_id=?`,
       [eventId, attId]
     );
 
@@ -195,7 +226,7 @@ exports.registerAttendeeWebinar = async (req, res) => {
 
     // Map attendee to event
     await db.query(
-      `INSERT INTO event_attendee (event_id, att_id) VALUES (?,?)`,
+      `INSERT INTO event_registrations (event_id, user_id) VALUES (?,?)`,
       [eventId, attId]
     );
 

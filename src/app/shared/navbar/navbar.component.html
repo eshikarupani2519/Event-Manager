@@ -6,7 +6,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+            <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+
                 <li class="nav-item mx-3">
                     <a class="nav-link active" aria-current="page" (click)="navigateToPage('dashboard')">Dashboard</a>
                 </li>
@@ -23,29 +24,83 @@
                 <li class="nav-item mx-3">
                     <a class="nav-link" (click)="navigateToPage('register-attendee')">Register attendee</a>
                 </li>
-            </ul>
+            </ul> -->
+            
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+    <li class="nav-item mx-3">
+        <a class="nav-link active" (click)="navigateToPage('dashboard')">Dashboard</a>
+    </li>
+
+    <li class="nav-item mx-3">
+        <a class="nav-link" (click)="navigateToPage('event-list')">Events</a>
+    </li>
+
+    <li class="nav-item mx-3">
+        <a class="nav-link" (click)="navigateToPage('attendees-list')">Attendees</a>
+    </li>
+
+    <li class="nav-item mx-3">
+        <a class="nav-link" (click)="navigateToPage('event-suggestions')">Event Suggestions</a>
+    </li>
+
+    <li class="nav-item mx-3">
+        <a class="nav-link" (click)="navigateToPage('register-attendee')">Register Attendee</a>
+    </li>
+
+    <!-- Profile Page (only after login) -->
+
+  <!-- <li class="nav-item mx-3" *ngIf="isLoggedIn">
+    <a class="nav-link" (click)="navigateToPage('profile')">
+        👤 Profile
+    </a>
+</li> -->
+
+</ul>
             <div class="d-flex align-items-center">
 
     <!-- When user NOT logged in -->
-    <button
+    <!-- <button
         *ngIf="!isLoggedIn"
         class="login-btn"
         (click)="navigateToPage('login')">
 
         Login
 
-    </button>
+    </button> -->
 
     <!-- When user logged in -->
 
-    <button
+    <!-- <button
         *ngIf="isLoggedIn"
         class="logout-btn"
         (click)="logout()">
 
         Logout
 
-    </button>
+    </button> -->
+
+    <div class="d-flex align-items-center">
+
+<button
+*ngIf="!isLoggedIn"
+class="login-btn"
+(click)="navigateToPage('login')">
+
+Login
+
+</button>
+
+<button
+*ngIf="isLoggedIn"
+class="logout-btn"
+(click)="logout()">
+
+Logout
+
+</button>
+
+</div>
 
 </div>
         </div>

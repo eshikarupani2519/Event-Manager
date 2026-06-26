@@ -55,46 +55,105 @@ module.exports = {
     }
   },
 
-  bookSeats: async (req, res) => {
-    try {
-      const { event_id, attendee_id, seats_to_book } = req.body;
+//   bookSeats: async (req, res) => {
+//     try {
+//       const { event_id, user_id, seats_to_book } = req.body;
 
-      // Get event
-      const [events] = await db.query(`SELECT * FROM events WHERE event_id=?`, [event_id]);
-      if (events.length === 0) return res.status(404).json({ message: "Event not found" });
+//       // Get event
+//       const [events] = await db.query(`SELECT * FROM events WHERE event_id=?`, [event_id]);
+//       if (events.length === 0) return res.status(404).json({ message: "Event not found" });
 
-      const event = events[0];
-      if (event.event_mode === "Offline") {
-        if (event.available_seats < seats_to_book)
-          return res.status(400).json({ message: "Not enough seats available" });
+//       const event = events[0];
+//       if (event.event_mode === "Offline") {
+//         if (event.available_seats < seats_to_book)
+//           return res.status(400).json({ message: "Not enough seats available" });
 
-        // Update available seats
-        await db.query(
-          `UPDATE events SET available_seats = available_seats - ? WHERE event_id=?`,
-          [seats_to_book, event_id]
-        );
-      }
+//         // Update available seats
+//         await db.query(
+//           `UPDATE events SET available_seats = available_seats - ? WHERE event_id=?`,
+//           [seats_to_book, event_id]
+//         );
+//       }
 
-      // Add attendee(s)
-      for (let i = 0; i < seats_to_book; i++) {
-        await db.query(
-          `INSERT INTO event_attendee(event_id, att_id) VALUES(?, ?)`,
-          [event_id, attendee_id]
-        );
-      }
+//       // Add attendee(s)
+//       // for (let i = 0; i < seats_to_book; i++) {
+//       //   await db.query(
+//       //     `INSERT INTO event_registrations(event_id, user_id) VALUES(?, ?)`,
+//       //     [event_id, user_id]
+//       //   );
+//       // }
 
-      // Return updated attendee info
-      const [attendees] = await db.query(
-        `SELECT a.id, a.name, a.email, a.phone FROM attendees a
-         JOIN event_attendee ea ON a.id = ea.att_id
-         WHERE ea.event_id=?`,
-        [event_id]
-      );
+//       // Return updated attendee info
+//      await db.query(
+// `
+// INSERT INTO event_registrations
+// (event_id,user_id,seats_booked)
+// VALUES(?,?,?)
+// `,
+// [event_id,user_id,seats_to_book]
+// );
 
-      res.json({ message: "Booking successful", attendees, available_seats: event.available_seats - seats_to_book });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Server error" });
+//       res.json({ message: "Booking successful", available_seats: event.available_seats - seats_to_book });
+//     } catch (err) {
+//       console.log(err);
+//       res.status(500).json({ message: "Server error" });
+//     }
+//   }
+bookSeats: async (req, res) => {
+  try {
+
+    const { event_id, seats_to_book } = req.body;
+    const user_id = req.user.userId;
+
+    const [events] = await db.query(
+      `SELECT * FROM events WHERE event_id=?`,
+      [event_id]
+    );
+
+    if (events.length === 0) {
+      return res.status(404).json({
+        message: "Event not found"
+      });
     }
+
+    const event = events[0];
+
+    if (event.event_mode === "Offline") {
+
+      if (event.available_seats < seats_to_book) {
+        return res.status(400).json({
+          message: "Not enough seats available"
+        });
+      }
+
+      await db.query(
+        `UPDATE events
+         SET available_seats = available_seats - ?
+         WHERE event_id=?`,
+        [seats_to_book, event_id]
+      );
+    }
+
+    await db.query(
+      `INSERT INTO event_registrations
+       (event_id,user_id,seats_booked)
+       VALUES(?,?,?)`,
+      [event_id, user_id, seats_to_book]
+    );
+
+    res.json({
+      message: "Booking successful",
+      available_seats: event.available_seats - seats_to_book
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
   }
+}
 };

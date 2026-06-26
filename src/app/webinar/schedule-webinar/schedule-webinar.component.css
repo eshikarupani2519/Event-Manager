@@ -51,13 +51,9 @@ margin-bottom:25px;
 /* ===== Form ===== */
 
 .webinar-form{
-
 display:flex;
-
 flex-direction:column;
-
-gap:18px;
-
+gap:16px;
 }
 
 /* ===== Group ===== */
@@ -138,6 +134,22 @@ transition:0.3s;
 
 }
 
+select{
+background:#020617;
+border:1px solid #334155;
+padding:10px;
+border-radius:6px;
+color:white;
+font-size:14px;
+transition:0.25s;
+}
+
+select:focus{
+outline:none;
+border-color:#6366f1;
+box-shadow:0 0 8px rgba(99,102,241,0.5);
+}
+
 /* Hover */
 
 .schedule-btn:hover{
@@ -145,5 +157,26 @@ transition:0.3s;
 transform:translateY(-2px);
 
 box-shadow:0 10px 25px rgba(99,102,241,0.6);
+
+}
+
+input, select{
+width:100%;
+box-sizing:border-box;
+}
+.schedule-card:hover{
+box-shadow:0 25px 70px rgba(0,0,0,0.8);
+}
+
+@media(max-width:768px){
+
+.schedule-page{
+padding:20px;
+}
+
+.schedule-card{
+max-width:100%;
+padding:22px;
+}
 
 }

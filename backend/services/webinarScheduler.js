@@ -34,10 +34,10 @@ cron.schedule("* * * * *", async () => {
     try{
 
         const query = `
-        SELECT e.*,a.email,a.id as attendee_id
+        SELECT e.*,a.email,a.id as user_id
         FROM events e
-        JOIN event_attendee ea ON e.event_id = ea.event_id
-        JOIN attendees a ON ea.att_id = a.id
+        JOIN event_registrations ea ON e.event_id = ea.event_id
+        JOIN users a ON ea.user_id = a.id
         WHERE e.event_mode='Online'
         AND e.activeYN=1
         `
@@ -110,8 +110,8 @@ console.log("Diff minutes:", diffMinutes)
 
                 const [check] = await db.query(`
                     SELECT * FROM notifications
-                    WHERE attendee_id=? AND event_id=? AND reminder_type='1_DAY'
-                `,[event.attendee_id,event.event_id])
+                    WHERE user_id=? AND event_id=? AND reminder_type='1_DAY'
+                `,[event.user_id,event.event_id])
 
                 if(check.length === 0){
 
@@ -132,9 +132,9 @@ console.log("PASS:", process.env.EMAIL_PASS)
                     )
 
                     await db.query(`
-                        INSERT INTO notifications(attendee_id,event_id,reminder_type)
+                        INSERT INTO notifications(user_id,event_id,reminder_type)
                         VALUES(?,?, '1_DAY')
-                    `,[event.attendee_id,event.event_id])
+                    `,[event.user_id,event.event_id])
 
                     console.log("1 day reminder sent:",event.email)
                 }
@@ -148,8 +148,8 @@ console.log("PASS:", process.env.EMAIL_PASS)
 
                 const [check] = await db.query(`
                     SELECT * FROM notifications
-                    WHERE attendee_id=? AND event_id=? AND reminder_type='30_MIN'
-                `,[event.attendee_id,event.event_id])
+                    WHERE user_id=? AND event_id=? AND reminder_type='30_MIN'
+                `,[event.user_id,event.event_id])
 
                 if(check.length === 0){
 
@@ -169,9 +169,9 @@ Join Link: ${event.meeting_link}
                     )
 
                     await db.query(`
-                        INSERT INTO notifications(attendee_id,event_id,reminder_type)
+                        INSERT INTO notifications(user_id,event_id,reminder_type)
                         VALUES(?,?,'30_MIN')
-                    `,[event.attendee_id,event.event_id])
+                    `,[event.user_id,event.event_id])
 
                     console.log("30 min reminder sent:",event.email)
                 }

@@ -13,7 +13,6 @@ const webinarController = require("./controllers/webinar.controller")
 // dashboard stats
 router.get("/dashboard",authenticate,dashboardController.getStats);
 
-
 router.post("/save-recording",webinarController.saveRecording)
 
 router.post("/signup", authController.signUp);
@@ -38,17 +37,16 @@ router.get("/event/:id",authenticate,eventController.getEventById);
 
 router.post("/attendees",authenticate,attendeeController.registerAttendee);
 router.post("/registerAttendeeWebinar",authenticate,attendeeController.registerAttendeeWebinar);
-
-router.get("/attendees/:id",authenticate,attendeeController.getAttendeeByEventId);
-
-router.get("/attendees/:id",authenticate,attendeeController.getAttendeeByEventId);
 router.get("/attendee",authenticate,attendeeController.getAttendeeByAttendeeId);
+// router.get("/attendees/:id",authenticate,attendeeController.getAttendeeByEventId);
+
+router.get("/attendees/:id",authenticate,attendeeController.getAttendeeByEventId);
+
 // router.get("/webinar/:meetingId",eventController.joinWebinar);
 
 router.get("/:meetingId", async(req,res)=>{
 
     try{
-
         const {meetingId} = req.params
 
         const [event] = await db.query(`
@@ -210,5 +208,72 @@ router.post("/events/book", authenticate, eventController.bookSeats);
 
 router.post("/payment/simulate", authenticate, eventController.simulatePayment);
 router.get("/event-summary/:meetingId", eventController.getEventSummary);
+
+
+router.get("/profile", (req, res) => {
+
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({ message: "Token missing" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+
+        const decoded = jwt.verify(token, "secretKey"); 
+        const attendeeId = decoded.id;
+
+        const query = `
+        SELECT 
+            a.name,
+            a.email,
+            e.event_id,
+            e.event_name,
+            e.event_date,
+            e.event_type
+        FROM attendees a
+        LEFT JOIN event_attendee ea ON a.id = ea.att_id
+        LEFT JOIN events e ON ea.event_id = e.event_id
+        WHERE a.id = ?
+        `;
+
+        db.query(query, [attendeeId], (err, results) => {
+
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            if (results.length === 0) {
+                return res.json({ user: null, events: [] });
+            }
+
+            const user = {
+                name: results[0].name,
+                email: results[0].email
+            };
+
+            const events = results
+                .filter(r => r.event_id !== null)
+                .map(r => ({
+                    event_id: r.event_id,
+                    event_name: r.event_name,
+                    event_date: r.event_date,
+                    event_type: r.event_type
+                }));
+
+            res.json({
+                user,
+                events
+            });
+
+        });
+
+    } catch (error) {
+        res.status(401).json({ message: "Invalid token" });
+    }
+
+});
 
 module.exports = router;

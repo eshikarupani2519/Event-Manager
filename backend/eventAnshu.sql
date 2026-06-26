@@ -1,291 +1,357 @@
 DROP DATABASE IF EXISTS eventManagementSystem;
 
-create database eventManagementSystem;
-use eventManagementSystem;
-drop table events;
+CREATE DATABASE eventManagementSystem;
 
-CREATE TABLE events (
-    event_id INT PRIMARY KEY AUTO_INCREMENT,
-    event_name VARCHAR(50),
-    event_description VARCHAR(200),
-    event_date DATE,
-    timing TIME,
-    event_type ENUM('Conference', 'Workshop', 'Meetup'),
-    event_category JSON,
-    event_mode ENUM('Online', 'Offline'),
-    location varchar(150) default 'Virtual',
-	created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
-    activeYN int default 1
-);
-alter table  events modify column event_mode ENUM('Online', 'Offline') NOT NULL;
-CREATE TABLE attendees (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    email VARCHAR(30)  NOT NULL,
-    phone BIGINT NOT NULL,
-    city varchar(40),
-    state varchar(40),
-    country varchar(40),
-    password varchar(255),
-    interests JSON,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
-    activeYN int default 1
-);
-CREATE TABLE hosts (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50)  NOT NULL,
-    email VARCHAR(30) NOT NULL,
-    phone BIGINT NOT NULL,
-    city varchar(40),
-    state varchar(40),
-    country varchar(40),
-    password varchar(255),
-    rating int default 0,
-    no_of_events_hosted int default 0,
-    categories JSON,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
-    activeYN int default 1
-);
+USE eventManagementSystem;
 
-CREATE TABLE event_attendee (
-    event_id INT,
-    FOREIGN KEY (event_id)
-        REFERENCES events (event_id),
-    att_id INT,
-    FOREIGN KEY (att_id)
-        REFERENCES attendees (id)
+-- ==========================================
+-- USERS TABLE
+-- ==========================================
+
+CREATE TABLE users (
+
+id INT PRIMARY KEY AUTO_INCREMENT,
+
+name VARCHAR(50) NOT NULL,
+
+email VARCHAR(100) NOT NULL UNIQUE,
+
+phone BIGINT NOT NULL,
+
+city VARCHAR(40),
+
+state VARCHAR(40),
+
+country VARCHAR(40),
+
+password VARCHAR(255),
+
+role ENUM('attendee','host') DEFAULT 'attendee',
+
+interests JSON,
+
+categories JSON,
+
+rating INT DEFAULT 0,
+
+no_of_events_hosted INT DEFAULT 0,
+
+verification_token VARCHAR(255),
+
+verified BOOLEAN DEFAULT FALSE,
+
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP,
+
+activeYN INT DEFAULT 1
+
+
 );
 
-CREATE TABLE event_host (
-    event_id INT,
-    FOREIGN KEY (event_id)
-        REFERENCES events (event_id),
-    host_id INT,
-    FOREIGN KEY (host_id)
-        REFERENCES hosts (id)
-);
+-- ==========================================
+-- ADMIN TABLE
+-- ==========================================
 
 CREATE TABLE admin (
-    username VARCHAR(30),
-    password VARCHAR(20),
-    role VARCHAR(20)
+
+
+username VARCHAR(30) PRIMARY KEY,
+
+password VARCHAR(255) NOT NULL,
+
+role VARCHAR(20) DEFAULT 'admin'
+
+
 );
-insert into admin values('admin','admin123','admin');
 
--- inserts
-select * from events;
-select * from attendees;
-INSERT INTO events 
-(event_name, event_description, event_date, timing, event_type, event_category, event_mode, location)
-VALUES
-('AI Conference 2026',
- 'A conference discussing latest trends in AI and ML.',
- '2026-04-15',
- '10:00:00',
- 'Conference',
- '["AI","Machine Learning","Data Science"]',
- 'Offline',
- 'Pune Convention Center'); 
+INSERT INTO admin(username,password,role)
+VALUES('admin','admin123','admin');
 
-INSERT INTO events 
-(event_name, event_description, event_date, timing, event_type, event_category, event_mode)
-VALUES
-('Web Dev Bootcamp',
- 'Hands-on workshop on modern web development.',
- '2026-05-10',
- '09:30:00',
- 'Workshop',
- '["React","Node.js","Full Stack"]',
- 'Online');
- 
- INSERT INTO events 
-(event_name, event_description, event_date, timing, event_type, event_category, event_mode, location)
-VALUES
-('Startup Meetup',
- 'Networking event for entrepreneurs and investors.',
- '2026-06-01',
- '05:00:00',
- 'Meetup',
- '["Startup","Business","Networking"]',
- 'Offline',
- 'Mumbai Business Hub');
- 
- INSERT INTO attendees 
-(name, email, phone, city, state, country, password, interests)
-VALUES
-('Eshika Rupani',
- 'eshika@gmail.com',
- 9876543210,
- 'Pune',
- 'Maharashtra',
- 'India',
- 'hashed_password_1',
- '["AI","Web Development"]');
- INSERT INTO attendees 
-(name, email, phone, city, state, country, password, interests)
-VALUES
-('Rahul Sharma',
- 'rahul@gmail.com',
- 9123456780,
- 'Mumbai',
- 'Maharashtra',
- 'India',
- 'hashed_password_2',
- '["Startups","Networking"]');
- INSERT INTO attendees 
-(name, email, phone, city, state, country, password, interests)
-VALUES
-('Sneha Patil',
- 'sneha@gmail.com',
- 9988776655,
- 'Bangalore',
- 'Karnataka',
- 'India',
- 'hashed_password_3',
- '["Machine Learning","Cloud"]');
+-- ==========================================
+-- EVENTS TABLE
+-- ==========================================
 
-INSERT INTO hosts 
-(name, email, phone, city, state, country, password, rating, no_of_events_hosted, categories)
-VALUES
-('Amit Kulkarni',
- 'amit@gmail.com',
- 9871234560,
- 'Pune',
- 'Maharashtra',
- 'India',
- 'host_pass_1',
- 4,
- 10,
- '["AI","Data Science"]');
- INSERT INTO hosts 
-(name, email, phone, city, state, country, password, rating, no_of_events_hosted, categories)
-VALUES
-('Priya Mehta',
- 'priya@gmail.com',
- 9812345678,
- 'Mumbai',
- 'Maharashtra',
- 'India',
- 'host_pass_2',
- 5,
- 15,
- '["Web Development","Cloud"]');
- INSERT INTO hosts 
-(name, email, phone, city, state, country, password, rating, no_of_events_hosted, categories)
-VALUES
-('Karan Verma',
- 'karan@gmail.com',
- 9900112233,
- 'Delhi',
- 'Delhi',
- 'India',
- 'host_pass_3',
- 3,
- 5,
- '["Business","Startups"]');
+CREATE TABLE events (
 
-INSERT INTO event_attendee (event_id, att_id)
-VALUES (1,1);
-INSERT INTO event_attendee (event_id, att_id)
-VALUES (2,2);
-INSERT INTO event_attendee (event_id, att_id)
-VALUES (3,3);
 
-INSERT INTO event_host (event_id, host_id)
-VALUES (1,1);
-INSERT INTO event_host (event_id, host_id)
-VALUES (2,2);
-INSERT INTO event_host (event_id, host_id)
-VALUES (3,3);
+event_id INT PRIMARY KEY AUTO_INCREMENT,
 
-ALTER TABLE events 
-ADD COLUMN meeting_id VARCHAR(20),
-ADD COLUMN meeting_link VARCHAR(255),
-ADD COLUMN webinar_status ENUM('scheduled','live','ended') DEFAULT 'scheduled';
+event_name VARCHAR(100) NOT NULL,
+
+event_description VARCHAR(500),
+
+event_date DATE,
+
+timing TIME,
+
+event_type ENUM(
+    'Conference',
+    'Workshop',
+    'Meetup'
+),
+
+event_category JSON,
+
+event_mode ENUM(
+    'Online',
+    'Offline'
+) NOT NULL,
+
+location VARCHAR(150)
+DEFAULT 'Virtual',
+
+total_seats INT DEFAULT NULL,
+
+available_seats INT DEFAULT NULL,
+
+meeting_id VARCHAR(50),
+
+meeting_link VARCHAR(255),
+
+webinar_status ENUM(
+    'scheduled',
+    'live',
+    'ended'
+) DEFAULT 'scheduled',
+
+recording_url VARCHAR(255),
+
+transcript LONGTEXT,
+
+summary TEXT,
+
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP,
+
+activeYN INT DEFAULT 1
+
+
+);
+
+-- ==========================================
+-- EVENT REGISTRATIONS
+-- ==========================================
+
+CREATE TABLE event_registrations (
+
+registration_id INT PRIMARY KEY AUTO_INCREMENT,
+
+event_id INT NOT NULL,
+
+user_id INT NOT NULL,
+
+seats_booked INT DEFAULT 1,
+
+status ENUM(
+    'registered',
+    'cancelled',
+    'attended'
+) DEFAULT 'registered',
+
+registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+UNIQUE(event_id,user_id),
+
+FOREIGN KEY(event_id)
+    REFERENCES events(event_id)
+    ON DELETE CASCADE,
+
+FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+
+
+);
+
+-- ==========================================
+-- EVENT HOSTS
+-- ==========================================
+
+CREATE TABLE event_hosts (
+
+event_id INT,
+
+user_id INT,
+
+PRIMARY KEY(event_id,user_id),
+
+FOREIGN KEY(event_id)
+    REFERENCES events(event_id)
+    ON DELETE CASCADE,
+
+FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+
+
+);
+
+-- ==========================================
+-- NOTIFICATIONS
+-- ==========================================
+
 CREATE TABLE notifications (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    attendee_id INT,
-    event_id INT,
-    message VARCHAR(255),
-    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('Pending','Sent') DEFAULT 'Pending',
-    FOREIGN KEY (attendee_id) REFERENCES attendees(id),
-    FOREIGN KEY (event_id) REFERENCES events(event_id)
+
+
+id INT PRIMARY KEY AUTO_INCREMENT,
+
+user_id INT,
+
+event_id INT,
+
+message VARCHAR(255),
+
+reminder_type ENUM(
+    '1_DAY',
+    '30_MIN'
+),
+
+status ENUM(
+    'Pending',
+    'Sent'
+) DEFAULT 'Pending',
+
+sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE,
+
+FOREIGN KEY(event_id)
+    REFERENCES events(event_id)
+    ON DELETE CASCADE
+
 );
-DESCRIBE attendees;
 
-INSERT INTO event_attendee(event_id,att_id)
-VALUES(4,4);
+-- ==========================================
+-- SAMPLE USERS
+-- ==========================================
 
-INSERT INTO event_attendee(event_id,att_id)
-VALUES(10,1);
-
-select * from events;
-INSERT INTO event_attendee(event_id,att_id)
-VALUES(6,4);
-
-
-SELECT event_id,event_name,meeting_id,meeting_link FROM events;
-
-ALTER TABLE notifications
-ADD COLUMN reminder_type ENUM('1_DAY','30_MIN');
-
-INSERT INTO events
-(event_name,event_description,event_date,timing,event_type,event_category,event_mode)
+INSERT INTO users
+(
+name,
+email,
+phone,
+city,
+state,
+country,
+password,
+role,
+interests
+)
 VALUES
 (
-"CRON TEST WEBINAR AGAIN",
-"Testing 1 day reminder email",
-CURDATE(),
-ADDTIME(CURTIME(),"00:02:00"),
-"Workshop",
-'["Testing"]',
-"Online"
+'Anshu Sachdev',
+'[anshu@gmail.com](mailto:anshu@gmail.com)',
+9876543210,
+'Mumbai',
+'Maharashtra',
+'India',
+'123456',
+'attendee',
+'["AI","Web Development"]'
 );
 
-INSERT INTO event_attendee(event_id,att_id)
-VALUES(12,5);
-
-INSERT INTO event_attendee(event_id,att_id)
-VALUES(11,1);
-
-INSERT INTO event_attendee(event_id,att_id)
-VALUES(16,7);
-
-select * from event_attendee;
-select * from attendees;
-select * from events;
-
-
-INSERT INTO attendees 
-(name, email, phone, city, state, country, password, interests)
+INSERT INTO users
+(
+name,
+email,
+phone,
+city,
+state,
+country,
+password,
+role,
+categories,
+rating,
+no_of_events_hosted
+)
 VALUES
-('ANSHU SACHDEV',
- 'anshusachdev22@gmail.com',
- 9123456780,
- 'Mumbai',
- 'Maharashtra',
- 'India',
- 'hashed_password_2',
- '["Startups","Networking"]');
- DELETE from attendees where id=6;
-select * from attendees; 
-ALTER TABLE attendees
+(
+'Amit Kulkarni',
+'[amit@gmail.com](mailto:amit@gmail.com)',
+9871234560,
+'Pune',
+'Maharashtra',
+'India',
+'host123',
+'host',
+'["AI","Data Science"]',
+4,
+10
+);
 
-ADD COLUMN verification_token VARCHAR(255),
-ADD COLUMN verified BOOLEAN DEFAULT FALSE;
+-- ==========================================
+-- SAMPLE EVENT
+-- ==========================================
+
+INSERT INTO events
+(
+event_name,
+event_description,
+event_date,
+timing,
+event_type,
+event_category,
+event_mode,
+location,
+total_seats,
+available_seats
+)
+VALUES
+(
+'AI Conference 2026',
+'Conference discussing latest AI trends',
+'2026-12-10',
+'10:00:00',
+'Conference',
+'["AI","ML"]',
+'Offline',
+'Pune Convention Center',
+100,
+100
+);
+
+-- ==========================================
+-- SAMPLE HOST MAPPING
+-- ==========================================
+
+INSERT INTO event_hosts
+(event_id,user_id)
+VALUES
+(1,2);
+
+-- ==========================================
+-- SAMPLE REGISTRATION
+-- ==========================================
+
+INSERT INTO event_registrations
+(
+event_id,
+user_id,
+seats_booked
+)
+VALUES
+(
+1,
+1,
+2
+);
+
+-- ==========================================
+-- CHECK DATA
+-- ==========================================
+
+SELECT * FROM admin;
+SELECT * FROM users;
+SELECT * FROM events;
+SELECT * FROM event_hosts;
+SELECT * FROM event_registrations;
+SELECT * FROM notifications;
 
 ALTER TABLE events
-ADD COLUMN total_seats INT DEFAULT NULL,
-ADD COLUMN available_seats INT DEFAULT NULL;
-
-ALTER TABLE events
-ADD COLUMN recording_url VARCHAR(255),
-ADD COLUMN transcript LONGTEXT,
-ADD COLUMN summary TEXT;
-
-select * from events;
-select * from attendees;
+ADD COLUMN ticket_price DECIMAL(10,2) DEFAULT 0;

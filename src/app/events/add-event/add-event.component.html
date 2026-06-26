@@ -1,116 +1,158 @@
-<div class="event-form-page">
+<div class="event-form-card">
 
-    <div class="event-form-card">
+    <h2 class="form-title">🎤 {{formTitle}}</h2>
 
-        <h2 class="form-title">🎤 {{formTitle}}</h2>
+    <form
+        class="event-form"
+        [formGroup]="addEventForm"
+        (ngSubmit)="onSubmit()">
 
-        <form class="event-form"
-            [formGroup]="addEventForm"
-            (ngSubmit)="onSubmit()">
+        <!-- Event Name -->
+        <div class="form-group">
 
-            <!-- Name -->
-            <div class="form-group">
-
-                <label>Name</label>
-
-                <input
-                    type="text"
-                    formControlName="event_name"
-                    placeholder="Enter event name">
-
-                <p *ngIf="isFormControlError('name')" class="errors">
-                    Name is required
-                </p>
-
-            </div>
+            <label>Event Name</label>
 
 
-            <!-- Description -->
+            <input
+                type="text"
+                formControlName="event_name"
+                placeholder="Enter event name">
 
-            <div class="form-group">
+        </div>
 
-                <label>Description</label>
+        <!-- Event Description -->
+        <div class="form-group">
 
-                <input
-                    type="text"
-                    formControlName="event_description"
-                    placeholder="Enter event description">
+            <label>Description</label>
 
-                <p *ngIf="isFormControlError('description')" class="errors">
-                    Description is required
-                </p>
+            <input
+                type="text"
+                formControlName="event_description"
+                placeholder="Enter event description">
 
-            </div>
+        </div>
+
+        <!-- Event Date -->
+        <div class="form-group">
+
+            <label>Date</label>
+
+            <input
+                type="date"
+                formControlName="event_date">
+
+        </div>
+
+        <!-- Event Type -->
+        <div class="form-group">
+
+            <label>Event Type</label>
+
+            <select formControlName="event_type">
+
+                <option value="">Select Type</option>
+                <option value="Conference">Conference</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Meetup">Meetup</option>
+
+            </select>
+
+        </div>
+
+        <!-- Timing -->
+        <div class="form-group">
+
+            <label>Timing</label>
+
+            <input
+                type="time"
+                formControlName="timing">
+
+        </div>
+
+        <!-- Event Mode -->
+        <div class="form-group">
+
+            <label>Event Mode</label>
+
+            <select formControlName="event_mode">
+
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+
+            </select>
+
+        </div>
+
+        <!-- Event Category -->
+        <div class="form-group">
+
+            <label>Category</label>
+
+            <input
+                type="text"
+                formControlName="event_category"
+                placeholder="AI, Web Development, Networking">
+
+        </div>
+
+        <!-- Location -->
+        <div
+            class="form-group"
+            *ngIf="addEventForm.get('event_mode')?.value === 'Offline'">
+
+            <label>Location</label>
+
+            <input
+                type="text"
+                formControlName="location"
+                placeholder="Enter location">
+
+        </div>
+
+        <!-- Total Seats -->
+        <div
+            class="form-group"
+            *ngIf="addEventForm.get('event_mode')?.value === 'Offline'">
+
+            <label>Total Seats</label>
+
+            <input
+                type="number"
+                formControlName="total_seats"
+                placeholder="Enter total seats">
+
+        </div>
 
 
-            <!-- Date -->
+        <!-- Ticket Price -->
 
-            <div class="form-group">
+<div class="form-group">
 
-                <label>Date</label>
+    <label>Ticket Price (₹)</label>
 
-                <input
-                    type="date"
-                    formControlName="event_date">
+    <input
+        type="number"
+        formControlName="ticket_price"
+        min="0"
+        placeholder="0 for free event">
 
-                <p *ngIf="isFormControlError('date')" class="errors">
-                    Date is required
-                </p>
+    <small>
+        Enter 0 for free events
+    </small>
 
-            </div>
+</div>
 
+        <!-- Submit -->
+        <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="addEventForm.invalid">
 
-            <!-- Type -->
+            {{formTitle}}
 
-            <div class="form-group">
+        </button>
 
-                <label>Type</label>
-
-                <select formControlName="event_type">
-
-                    <option value="Conference">Conference</option>
-                    <option value="Workshop">Workshop</option>
-                    <option value="Meetup">Meetup</option>
-
-                </select>
-
-                <p *ngIf="isFormControlError('type')" class="errors">
-                    Type is required
-                </p>
-
-            </div>
-
-
-            <!-- Timing -->
-
-            <div class="form-group">
-
-                <label>Timing</label>
-
-                <input
-                    type="time"
-                    formControlName="timing">
-
-                <p *ngIf="isFormControlError('timing')" class="errors">
-                    Timing is required
-                </p>
-
-            </div>
-
-
-            <!-- Submit -->
-
-            <button
-                type="submit"
-                class="submit-btn"
-                [disabled]="addEventForm.invalid">
-
-                {{formTitle}}
-
-            </button>
-
-        </form>
-
-    </div>
+    </form>
 
 </div>
